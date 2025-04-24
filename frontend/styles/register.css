@@ -1,0 +1,67 @@
+/* register.css */
+body {
+    font-family: Calibri, sans-serif;
+    background: linear-gradient(to right, #e3f2fd, #bbdefb);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.register-container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 400px;
+}
+
+.register-container h2 {
+    text-align: center;
+    color: #1565c0;
+    margin-bottom: 25px;
+}
+
+.register-container input[type="text"],
+.register-container input[type="email"],
+.register-container input[type="password"],
+.register-container select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #90caf9;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.register-container button {
+    width: 100%;
+    background-color: #1565c0;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.register-container button:hover {
+    background-color: #0d47a1;
+}
+
+.login-link {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.login-link a {
+    color: #1565c0;
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}

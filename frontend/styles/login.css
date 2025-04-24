@@ -1,0 +1,91 @@
+/* login.css */
+body {
+    font-family: Calibri, sans-serif;
+    background: linear-gradient(to right, #e3f2fd, #bbdefb);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 400px;
+}
+
+.login-container h2 {
+    text-align: center;
+    color: #1565c0;
+    margin-bottom: 25px;
+}
+
+.login-container input[type="email"],
+.login-container input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #90caf9;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.login-container button {
+    width: 100%;
+    background-color: #1565c0;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.login-container button:hover {
+    background-color: #0d47a1;
+}
+
+.register-link {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.register-link a {
+    color: #1565c0;
+    text-decoration: none;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+}
+
+/* Reuse the same design for OTP input and button */
+#otp-section input.styled-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #90caf9;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+#otp-section button.styled-button {
+    width: 100%;
+    background-color: #1565c0;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+#otp-section button.styled-button:hover {
+    background-color: #0d47a1;
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - User Management</title>
+    <link rel="stylesheet" href="../styles/login.css">
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="login-form">
+            <input type="email" id="username_or_email" placeholder="Email or Username" required><br>
+            <input type="password" id="password" placeholder="Password" required><br>
+            <button type="submit">Login</button>
+        </form>
+
+        <!-- OTP Section (Styled like login form) -->
+        <div id="otp-section" style="display: none; margin-top: 20px;">
+            <input type="text" id="otp_input" class="styled-input" placeholder="Enter OTP" required><br>
+            <button type="button" class="styled-button" onclick="validateOTP()">Verify OTP</button>
+        </div>
+        
+        <p class="register-link">Don't have an account?
+            <a href="../templates/register.html">Register here</a>
+        </p>
+
+        <div id="loginResponse" style="margin-top: 10px; color: red;"></div>
+    </div>
+
+    <script src="../scripts/login.js"></script>
+</body>
+</html>

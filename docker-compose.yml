@@ -1,0 +1,33 @@
+# # version: '3.8'
+
+# services:
+#   user_management:
+#     build: ./backend/user_management
+#     ports:
+#       - "8081:8081"
+#     env_file:
+#       - .env
+#     volumes:
+#       - ./backend:/app
+#     # restart: always
+
+# version: '3.8'
+
+services:
+  user_management:
+    build:
+      context: .
+      dockerfile: backend/user_management/Dockerfile
+    ports:
+      - "8081:8081"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "8080:80"
