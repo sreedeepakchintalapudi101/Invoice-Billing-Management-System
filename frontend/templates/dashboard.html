@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Invoice Management Dashboard</title>
+  <link rel="stylesheet" href="../styles/dashboard.css"/>
+</head>
+<body>
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <h2>Dashboard</h2>
+      <ul>
+        <li onclick="showTab('invoices')">📄 Invoice Management</li>
+        <li onclick="showTab('files')">📁 Ingested Files</li>
+        <li onclick="showTab('settings')">⚙️ Settings</li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <!-- Invoice Management Tab -->
+      <section id="invoices-tab" class="tab-section">
+        <h1>Invoice Management</h1>
+        <p>Coming soon...</p>
+      </section>
+
+      <!-- Ingested Files Tab -->
+      <section id="files-tab" class="tab-section hidden">
+        <h1>Ingested Files</h1>
+        <table>
+          <thead>
+            <tr>
+              <th>File Name</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Upload Time</th>
+            </tr>
+          </thead>
+          <tbody id="files-tbody">
+            <!-- Rows will be injected here -->
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Settings Tab -->
+      <section id="settings-tab" class="tab-section hidden">
+        <h1>Settings</h1>
+        <p>Settings & Configurations</p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    function showTab(tabName) {
+      document.querySelectorAll('.tab-section').forEach(tab => tab.classList.add('hidden'));
+      document.getElementById(tabName + '-tab').classList.remove('hidden');
+
+      if (tabName === 'files') {
+        loadIngestedFiles();
+      }
+    }
+
+    function loadIngestedFiles() {
+      fetch("http://localhost:8081/get_ingested_files", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: localStorage.getItem("user_id"),
+          user_type: localStorage.getItem("user_type")
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.getElementById("files-tbody");
+        tbody.innerHTML = "";
+        data.data.forEach(file => {
+          tbody.innerHTML += `
+            <tr>
+              <td>${file.file_name}</td>
+              <td>${file.file_type}</td>
+              <td>${file.status}</td>
+              <td>${file.upload_time}</td>
+            </tr>
+          `;
+        });
+      });
+    }
+  </script>
+</body>
+</html>

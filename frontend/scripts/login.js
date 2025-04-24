@@ -50,6 +50,10 @@ async function validateOTP() {
 
     if (result.flag === "success") {
       document.getElementById("loginResponse").innerText = "OTP Verified Successfully!";
+      setTimeout(() =>  {
+        window.location.href = "/frontend/templates/dashboard.html"
+      } 
+      )
       // Optional: Redirect or load a new page
     } else if (result.flag === "expired") {
       document.getElementById("loginResponse").innerText = "OTP Expired! Please click on resend to get new OTP.";
