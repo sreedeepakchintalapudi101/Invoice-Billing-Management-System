@@ -4,63 +4,54 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Invoice Management Dashboard</title>
-  <link rel="stylesheet" href="../styles/dashboard.css" />
+  <link rel="stylesheet" href="../styles/dashboard.css"/>
 </head>
-
 <body>
   <div class="dashboard-container">
-    <aside class="sidebar">
-      <h2>Dashboard</h2>
+    <aside class="sidebar" id="sidebar">
       <ul>
-        <li onclick="showTab('dashboard')">🏠 Dashboard</li>
-        <li onclick="showTab('invoices')">📄 Invoice Management</li>
-        <li onclick="showTab('customers')">👥 Customers</li>
-        <li onclick="showTab('files')">📁 Ingested Files</li>
-        <li onclick="showTab('settings')">⚙️ Settings</li>
+        <li onclick="showTab('dashboard')">
+          <span class="icon">🏠</span>
+          <span class="text">Dashboard</span>
+        </li>
+        <li onclick="showTab('invoices')">
+          <span class="icon">📄</span>
+          <span class="text">Invoices</span>
+        </li>
+        <li onclick="showTab('customers')">
+          <span class="icon">👥</span>
+          <span class="text">Customers</span>
+        </li>
+        <li onclick="showTab('settings')">
+          <span class="icon">⚙️</span>
+          <span class="text">Settings</span>
+        </li>
       </ul>
     </aside>
 
     <main class="main-content">
       <!-- Dashboard Tab -->
-      <section id="dashboard-tab" class="tab-section active">
-        <h1>Welcome to Invoice Management Dashboard</h1>
-        <p>Overview and Quick Actions.</p>
+      <section id="dashboard-tab" class="tab-section">
+        <h1>Dashboard</h1>
+        <p>Welcome to the Dashboard!</p>
       </section>
 
       <!-- Invoice Management Tab -->
-      <section id="invoices-tab" class="tab-section">
-        <h1>Invoice Management</h1>
-        <p>Coming soon...</p>
+      <section id="invoices-tab" class="tab-section hidden">
+        <h1>Invoices</h1>
+        <p>Manage your invoices here.</p>
       </section>
 
       <!-- Customers Tab -->
-      <section id="customers-tab" class="tab-section">
+      <section id="customers-tab" class="tab-section hidden">
         <h1>Customers</h1>
-        <p>Manage customer information and profiles.</p>
-      </section>
-
-      <!-- Ingested Files Tab -->
-      <section id="files-tab" class="tab-section">
-        <h1>Ingested Files</h1>
-        <table>
-          <thead>
-            <tr>
-              <th>File Name</th>
-              <th>Type</th>
-              <th>Status</th>
-              <th>Upload Time</th>
-            </tr>
-          </thead>
-          <tbody id="files-tbody">
-            <!-- Rows will be injected here -->
-          </tbody>
-        </table>
+        <p>Customer details will be shown here.</p>
       </section>
 
       <!-- Settings Tab -->
-      <section id="settings-tab" class="tab-section">
+      <section id="settings-tab" class="tab-section hidden">
         <h1>Settings</h1>
-        <p>Settings & Configurations.</p>
+        <p>Settings & Configurations</p>
       </section>
     </main>
   </div>
