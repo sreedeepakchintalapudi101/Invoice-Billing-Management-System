@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Invoices</title>
+  <link rel="stylesheet" href="./styles/dashboard.css" /> <!-- Common Sidebar -->
+  <link rel="stylesheet" href="./styles/invoice_list.css" /> <!-- Invoice Page Specific -->
+</head>
+<body>
+  <div class="dashboard-container">
+    <aside class="sidebar" id="sidebar">
+      <ul>
+        <li onclick="navigateTo('dashboard_home.html')">
+          <span class="icon">🏠</span>
+          <span class="text">Dashboard</span>
+        </li>
+        <li onclick="navigateTo('invoice_list.html')">
+          <span class="icon">📄</span>
+          <span class="text">Invoices</span>
+        </li>
+        <li onclick="navigateTo('customers.html')">
+          <span class="icon">👥</span>
+          <span class="text">Customers</span>
+        </li>
+        <li onclick="navigateTo('settings.html')">
+          <span class="icon">⚙️</span>
+          <span class="text">Settings</span>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <h1>Invoice List</h1>
+      <div id="table-container">
+        <table id="invoice-table">
+          <thead>
+            <tr>
+              <th>Invoice ID</th>
+              <th>Ingested Date & Time</th>
+              <th>Ingested From (Mail)</th>
+            </tr>
+          </thead>
+          <tbody id="invoice-tbody">
+            <!-- Invoices will be populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script src="./scripts/dashboard.js"></script> <!-- Common sidebar navigation -->
+  <script src="./scripts/invoice_list.js"></script> <!-- Specific to invoice page -->
+</body>
+</html>

@@ -1,5 +1,5 @@
 window.onload = function() {
-    fetch("http://localhost:8081/get_ingested_invoices", {
+    fetch("http://localhost:8083/get_ingested_invoices", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

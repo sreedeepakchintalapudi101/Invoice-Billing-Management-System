@@ -1,0 +1,42 @@
+/* Invoice List Specific CSS */
+
+/* Container for table to make it neat */
+#table-container {
+    margin-top: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+  }
+  
+  /* Table styling */
+  #invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+  }
+  
+  #invoice-table th, #invoice-table td {
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    text-align: left;
+  }
+  
+  #invoice-table th {
+    background-color: #3498db;
+    color: white;
+  }
+  
+  #invoice-table tbody tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+  }
+  
+  /* Responsive - mobile */
+  @media (max-width: 768px) {
+    #invoice-table th, #invoice-table td {
+      font-size: 14px;
+      padding: 10px;
+    }
+  }
+  
