@@ -78,7 +78,6 @@ def email_ingestion():
                                     logging.info(f"File Name is {filename}")
                                     invoice_id = f"INV{uuid.uuid4().hex[:16]}"
                                     folder = os.path.join("ingested_files", invoice_id, "pdf")
-                                    os.mkdir()
                                     os.makedirs(folder, exist_ok=True)
                                     file_path = os.path.join(folder, filename)
                                     logging.info(f"Current working directory: {os.getcwd()}")
