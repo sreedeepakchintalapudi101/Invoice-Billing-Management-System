@@ -18,6 +18,7 @@ services:
     build:
       context: .
       dockerfile: backend/user_management/Dockerfile
+    container_name: user_management
     ports:
       - "8081:8081"
     env_file:
@@ -25,9 +26,35 @@ services:
     volumes:
       - .:/app
     restart: always
+  
+  dashboard_management:
+    build:
+      context: .
+      dockerfile: /backend/dashboard_management/Dockerfile
+    container_name: dashboard_management
+    ports: 
+      - "8082:8082"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    restart: always
 
+  email_management:
+    build:
+      context: .
+      dockerfile: /backend/email_management/Dockerfile
+    container_name: email_management
+    ports:
+      - "8083:8083"
+    env_file:
+      - .env
+    volumes:
+      - ./ingested_emails:/app/ingested_emails
+    restart: always
   frontend:
     build:
       context: ./frontend
+    container_name: frontend
     ports:
       - "8080:80"

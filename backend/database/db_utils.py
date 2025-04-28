@@ -89,4 +89,3 @@ def insert_query(database, query, params=None):
         except pymysql.MySQLError as e:
             logging.exception(f"Error occured with Exception {e}")
             return 0
-print(execute_("user_management", "select * from user_authentication"))

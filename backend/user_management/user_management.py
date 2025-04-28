@@ -9,11 +9,17 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import jinja2
+import os
+from dotenv import load_dotenv
 from jinja2 import Template
 import random, string
 from datetime import datetime, timedelta
 import ast
 from ast import literal_eval
+
+load_dotenv()
+email = os.getenv("email")
+password = os.getenv("password")
 
 from backend.database.db_utils import get_connection, execute_, update_query, insert_query
 import logging
@@ -56,8 +62,8 @@ def fetch_email_body():
     return result
 
 def send_email(to_email, subject, body):
-    sender_email = "otpvalidation.invoicemanagement@gmail.com"
-    sender_password = "xahe vyqq epgh mznv"
+    sender_email = email
+    sender_password = password
     
     msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
@@ -116,6 +122,10 @@ def register_user():
                 
 @app.route("/login_user", methods=["GET","POST"])
 def login_user():
+    email = os.getenv("email")
+    logging.info(f"The Email is {email}")
+    password = os.getenv("password")
+    logging.info(f"The Password is {password}")
     database = "user_management"
     logging.info(f"The Request Method is {request.method}")
     if request.method == "POST":

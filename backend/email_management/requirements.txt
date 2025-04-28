@@ -1,0 +1,8 @@
+flask
+flask-cors
+pymysql
+python-dotenv
+# logging
+jinja2
+paramiko
+APScheduler

@@ -4,28 +4,43 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Invoice Management Dashboard</title>
-  <link rel="stylesheet" href="../styles/dashboard.css"/>
+  <link rel="stylesheet" href="../styles/dashboard.css" />
 </head>
+
 <body>
   <div class="dashboard-container">
     <aside class="sidebar">
       <h2>Dashboard</h2>
       <ul>
+        <li onclick="showTab('dashboard')">🏠 Dashboard</li>
         <li onclick="showTab('invoices')">📄 Invoice Management</li>
+        <li onclick="showTab('customers')">👥 Customers</li>
         <li onclick="showTab('files')">📁 Ingested Files</li>
         <li onclick="showTab('settings')">⚙️ Settings</li>
       </ul>
     </aside>
 
     <main class="main-content">
+      <!-- Dashboard Tab -->
+      <section id="dashboard-tab" class="tab-section active">
+        <h1>Welcome to Invoice Management Dashboard</h1>
+        <p>Overview and Quick Actions.</p>
+      </section>
+
       <!-- Invoice Management Tab -->
       <section id="invoices-tab" class="tab-section">
         <h1>Invoice Management</h1>
         <p>Coming soon...</p>
       </section>
 
+      <!-- Customers Tab -->
+      <section id="customers-tab" class="tab-section">
+        <h1>Customers</h1>
+        <p>Manage customer information and profiles.</p>
+      </section>
+
       <!-- Ingested Files Tab -->
-      <section id="files-tab" class="tab-section hidden">
+      <section id="files-tab" class="tab-section">
         <h1>Ingested Files</h1>
         <table>
           <thead>
@@ -43,48 +58,13 @@
       </section>
 
       <!-- Settings Tab -->
-      <section id="settings-tab" class="tab-section hidden">
+      <section id="settings-tab" class="tab-section">
         <h1>Settings</h1>
-        <p>Settings & Configurations</p>
+        <p>Settings & Configurations.</p>
       </section>
     </main>
   </div>
 
-  <script>
-    function showTab(tabName) {
-      document.querySelectorAll('.tab-section').forEach(tab => tab.classList.add('hidden'));
-      document.getElementById(tabName + '-tab').classList.remove('hidden');
-
-      if (tabName === 'files') {
-        loadIngestedFiles();
-      }
-    }
-
-    function loadIngestedFiles() {
-      fetch("http://localhost:8081/get_ingested_files", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: localStorage.getItem("user_id"),
-          user_type: localStorage.getItem("user_type")
-        })
-      })
-      .then(res => res.json())
-      .then(data => {
-        const tbody = document.getElementById("files-tbody");
-        tbody.innerHTML = "";
-        data.data.forEach(file => {
-          tbody.innerHTML += `
-            <tr>
-              <td>${file.file_name}</td>
-              <td>${file.file_type}</td>
-              <td>${file.status}</td>
-              <td>${file.upload_time}</td>
-            </tr>
-          `;
-        });
-      });
-    }
-  </script>
+  <script src="../scripts/dashboard.js"></script>
 </body>
 </html>
