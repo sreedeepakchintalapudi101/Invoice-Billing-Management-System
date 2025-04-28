@@ -129,7 +129,7 @@ def download_invoice(invoice_id, filename):
             message = "Successfully converted to the Blob Data."
             return {
                 "flag" : True,
-                "message" : message
+                "message" : message,
                 "blob_data" : blob_data,
                 "filename" : filename 
             }
