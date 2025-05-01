@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const tbody = document.getElementById("invoice-tbody");
 
   try {
-    const response = await fetch("http://localhost:8083/get_ingested_invoices", {
+    const response = await fetch("http://localhost:8084/get_ingested_invoices", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
