@@ -131,7 +131,7 @@ def get_ingested_invoices():
     logging.info(f"Request Data is {data}")
     try:
         query = """
-        SELECT invoice_id, ingested_time AS ingested_datetime, ingested_from AS from_email
+        SELECT invoice_id, ingested_time AS ingested_datetime, from_email
         FROM `ingested_files`
         ORDER BY ingested_datetime;
         """
