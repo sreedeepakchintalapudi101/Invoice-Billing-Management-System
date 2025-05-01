@@ -6,7 +6,7 @@ COPY . .
 
 RUN pip install -r backend/invoice_management/requirements.txt
 
-ENV /PYTHONPATH=/app
+ENV PYTHONPATH=/app
 
 EXPOSE 8084
 
