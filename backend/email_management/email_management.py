@@ -14,7 +14,9 @@ import uuid
 from email import message_from_bytes
 from email.header import decode_header
 import time
+from datetime import datetime
 import threading
+from backend.database.db_utils import execute_, update_query, insert_query
 
 app = Flask(__name__)
 CORS(app)
@@ -57,6 +59,7 @@ def email_ingestion():
     logging.info(f"The password is {password}")
     logging.info(f"The Host is {host}")
     logging.info(f"The Imap Server is {imap_server}")
+    database = "email_management"
     try:
         imap = imaplib.IMAP4_SSL(imap_server)
         imap.login(email_address, password)
@@ -86,6 +89,14 @@ def email_ingestion():
                                     with open(file_path, "wb") as f:
                                         f.write(part.get_payload(decode=True))
                                         logging.info(f"Saved Email attachment{invoice_id}")
+                                    query = """
+                                    INSERT INTO ingested_files
+                                    ('invoice_id', 'file_name', 'ingested_time')
+                                    VALUES
+                                    (%s, %s, %s);
+                                    """
+                                    params=[invoice_id, filename, datetime.strftime("%Y-%m-%d %H:%M:%S")]
+                                    result = insert_query(database, query, params)
                                     # folder = "ingested_emails"
                                     # os.makedirs(folder, exist_ok=True)
                                     # filepath = os.path.join(folder, filename)
@@ -114,12 +125,10 @@ def start_scheduler():
     scheduler_thread.daemon = True
     scheduler_thread.start()
     
-@app.route("get_ingested_invoices", methods=["GET", "POST"])
-def get_ingested_invoices():
-    data = request.get_json()
-    logging.info(f"Request Data is {data}")
-    
-    
+# @app.route("/get_ingested_invoices", methods=["GET", "POST"])
+# def get_ingested_invoices():
+#     data = request.get_json()
+#     logging.info(f"Request Data is {data}")
     
 @app.route("/download/<invoice_id>/<filename>", methods=["GET", "POST"])
 def download_invoice(invoice_id, filename):
