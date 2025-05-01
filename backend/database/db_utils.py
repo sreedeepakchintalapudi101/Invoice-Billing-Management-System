@@ -32,20 +32,19 @@ tenant_id = os.getenv("TENANT_ID")
 logging.info(f"Tenant id is {tenant_id}")
 
 def get_connection(database):
-    # try:
-    conn = pymysql.connect(
-        host=db_host,
-        user=db_user,
-        password=db_password,
-        port=db_port,
-        database=f"{tenant_id}_{database}"
-    )
-    logging.info(f"The database name is {database}")
-    logging.info(f"Successfully connected to {db_host}:{db_port} - Database: {tenant_id}_{database}")
-    return conn
-    # except pymysql.MySQLError as e:
-    #     logging.error(f"Something went wrong with the connection: {e}")
-    #     return None
+    try:
+        conn = pymysql.connect(
+            host=db_host,
+            user=db_user,
+            password=db_password,
+            port=db_port,
+            database=f"{tenant_id}_{database}"
+        )
+        logging.info(f"Successfully connected to {db_host}:{db_port} - Database: {tenant_id}_{database}")
+        return conn
+    except pymysql.MySQLError as e:
+        logging.error(f"Something went wrong with the connection: {e}")
+        return None
         
 def execute_(database, query, params=None):
     conn = get_connection(database)
