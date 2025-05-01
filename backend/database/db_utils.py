@@ -40,6 +40,7 @@ def get_connection(database):
         port=db_port,
         database=f"{tenant_id}_{database}"
     )
+    logging.info(f"The database name is {database}")
     logging.info(f"Successfully connected to {db_host}:{db_port} - Database: {tenant_id}_{database}")
     return conn
     # except pymysql.MySQLError as e:
