@@ -16,7 +16,7 @@ from email.header import decode_header
 import time
 from datetime import datetime
 import threading
-from backend.database.db_utils import execute_, update_query, insert_query
+from backend.database.db_utils import get_connection, execute_, update_query, insert_query
 
 app = Flask(__name__)
 CORS(app)
