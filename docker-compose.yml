@@ -52,6 +52,21 @@ services:
     volumes:
       - ./ingested_emails:/app/ingested_emails
     restart: always
+  
+
+  invoice_management:
+    build:
+      context: .
+      dockerfile: ./backend/invoice_management/Dockerfile
+    container_name: invoice_management
+    ports:
+      - "8084:8084"
+    env_file:
+      - .env
+    volumes:
+      - ./ingested_emails:/app/ingested_emails
+    restart: always
+
   frontend:
     build:
       context: ./frontend

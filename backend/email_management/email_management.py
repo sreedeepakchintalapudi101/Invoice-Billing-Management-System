@@ -132,8 +132,6 @@ def extract_email_address(raw_email):
     return raw_email.strip()
 
 @app.route("/get_ingested_invoices", methods=["GET", "POST"])
-# @cross_origin(origin="http://localhost:8080")
-@app.route("/get_ingested_invoices", methods=["GET", "POST"])
 def get_ingested_invoices():
     database = "invoice_management"
     try:
