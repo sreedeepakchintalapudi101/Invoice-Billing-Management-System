@@ -126,10 +126,10 @@ def start_scheduler():
 @app.route("/get_ingested_invoices", methods=["GET", "POST"])
 # @cross_origin(origin="http://localhost:8080")
 def get_ingested_invoices():
+    database = "invoice_management"
     data = request.get_json()
     logging.info(f"Request Data is {data}")
     try:
-        database = "invoice_management"
         query = """
         SELECT invoice_id, ingested_time AS ingested_datetime, ingested_from AS from_email
         FROM `ingested_files`
