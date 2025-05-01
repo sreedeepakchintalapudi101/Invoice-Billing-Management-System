@@ -70,6 +70,7 @@ def email_ingestion():
             for response in msg:
                 if isinstance(response, tuple):
                     msg = message_from_bytes(response[1])
+                    from_email = msg["From"]
                     subject, encoding = decode_header(msg["subject"])[0]
                     if isinstance(subject, bytes):
                         subject = subject.decode(encoder or 'UTF-8')
@@ -91,11 +92,11 @@ def email_ingestion():
                                         logging.info(f"Saved Email attachment{invoice_id}")
                                     query = """
                                     INSERT INTO ingested_files
-                                    (invoice_id, file_name, ingested_time)
+                                    (invoice_id, file_name, ingested_time, from_email)
                                     VALUES
-                                    (%s, %s, %s);
+                                    (%s, %s, %s, %s);
                                     """
-                                    params=[invoice_id, filename, datetime.now()]
+                                    params=[invoice_id, filename, datetime.now(), from_email]
                                     result = insert_query(database, query, params)
                                     # folder = "ingested_emails"
                                     # os.makedirs(folder, exist_ok=True)
