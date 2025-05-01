@@ -19,7 +19,7 @@ import threading
 from backend.database.db_utils import execute_, update_query, insert_query
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, support_credentials=True, origins=["http://localhost:8080"], methods=["GET","POST"])
 
 import logging
 import dotenv
