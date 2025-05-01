@@ -35,7 +35,7 @@ async function validateOTP() {
   const username_or_email = document.getElementById("username_or_email").value;
 
   if (!otp || !username_or_email) {
-    alert("Please enter the OTP!");
+    document.getElementById("loginResponse").innerText = "Please enter valid details!";
     return;
   }
 

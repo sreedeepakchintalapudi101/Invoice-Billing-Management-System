@@ -1,6 +1,7 @@
 import flask
 from flask import request, render_template, redirect
 from flask import Flask
+import requests
 from flask_cors import CORS
 import base64
 # import APScheduler
@@ -112,6 +113,13 @@ def start_scheduler():
     scheduler_thread = threading.Thread(target=basic_scheduler, args=(interval,))
     scheduler_thread.daemon = True
     scheduler_thread.start()
+    
+@app.route("get_ingested_invoices", methods=["GET", "POST"])
+def get_ingested_invoices():
+    data = request.get_json()
+    logging.info(f"Request Data is {data}")
+    
+    
     
 @app.route("/download/<invoice_id>/<filename>", methods=["GET", "POST"])
 def download_invoice(invoice_id, filename):
