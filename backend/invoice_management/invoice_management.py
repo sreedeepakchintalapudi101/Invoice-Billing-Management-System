@@ -87,6 +87,10 @@ def get_ingested_invoices():
             "message": f"Unhandled error occurred: {str(e)}"
         }
         
+@app.route("/get_view/<invoice_id>/<filename>", methods=["GET", "POST"])
+def get_view():
+    pass
+        
 @app.route("/download/<invoice_id>/<filename>", methods=["GET", "POST"])
 def download_invoice(invoice_id, filename):
     try:

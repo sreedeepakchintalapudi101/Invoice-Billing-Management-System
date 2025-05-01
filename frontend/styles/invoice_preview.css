@@ -1,0 +1,21 @@
+.preview-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    min-height: 100vh;
+  }
+  
+  h1 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  #invoice-content {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 20px;
+    white-space: pre-wrap;
+    overflow-x: auto;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  }
+  
