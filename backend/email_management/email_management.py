@@ -91,7 +91,7 @@ def email_ingestion():
                                         logging.info(f"Saved Email attachment{invoice_id}")
                                     query = """
                                     INSERT INTO ingested_files
-                                    ('invoice_id', 'file_name', 'ingested_time')
+                                    (invoice_id, file_name, ingested_time)
                                     VALUES
                                     (%s, %s, %s);
                                     """
