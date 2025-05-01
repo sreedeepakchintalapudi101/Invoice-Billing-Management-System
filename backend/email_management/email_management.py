@@ -138,6 +138,11 @@ def get_ingested_invoices():
         result = execute_(query, database)
         message = "Query Executed Successfully!"
         logging.info("Query Executed Successfully!")
+        if not result:
+            return {
+                "flag" : False,
+                "message" : "Something went wrong!"
+            }
         return {
             "flag" : True,
             "message" : message,
