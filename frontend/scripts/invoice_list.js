@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         tbody.innerHTML += `
           <tr>
             <td>${invoice.invoice_id}</td>
+            <td>${invoice.file_name}</td>
             <td>${invoice.ingested_datetime}</td>
             <td>${invoice.ingested_from}</td>
           </tr>
