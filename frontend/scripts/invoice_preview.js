@@ -16,7 +16,7 @@ function getParams() {
     }
   
     try {
-      const response = await fetch(`/get_invoice_view/${invoice_id}/${filename}`);
+      const response = await fetch(`http://localhost:8084/get_invoice_view/${invoice_id}/${filename}`);
       if (!response.ok) throw new Error("Failed to load invoice");
       
       const content = await response.text();
