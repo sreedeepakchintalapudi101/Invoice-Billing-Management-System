@@ -126,10 +126,32 @@ def start_scheduler():
     scheduler_thread.daemon = True
     scheduler_thread.start()
     
-# @app.route("/get_ingested_invoices", methods=["GET", "POST"])
-# def get_ingested_invoices():
-#     data = request.get_json()
-#     logging.info(f"Request Data is {data}")
+@app.route("/get_ingested_invoices", methods=["GET", "POST"])
+def get_ingested_invoices():
+    data = request.get_json()
+    logging.info(f"Request Data is {data}")
+    try:
+        database = "invoice_management"
+        query = """
+        SELECT invoice_id, ingested_time AS ingested_datetime, ingested_from AS from_email
+        FROM `ingested_files`
+        ORDER BY ingested_datetime;
+        """
+        result = execute_(query, database)
+        message = "Query Executed Successfully!"
+        logging.info("Query Executed Successfully!")
+        return {
+            "flag" : True,
+            "message" : message
+            "data" : result,
+        }
+    except Exception as e:
+        logging.exception(f"Error occured with Exception {e}")
+        message = "Internal Error Occured"
+        return {
+            "flag" : False,
+            "message" : message
+        }
     
 @app.route("/download/<invoice_id>/<filename>", methods=["GET", "POST"])
 def download_invoice(invoice_id, filename):
