@@ -120,3 +120,6 @@ def convert_to_blob(file_path):
         file_data = file.read()
         blob_data = base64.b64encode(file_data).decode("UTF-8")
     return blob_data
+
+if __name__ == "__main__":
+    app.run(debug=False, host="0.0.0.0", port=8084)
