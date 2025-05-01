@@ -127,7 +127,7 @@ def start_scheduler():
     scheduler_thread.start()
     
 @app.route("/get_ingested_invoices", methods=["GET", "POST"])
-@cross_origin(origin="http://localhost:8080")
+# @cross_origin(origin="http://localhost:8080")
 def get_ingested_invoices():
     data = request.get_json()
     logging.info(f"Request Data is {data}")
