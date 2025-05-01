@@ -4,6 +4,7 @@ from flask import Flask
 import requests
 from flask_cors import CORS
 import base64
+import re
 # import APScheduler
 import os
 import email
@@ -67,7 +68,8 @@ def email_ingestion():
             for response in msg:
                 if isinstance(response, tuple):
                     msg = message_from_bytes(response[1])
-                    from_email = msg["From"]
+                    from_email_raw = msg["From"]
+                    from_email = extract_email_address(from_email_raw)
                     subject, encoding = decode_header(msg["subject"])[0]
                     if isinstance(subject, bytes):
                         subject = subject.decode(encoder or 'UTF-8')
@@ -123,6 +125,12 @@ def start_scheduler():
     scheduler_thread.daemon = True
     scheduler_thread.start()
     
+def extract_email_address(raw_email):
+    match = re.search(r'<(.+?)>', raw_email)
+    if match:
+        return match.group(1)
+    return raw_email.strip()
+
 @app.route("/get_ingested_invoices", methods=["GET", "POST"])
 # @cross_origin(origin="http://localhost:8080")
 @app.route("/get_ingested_invoices", methods=["GET", "POST"])
