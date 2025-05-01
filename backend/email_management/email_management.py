@@ -135,7 +135,7 @@ def get_ingested_invoices():
         FROM `ingested_files`
         ORDER BY ingested_datetime;
         """
-        result = execute_(query, database)
+        result = execute_(database, query)
         message = "Query Executed Successfully!"
         logging.info("Query Executed Successfully!")
         if not result:
