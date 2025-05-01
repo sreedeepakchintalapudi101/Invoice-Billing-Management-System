@@ -95,7 +95,7 @@ def email_ingestion():
                                     VALUES
                                     (%s, %s, %s);
                                     """
-                                    params=[invoice_id, filename, str(datetime.strftime("%Y-%m-%d %H:%M:%S"))]
+                                    params=[invoice_id, filename, datetime.now()]
                                     result = insert_query(database, query, params)
                                     # folder = "ingested_emails"
                                     # os.makedirs(folder, exist_ok=True)
