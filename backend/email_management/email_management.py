@@ -59,7 +59,7 @@ def email_ingestion():
     logging.info(f"The password is {password}")
     logging.info(f"The Host is {host}")
     logging.info(f"The Imap Server is {imap_server}")
-    database = "email_management"
+    database = "invoice_management"
     try:
         imap = imaplib.IMAP4_SSL(imap_server)
         imap.login(email_address, password)
