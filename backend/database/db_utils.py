@@ -40,10 +40,10 @@ def get_connection(database):
             port=db_port,
             database=f"{tenant_id}_{database}"
         )
-        logger.info(f"Successfully connected to {db_host}:{db_port} - Database: {tenant_id}_{database}")
+        logging.info(f"Successfully connected to {db_host}:{db_port} - Database: {tenant_id}_{database}")
         return conn
     except pymysql.MySQLError as e:
-        logger.error(f"Something went wrong with the connection: {e}")
+        logging.error(f"Something went wrong with the connection: {e}")
         return None
         
 def execute_(database, query, params=None):
