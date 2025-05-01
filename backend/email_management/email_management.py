@@ -143,11 +143,12 @@ def get_ingested_invoices():
                 "flag" : False,
                 "message" : "Something went wrong!"
             }
-        return {
-            "flag" : True,
-            "message" : message,
-            "data" : result
-        }
+        if result:
+            return {
+                "flag" : True,
+                "message" : message,
+                "data" : result
+            }
     except Exception as e:
         logging.exception(f"Error occured with Exception {e}")
         message = "Internal Error Occured"
