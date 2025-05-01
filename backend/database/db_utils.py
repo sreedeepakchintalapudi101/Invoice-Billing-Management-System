@@ -32,6 +32,8 @@ tenant_id = os.getenv("TENANT_ID")
 logging.info(f"Tenant id is {tenant_id}")
 
 def get_connection(database):
+    logging.info(f"The Tenant Id is {tenant_id}")
+    logging.info(f"The database name is {database}")
     try:
         conn = pymysql.connect(
             host=db_host,
