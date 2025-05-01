@@ -125,38 +125,49 @@ def start_scheduler():
     
 @app.route("/get_ingested_invoices", methods=["GET", "POST"])
 # @cross_origin(origin="http://localhost:8080")
+@app.route("/get_ingested_invoices", methods=["GET", "POST"])
 def get_ingested_invoices():
     database = "invoice_management"
-    data = request.get_json()
-    logging.info(f"Request Data is {data}")
     try:
+        data = request.get_json()  # Safely handles absence of JSON
+        logging.info(f"Request Data is {data}")
+
         query = """
         SELECT invoice_id, ingested_time AS ingested_datetime, from_email
-        FROM `ingested_files`
+        FROM ingested_files
         ORDER BY ingested_datetime;
         """
-        result = execute_(database, query)
-        message = "Query Executed Successfully!"
-        logging.info("Query Executed Successfully!")
+        
+        try:
+            result = execute_(database, query)
+        except Exception as db_err:
+            logging.exception(f"Database query failed: {db_err}")
+            return {
+                "flag": False,
+                "message": f"Database query error: {str(db_err)}"
+            }
+        
         if not result:
+            logging.warning("Query executed but returned no results.")
             return {
-                "flag" : False,
-                "message" : "Something went wrong!"
+                "flag": False,
+                "message": "No records found."
             }
-        if result:
-            return {
-                "flag" : True,
-                "message" : message,
-                "data" : result
-            }
-    except Exception as e:
-        logging.exception(f"Error occured with Exception {e}")
-        message = "Internal Error Occured"
+
+        logging.info("Query Executed Successfully!")
         return {
-            "flag" : False,
-            "message" : message
+            "flag": True,
+            "message": "Query executed successfully!",
+            "data": result
         }
-    
+
+    except Exception as e:
+        logging.exception(f"Unhandled error occurred: {e}")
+        return {
+            "flag": False,
+            "message": f"Unhandled error occurred: {str(e)}"
+        }
+        
 @app.route("/download/<invoice_id>/<filename>", methods=["GET", "POST"])
 def download_invoice(invoice_id, filename):
     try:
