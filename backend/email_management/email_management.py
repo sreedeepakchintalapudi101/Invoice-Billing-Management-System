@@ -127,6 +127,7 @@ def start_scheduler():
     scheduler_thread.start()
     
 @app.route("/get_ingested_invoices", methods=["GET", "POST"])
+@cross_origin(origin="http://localhost:8080")
 def get_ingested_invoices():
     data = request.get_json()
     logging.info(f"Request Data is {data}")
@@ -142,8 +143,8 @@ def get_ingested_invoices():
         logging.info("Query Executed Successfully!")
         return {
             "flag" : True,
-            "message" : message
-            "data" : result,
+            "message" : message,
+            "data" : result
         }
     except Exception as e:
         logging.exception(f"Error occured with Exception {e}")
@@ -189,4 +190,4 @@ def convert_to_blob(file_path):
 
 if __name__ == "__main__":
     start_scheduler()
-    app.run(debug=False, host="0.0.0.0", port=8081)
+    app.run(debug=False, host="0.0.0.0", port=8083)
