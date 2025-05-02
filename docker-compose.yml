@@ -50,7 +50,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./ingested_emails:/app/ingested_emails
+      - ingested_emails:/app/ingested_emails
     restart: always
   
 
@@ -64,7 +64,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./ingested_emails:/app/ingested_emails
+      - ingested_emails:/app/ingested_emails
     restart: always
 
   frontend:
