@@ -18,6 +18,8 @@ import time
 from datetime import datetime
 import threading
 from backend.database.db_utils import get_connection, execute_, update_query, insert_query
+import pdf2image
+from pdf2image import convert_from_path, convert_from_bytes
 
 app = Flask(__name__)
 CORS(app)
@@ -105,6 +107,9 @@ def get_invoice_view():
             }
         file_path = os.path.join("/app/ingested_files", invoice_id, "pdf", filename)
         logging.info(f"The File Path is {file_path}")
+        output_path = os.path.join("/app/ingested_files", invoice_id)
+        logging.info(f"The output path is {output_path}")
+        
         if not os.path.isfile(file_path):
             message = f"The file donot exists with the filename {filename}"
             logging.info(f"The file donot exists with the filename {file_path}")
@@ -112,21 +117,41 @@ def get_invoice_view():
                 "flag" : False,
                 "message" : message
             }
-        blob_data = convert_to_blob(file_path)
-        if not blob_data:
-            message = "Something Went Wrong"
-            logging.info(f"Error in converting to blob data")
+        image_paths = convert_to_images(file_path, output_path, file_name)
+        blob_datas = []
+        for image_path in image_paths:
+            blob_data = convert_to_blob(image_path)
+            blob_datas.append(blob_data)
+        logging.info(f"The Blob Datas are {blob_datas}")
+        if not blob_datas:
+            message = "Something went wrong!"
+            logging.info(f"Blob data was not generated")
             return {
                 "flag" : False,
                 "message" : message
             }
-        else:
-            message = "Successfully File Fetched!"
+        if blob_datas:
+            message = "The Images are successfully converted and saved"
             return {
                 "flag" : True,
-                "message" : message,
-                "blob_data" : blob_data,
+                "blob_datas" : blob_datas,
+                "message" : message
             }
+        # blob_data = convert_to_blob(file_path)
+        # if not blob_data:
+        #     message = "Something Went Wrong"
+        #     logging.info(f"Error in converting to blob data")
+        #     return {
+        #         "flag" : False,
+        #         "message" : message
+        #     }
+        # else:
+        #     message = "Successfully File Fetched!"
+        #     return {
+        #         "flag" : True,
+        #         "message" : message,
+        #         "blob_data" : blob_data,
+        #     }
     except Exception as e:
         logging.Exception(f"Error occured with Exception {e}")
         message = "Internal Error Occured!"
@@ -169,5 +194,15 @@ def convert_to_blob(file_path):
         blob_data = base64.b64encode(file_data).decode("UTF-8")
     return blob_data
 
+def convert_to_images(file_path, output_path, base_file_name):
+    images = convert_from_path(pdf_path=file_path, dpi=200, fmt="jpeg")
+    image_paths = []
+    for i, image in enumerate(images):
+        image_name = f"{base_file_name}_{i + 1:02d}.jpg"
+        image_path = os.path.join(output_path, image_name)
+        image.save(image_name, "JPEG")
+        image_paths.append(image_path)
+        logging.info(f"The Image is saved in mentioned output path with {image_name}")
+    return image_paths
 if __name__ == "__main__":
     app.run(debug=False, host="0.0.0.0", port=8084)
