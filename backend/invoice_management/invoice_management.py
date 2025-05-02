@@ -97,7 +97,7 @@ def get_invoice_view(invoice_id, filename):
                 "flag" : False,
                 "message" : message
             }
-        file_path = os.path.join("ingested_files", invoice_id, "pdf", filename)
+        file_path = os.path.join("app", "ingested_files", invoice_id, "pdf", filename)
         logging.info(f"The File Path is {file_path}")
         if not os.path.isfile(file_path):
             message = f"The file donot exists with the filename {filename}"
