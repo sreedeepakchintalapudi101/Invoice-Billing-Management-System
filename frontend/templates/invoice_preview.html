@@ -3,25 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Invoice Preview</title>
+  <title>Invoice Viewer</title>
   <link rel="stylesheet" href="../styles/invoice_preview.css"/>
 </head>
 <body>
-  <div class="preview-container">
-    <div class="sidebar">
-      <h2>Invoices</h2>
-      <div id="file-list">
-        <!-- JS will populate file items here -->
-        <div class="file-item">INV123.pdf</div>
-        <div class="file-item">INV456.pdf</div>
-        <div class="file-item">INV789.pdf</div>
-      </div>
-    </div>
-
-    <div class="content">
+  <div class="main-container">
+    <!-- Left: Invoice Preview -->
+    <div class="left-panel">
       <h1>Invoice Preview</h1>
       <div id="invoice-content">
         Loading invoice...
+      </div>
+    </div>
+
+    <!-- Right: Extraction Placeholder -->
+    <div class="right-panel">
+      <h2>Extracted Values</h2>
+      <div id="extracted-values">
+        <!-- Future extracted data goes here -->
+        <p>No data extracted yet.</p>
       </div>
     </div>
   </div>
