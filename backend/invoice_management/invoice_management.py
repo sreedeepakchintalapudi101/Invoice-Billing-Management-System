@@ -87,8 +87,8 @@ def get_ingested_invoices():
             "message": f"Unhandled error occurred: {str(e)}"
         }
         
-@app.route("/get_view/<invoice_id>/<filename>", methods=["GET", "POST"])
-def get_view(invoice_id, filename):
+@app.route("/get_invoice_view/<invoice_id>/<filename>", methods=["GET", "POST"])
+def get_invoice_view(invoice_id, filename):
     try:
         if not invoice_id or not filename:
             message = "Unable to fetch the file"
