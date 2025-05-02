@@ -16,7 +16,11 @@ async function loadInvoice() {
   }
 
   try {
-    const response = await fetch(`http://localhost:8084/get_invoice_view/${invoice_id}/${filename}`);
+    const response = await fetch(`http://localhost:8084/get_invoice_view`, {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ invoice_id : invoice_id, filename : filename })}
+    });
     const result = await response.json();
 
     if (!result.flag) {
