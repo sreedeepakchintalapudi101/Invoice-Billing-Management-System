@@ -21,24 +21,19 @@ async function loadInvoice() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ invoice_id, filename }),
     });
+
     const result = await response.json();
 
-    if (!result.flag) {
+    if (!result.flag || !Array.isArray(result.blob_datas)) {
       contentContainer.innerHTML = `<p>${result.message || "Failed to load invoice."}</p>`;
       return;
     }
 
-    const blobData = result.blob_data;
+    const imagesHtml = result.blob_datas.map((base64Str, idx) => {
+      return `<img src="data:image/jpeg;base64,${base64Str}" alt="Page ${idx + 1}" />`;
+    }).join("");
 
-    const byteCharacters = atob(blobData);
-    const byteNumbers = new Array(byteCharacters.length).fill().map((_, i) => byteCharacters.charCodeAt(i));
-    const byteArray = new Uint8Array(byteNumbers);
-    const pdfBlob = new Blob([byteArray], { type: 'application/pdf' });
-    const pdfUrl = URL.createObjectURL(pdfBlob);
-
-    contentContainer.innerHTML = `
-      <embed src="${pdfUrl}" type="application/pdf" width="100%" height="800px" />
-    `;
+    contentContainer.innerHTML = imagesHtml;
 
   } catch (error) {
     console.error("Error fetching invoice:", error);
