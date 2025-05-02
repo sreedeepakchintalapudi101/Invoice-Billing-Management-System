@@ -1,5 +1,7 @@
 FROM python:3.10-slim
 
+RUN apt-get update && apt-get install -y poppler-utils && apt-get clean
+
 WORKDIR /app
 
 COPY . .
@@ -10,4 +12,4 @@ ENV PYTHONPATH=/app
 
 EXPOSE 8084
 
-CMD ["python","backend/invoice_management/invoice_management.py"]
+CMD ["python", "backend/invoice_management/invoice_management.py"]
