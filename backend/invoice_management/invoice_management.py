@@ -117,7 +117,7 @@ def get_invoice_view():
                 "flag" : False,
                 "message" : message
             }
-        image_paths = convert_to_images(file_path, output_path, file_name)
+        image_paths = convert_to_images(file_path, output_path, filename)
         blob_datas = []
         for image_path in image_paths:
             blob_data = convert_to_blob(image_path)
