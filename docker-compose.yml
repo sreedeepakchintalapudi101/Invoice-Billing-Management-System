@@ -75,3 +75,6 @@ services:
     container_name: frontend
     ports:
       - "8080:80"
+
+volumes:
+  ingested_files:
