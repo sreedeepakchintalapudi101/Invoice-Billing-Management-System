@@ -153,7 +153,7 @@ def get_invoice_view():
         #         "blob_data" : blob_data,
         #     }
     except Exception as e:
-        logging.Exception(f"Error occured with Exception {e}")
+        logging.error(f"Error occured with Exception {e}")
         message = "Internal Error Occured!"
         return {
             "flag" : False,
