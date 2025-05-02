@@ -88,8 +88,46 @@ def get_ingested_invoices():
         }
         
 @app.route("/get_view/<invoice_id>/<filename>", methods=["GET", "POST"])
-def get_view():
-    pass
+def get_view(invoice_id, filename):
+    try:
+        if not invoice_id or not filename:
+            message = "Unable to fetch the file"
+            logging.info(f"invoice_id (or) filename is  missing.")
+            return {
+                "flag" : False,
+                "message" : message
+            }
+        file_path = os.path.join("ingested_files" invoice_id, "pdf", filename)
+        logging.info(f"The File Path is {file_path}")
+        if not os.path.isfile(file_path):
+            message = f"The file donot exists with the filename {filename}"
+            logging.info(f"The file donot exists with the filename {file_path}")
+            return {
+                "flag" : False,
+                "message" : message
+            }
+        blob_data = convert_to_blob(file_path)
+        if not blob_data:
+            message = "Something Went Wrong"
+            logging.info(f"Error in converting to blob data")
+            return {
+                "flag" : False,
+                "message" : message
+            }
+        else:
+            message = "Successfully File Fetched!"
+            return {
+                "flag" : True,
+                "message" : message,
+                "blob_data" : blob_data,
+            }
+    except Exception as e:
+        logging.Exception(f"Error occured with Exception {e}")
+        message = "Internal Error Occured!"
+        return {
+            "flag" : False,
+            "message" : message
+        }
         
 @app.route("/download/<invoice_id>/<filename>", methods=["GET", "POST"])
 def download_invoice(invoice_id, filename):
