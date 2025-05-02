@@ -18,8 +18,8 @@ async function loadInvoice() {
   try {
     const response = await fetch(`http://localhost:8084/get_invoice_view`, {
       method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({ invoice_id : invoice_id, filename : filename })}
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ invoice_id, filename }),
     });
     const result = await response.json();
 
@@ -30,14 +30,12 @@ async function loadInvoice() {
 
     const blobData = result.blob_data;
 
-    // Create a blob URL for the PDF
     const byteCharacters = atob(blobData);
     const byteNumbers = new Array(byteCharacters.length).fill().map((_, i) => byteCharacters.charCodeAt(i));
     const byteArray = new Uint8Array(byteNumbers);
     const pdfBlob = new Blob([byteArray], { type: 'application/pdf' });
     const pdfUrl = URL.createObjectURL(pdfBlob);
 
-    // Display PDF in iframe or embed
     contentContainer.innerHTML = `
       <embed src="${pdfUrl}" type="application/pdf" width="100%" height="800px" />
     `;
