@@ -8,3 +8,6 @@ paramiko
 APScheduler
 requests
 pdf2image
+pytesseract
+opencv-python
+pdfplumber
