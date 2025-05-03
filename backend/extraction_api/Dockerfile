@@ -1,0 +1,15 @@
+FROM python:3.9-slim
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y poppler-utils && apt-get clean
+
+COPY . .
+
+RUN pip install -r requirements.txt
+
+ENV PYTHONPATH=/app
+
+EXPOSE 8085
+
+CMD ["python", "backend/extraction_api/extraction_api.py"]

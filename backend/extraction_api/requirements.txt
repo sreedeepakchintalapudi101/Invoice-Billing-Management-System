@@ -1,0 +1,16 @@
+flask
+flask_cors
+pymysql
+python-dotenv
+# logging
+jinja2
+paramiko
+APScheduler
+requests
+pdf2image
+pytesseract
+opencv-python
+pdfplumber
+layoutparser
+matplotlib 
+numpy
