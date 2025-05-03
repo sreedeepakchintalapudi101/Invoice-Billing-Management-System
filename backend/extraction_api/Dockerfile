@@ -2,26 +2,30 @@ FROM python:3.9-slim
 
 WORKDIR /app
 
-# Install dependencies for Tesseract and other required libraries
+# Install dependencies for Tesseract, Poppler (PDF to image), and OpenCV
 RUN apt-get update && apt-get install -y \
     poppler-utils \
     tesseract-ocr \
     libsm6 libxext6 libxrender-dev \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
     libicu-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Copy the application code into the container
+# Copy the entire project into the container
 COPY . .
 
-# Install Python dependencies
+# Install Python dependencies with retries and increased timeout
 RUN pip install --upgrade pip && \
-    pip install -r backend/extraction_api/requirements.txt
+    pip install --no-cache-dir --default-timeout=100 --retries=10 \
+    --trusted-host pypi.org --trusted-host files.pythonhosted.org \
+    -r backend/extraction_api/requirements.txt
 
-# Set the PYTHONPATH environment variable
+# Set Python path for app imports
 ENV PYTHONPATH=/app
 
-# Expose port (assuming your Flask API runs on 8085)
+# Expose the API port
 EXPOSE 8085
 
-# Command to run the extraction API
+# Command to run the app
 CMD ["python", "backend/extraction_api/extraction_api.py"]
