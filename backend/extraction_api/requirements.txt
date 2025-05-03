@@ -9,7 +9,7 @@ APScheduler
 requests
 pdf2image
 pytesseract
-opencv-python
+opencv-contrib-python
 pdfplumber
 layoutparser
 matplotlib 
