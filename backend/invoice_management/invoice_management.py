@@ -200,7 +200,7 @@ def convert_to_images(file_path, output_path, base_file_name):
     for i, image in enumerate(images):
         image_name = f"{base_file_name}_{i + 1:02d}.jpg"
         image_path = os.path.join(output_path, image_name)
-        image.save(image_name, "JPEG")
+        image.save(image_path, "JPEG")
         image_paths.append(image_path)
         logging.info(f"The Image is saved in mentioned output path with {image_name}")
     return image_paths
