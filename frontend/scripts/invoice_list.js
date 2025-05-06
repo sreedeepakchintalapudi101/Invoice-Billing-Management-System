@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         row.innerHTML = `
           <td>${invoice.invoice_id}</td>
           <td>${invoice.ingested_datetime}</td>
-          <td>${invoice.from_email}</td>
+          <td>${invoice.ingested_from}</td>
           <td>${invoice.file_name || 'N/A'}</td>
         `;
 
