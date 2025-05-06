@@ -43,7 +43,7 @@ async function loadInvoice() {
 
 window.onload = loadInvoice;
 
-document.getElementById("extract-btn").addEventListener("click", function() => {
+document.getElementById("extract-btn").addEventListener("click", function() {
   fetch("http://localhost:8085/extraction_api", {
     method: "POST",
     headers: {"content":"application/json"},
