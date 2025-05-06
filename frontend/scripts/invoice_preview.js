@@ -43,17 +43,19 @@ async function loadInvoice() {
 
 window.onload = loadInvoice;
 
-// document.getElementById("extract-btn").addEventListener("click", function() {
-//   fetch("http://localhost:8085/extraction_api", {
-//     method: "POST",
-//     headers: {"content":"application/json"},
-//     body: JSON.stringify({invoice_id, filename})
-//   })
-//   .then(response => response.json())
-//   .then(data = {
-//     console.log("Response is:",data)
-//   })
-//   .catch(error => {
-//     console.log("Error", error)
-//   })
-// })
+document.getElementById("extract-btn").addEventListener("click", function () {
+  const { invoice_id, filename } = getParams();
+
+  fetch("http://localhost:8085/extraction_api", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ invoice_id, filename })
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log("Response is:", data);
+    })
+    .catch(error => {
+      console.error("Error:", error);
+    });
+});
