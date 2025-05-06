@@ -16,6 +16,7 @@ import random, string
 from datetime import datetime, timedelta
 import ast
 from ast import literal_eval
+import bcrypt
 
 load_dotenv()
 email = os.getenv("email")
