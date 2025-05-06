@@ -1,6 +1,9 @@
 import flask
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flask import request
+from datetime import datetime
+import logging
 import json
 import sqlite3
 import re
@@ -39,12 +42,9 @@ app = Flask(__name__)
 CORS(app)
 
 def encrypt_password(password):
+    password_bytes = password.encode("utf-8")
     salt = bcrypt.gensalt()
-    password_bytes = password.encode('utf-8')
-    hashed_password = bcrypt.hashpw(
-        password_bytes
-        salt
-    )
+    hashed_password = bcrypt.hashpw(password_bytes, salt)
     return hashed_password
 
 def validate_password(password):
@@ -104,6 +104,16 @@ def register_user():
         logging.info(f"The confirmed password is {confirm_password}")
         user_type = data.get("user_type")
         logging.info(f"The user type is {user_type}")
+        
+        if not validate_password(password):
+            return {
+                "flag": False,
+                "message": "Password does not meet the required criteria."
+            }
+        
+        hashed_password = encrypt_password(password)
+        hashed_confirm_password = encrypt_password(confirm_password)
+        
         query = "select * from `user_authentication` where username=%s or email=%s;"
         params=[username, email]
         result = execute_(database, query, params)
@@ -117,7 +127,7 @@ def register_user():
             }
         else:
             query = 'INSERT INTO `user_authentication` (`email`, `username`, `password`, `confirm_password`, `user_type`,`status`) VALUES (%s, %s, %s, %s, %s, %s);'
-            params = [email, username, password, confirm_password, user_type, status]
+            params = [email, username, hashed_password, hashed_confirm_password, user_type, status]
             result = insert_query(database, query, params)
             logging.info(f"The result is {result}")
             if result:
@@ -131,112 +141,88 @@ def register_user():
                     "message" : "Something went wrong with registration."
                 }
                 
-@app.route("/login_user", methods=["GET","POST"])
+@app.route("/login_user", methods=["GET", "POST"])
 def login_user():
-    email = os.getenv("email")
-    logging.info(f"The Email is {email}")
-    password = os.getenv("password")
-    logging.info(f"The Password is {password}")
     database = "user_management"
-    logging.info(f"The Request Method is {request.method}")
+    logging.info(f"Request Method: {request.method}")
+
     if request.method == "POST":
-        data = request.get_json()
-        logging.info(f"Request Data is {data}")
-        username_or_email = data.get("username_or_email","")
-        logging.info(f"The user name (or) email is {username_or_email}")
-        password = data.get("password","")
-        logging.info(f"The password is {password}")
-        query = """
-        select * from `user_authentication`
-        where (username=%s or email=%s) and password=%s;
-        """
-        params=[username_or_email, username_or_email, password]
-        result = execute_(database, query, params)
-        logging.info(f"The result is {result}")
-        if not result:
-            message = "Username (or) Email not found!"
-            return {
-                "flag" : False,
-                "message" : message
-            }
-        user_info = result[0]
-        to_email = result[0]["email"]
-        otp = generate_otp()
-        otp_expiry = (datetime.now() + timedelta(minutes=10)).strftime('%Y-%m-%d %H:%M:%S')
-        otp_update_query = """
-        update `user_authentication`
-        set otp = %s, otp_expiry = %s
-        where email = %s or username = %s;
-        """
-        params = [otp, otp_expiry, username_or_email, username_or_email]
-        result = update_query(database, otp_update_query, params)
-        logging.info(f"The Result is {result}")
-        info = fetch_email_body()
-        logging.info(f"The email_template is {info}")
-        query = """
-        SELECT `username`,`status` FROM `user_authentication`
-        WHERE username = %s or email = %s;
-        """
-        params = [username_or_email, username_or_email]
-        name_result = execute_(database, query, params)
-        name = name_result[0]["username"]
-        status = name_result[0]["status"]
-        if status == "0":
-            message = "Account Locked!"
-            return {
-                "flag" : "locked",
-                "message" : message
-            }
-        if info:
-            try:
-                logging.info(f"The type of info is {type(info)}")
-                logging.info(f"The type of info[0] is {type(info[0])}")
-                logging.info(f"The type of info[0][info] is {type(info[0]['info'])}")
-                logging.info(f"The info[0]['info'] is {info[0]['info']}")
-                raw_info = info[0]["info"]
-                logging.info(f"Raw info before parsing: {raw_info}")
-                parsed_info = json.loads(raw_info)
+        try:
+            data = request.get_json()
+            logging.info(f"Request Data: {data}")
 
-                # try:
-                #     parsed_info = json.loads(clean_str)
-                # except json.JSONDecodeError as e:
-                #     logging.exception(f"The json error occured with exception: {e}")
-                #     logging.exception(f"Broken_str:{clean_str}")
-                
-                # info[0]['info'] = json.loads(info[0]["info"].replace('\n', '\\n').replace('\r', '\\r'))
-                # info_dict = info[0]
-                # if isinstance(info_dict, dict) and "info" in info_dict and isinstance(info_dict["info"], dict):
-                from_email = parsed_info["email"]
-                logging.info(f"The from email is {from_email}")
-                email_subject =  parsed_info["subject"]
-                logging.info(f"The subject is {email_subject}")
-                email_body = parsed_info["body"]
-                logging.info(f"The email body is {email_body}")
-                subject_template = Template(email_subject)
-                logging.info(f"The subject template is {subject_template}")
-                body_template = Template(email_body)
-                logging.info(f"The body template is {body_template}")
-                subject = subject_template.render(username=name, otp=otp)
-                body = body_template.render(username=name, otp=otp)
-                
-                send_email(to_email, subject, body)
-                logging.info(f"The Email sent to {to_email}")
-            except Exception as e:
-                logging.exception(f"Error occured with Exception {e}")
-                message = "Internal error while sending OTP"
+            username_or_email = data.get("username_or_email", "")
+            input_password = data.get("password", "")
+
+            logging.info(f"Username/Email: {username_or_email}")
+
+            # Step 1: Fetch user details from DB
+            query = """
+                SELECT * FROM `user_authentication`
+                WHERE username = %s OR email = %s;
+            """
+            params = [username_or_email, username_or_email]
+            result = execute_(database, query, params)
+            logging.info(f"User Query Result: {result}")
+
+            if not result:
                 return {
-                    "flag" : False,
-                    "message" : message
+                    "flag": False,
+                    "message": "Username or Email not found!"
                 }
-        
-        return {
-            "flag" : True,
-            "message" : "Otp Generated Successfully!"
-        }
-from flask import request
-from datetime import datetime
-import logging
-
+            user_info = result[0]
+            stored_hashed_password = user_info["password"]
+            if not bcrypt.checkpw(input_password.encode("utf-8"), stored_hashed_password.encode("utf-8")):
+                return {
+                    "flag": False,
+                    "message": "Invalid password!"
+                }
+            if user_info["status"] == "0":
+                return {
+                    "flag": "locked",
+                    "message": "Account Locked!"
+                }
+            name = user_info["username"]
+            to_email = user_info["email"]
+            otp = generate_otp()
+            otp_expiry = (datetime.now() + timedelta(minutes=10)).strftime('%Y-%m-%d %H:%M:%S')
+            update_query_stmt = """
+                UPDATE `user_authentication`
+                SET otp = %s, otp_expiry = %s
+                WHERE email = %s OR username = %s;
+            """
+            update_params = [otp, otp_expiry, username_or_email, username_or_email]
+            update_result = update_query(database, update_query_stmt, update_params)
+            logging.info(f"OTP Update Result: {update_result}")
+            email_template_info = fetch_email_body()
+            if email_template_info:
+                try:
+                    raw_info = email_template_info[0]["info"]
+                    parsed_info = json.loads(raw_info)
+                    from_email = parsed_info["email"]
+                    email_subject_template = Template(parsed_info["subject"])
+                    email_body_template = Template(parsed_info["body"])
+                    subject = email_subject_template.render(username=name, otp=otp)
+                    body = email_body_template.render(username=name, otp=otp)
+                    send_email(to_email, subject, body)
+                    logging.info(f"OTP email sent to {to_email}")
+                except Exception as e:
+                    logging.exception(f"Error sending OTP: {e}")
+                    return {
+                        "flag": False,
+                        "message": "Internal error while sending OTP"
+                    }
+            return {
+                "flag": True,
+                "message": "OTP generated successfully!"
+            }
+        except Exception as e:
+            logging.exception(f"Login Exception: {e}")
+            return {
+                "flag": False,
+                "message": "An unexpected error occurred."
+            }
+            
 @app.route("/validate_otp", methods=["POST"])
 def validate_otp():
     database = "user_management"
