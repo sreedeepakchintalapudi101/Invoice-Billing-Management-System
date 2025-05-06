@@ -17,6 +17,7 @@ from datetime import datetime, timedelta
 import ast
 from ast import literal_eval
 import bcrypt
+import hashlib
 
 load_dotenv()
 email = os.getenv("email")
@@ -36,6 +37,15 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 CORS(app)
+
+def encrypt_password(password):
+    salt = bcrypt.gensalt()
+    password_bytes = password.encode('utf-8')
+    hashed_password = bcrypt.hashpw(
+        password_bytes
+        salt
+    )
+    return hashed_password
 
 def validate_password(password):
     pattern = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$')
