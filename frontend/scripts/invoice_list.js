@@ -22,9 +22,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         row.innerHTML = `
           <td>${invoice.invoice_id}</td>
-          <td>${invoice.file_name}</td>
           <td>${invoice.ingested_datetime}</td>
-          <td>${invoice.from_email || 'N/A'}</td>
+          <td>${invoice.from_email}</td>
+          <td>${invoice.file_name || 'N/A'}</td>
         `;
 
         row.style.cursor = "pointer";
