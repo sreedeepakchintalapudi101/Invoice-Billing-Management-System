@@ -41,6 +41,11 @@ def home():
         "flag": True,
         "message": message
     }
-    
+
+@app.route("/extraction_api", methods=["GET", "POST"])
+def extraction_api():
+    data = request.get_json()
+    pass
+
 if __name__ == "__main__":
     app.run(debug=False, host="0.0.0.0", port=8085)

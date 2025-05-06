@@ -80,7 +80,7 @@ services:
       - .env
     volumes:
       - ingested_files:/app/ingested_files
-    restart: -always
+    restart: always
 
   frontend:
     build:
