@@ -122,7 +122,7 @@ def get_invoice_view():
         for image_path in image_paths:
             blob_data = convert_to_blob(image_path)
             blob_datas.append(blob_data)
-        logging.info(f"The Blob Datas are {blob_datas}")
+        # logging.info(f"The Blob Datas are {blob_datas}")
         if not blob_datas:
             message = "Something went wrong!"
             logging.info(f"Blob data was not generated")
