@@ -72,7 +72,7 @@ def extraction_api():
     logging.info(f"Request Data is {data}")
     invoice_id = data.get("invoice_id","")
     logging.info(f"Invoice ID is {invoice_id}")
-    file_name = data.get("file_name","")
+    file_name = data.get("filename","")
     logging.info(f"File name is {file_name}")
     try:
         if not invoice_id or not file_name:
