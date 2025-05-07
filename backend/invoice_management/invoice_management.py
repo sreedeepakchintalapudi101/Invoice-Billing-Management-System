@@ -198,6 +198,7 @@ def convert_to_images(file_path, output_path, base_file_name):
     images = convert_from_path(pdf_path=file_path, dpi=200, fmt="jpeg")
     image_paths = []
     for i, image in enumerate(images):
+        base_file_name = base_file_name.split(".")[0]
         image_name = f"{base_file_name}_{i + 1:02d}.jpg"
         image_path = os.path.join(output_path, image_name)
         image.save(image_path, "JPEG")
