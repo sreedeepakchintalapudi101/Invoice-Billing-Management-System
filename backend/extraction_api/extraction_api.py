@@ -54,7 +54,7 @@ def image_preprocess(image_path, output_path, scale_factor=2.0):
         image = cv2.imread(image_path)
         logging.info(f"The image is {image}")
         height, width, channels = image.shape
-        image = cv2.resize(image, (int(height * scale_factor), int(width * scale_factor)), interpolation=cv2.INTER_CUBIC)
+        image = cv2.resize(image, (int(width * scale_factor), int(height * scale_factor)), interpolation=cv2.INTER_CUBIC)
         logging.info(f"The Resized Image Shape is {image.shape}")
         base_name = image_path.split(".")[0]
         # base_name = os.path.splitext(os.path.basename(image_path))[0]
@@ -108,7 +108,7 @@ def extraction_api():
             image_path = os.path.join(file_path, image_file)
             logging.info(f"The Image Path is {image_path}")
             output_path = os.path.join("/app/ingested_files", invoice_id)
-            grey_image = image_preprocess(image_path, output_path)
+            grey_image = f(image_path, output_path)
             if grey_image:
                 grey_image_paths.append(grey_image)
         message = "The Files are successfully Preprocessed"
