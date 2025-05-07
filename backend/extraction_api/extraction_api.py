@@ -83,7 +83,7 @@ def extraction_api():
             }
         file_path = os.path.join("app/ingested_files", invoice_id)
         logging.info(f"The file path is {file_path}")
-        if not os.path.exists:
+        if not os.path.exists(file_path):
             message = "File does not exists in given path"
             return {
                 "flag" : False,
@@ -91,7 +91,8 @@ def extraction_api():
             }
         image_files = []
         for image in os.listdir(file_path):
-            if image.endswith(".jpeg") or image.endswith("jpeg") or image.endswith("png"):
+            # if image.endswith(".jpeg") or image.endswith("jpeg") or image.endswith("png"):
+            if image.lower().endswith((".jpg", ".jpeg", ".png")):
                 image_files.append(image)
         if not image_files:
             logging.info(f"Image file does not exists")
@@ -105,7 +106,7 @@ def extraction_api():
             image_path = os.path.join(file_path, image_file)
             logging.info(f"The Image Path is {image_path}")
             output_path = "app/"
-            grey_image = image_preprocess(input_path, output_path)
+            grey_image = image_preprocess(image_path, output_path)
             if grey_image:
                 grey_image_paths.append(grey_image)
         message = "The Files are successfully Preprocessed"
