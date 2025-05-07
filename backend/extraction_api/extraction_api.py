@@ -108,7 +108,7 @@ def extraction_api():
             image_path = os.path.join(file_path, image_file)
             logging.info(f"The Image Path is {image_path}")
             output_path = os.path.join("/app/ingested_files", invoice_id)
-            grey_image = f(image_path, output_path)
+            grey_image = (image_path, output_path)
             if grey_image:
                 grey_image_paths.append(grey_image)
         message = "The Files are successfully Preprocessed"
