@@ -56,15 +56,17 @@ def image_preprocess(image_path, output_path, scale_factor=2.0):
         height, width, channels = image.shape
         image = cv2.resize(image, (int(height * scale_factor), int(width * scale_factor)), interpolation=cv2.INTER_CUBIC)
         logging.info(f"The Resized Image Shape is {image.shape}")
-        base_name = image_path.split(".")[0]
+        # base_name = image_path.split(".")[0]
+        base_name = os.path.splitext(os.path.basename(image_path))[0]
         logging.info(f"The Base Name is {base_name}")
         grey_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         grey_image_path = os.path.join(output_path, f"{base_name}_grey.jpg")
-        cv2.imwrite(grey_image, grey_image_path)
+        cv2.imwrite(grey_image_path, grey_image)
         logging.info(f"The grey image is saved in {grey_image_path}")
         return grey_image_path
     except Exception as e:
         logging.error(f"Error occured with Exception {e}")
+        return None
         
 @app.route("/extraction_api", methods=["GET", "POST"])
 def extraction_api():
