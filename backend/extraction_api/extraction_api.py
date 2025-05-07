@@ -83,7 +83,7 @@ def extraction_api():
                 "flag" : False,
                 "message" : message
             }
-        file_path = os.path.join("app/ingested_files", invoice_id)
+        file_path = os.path.join("/app/ingested_files", invoice_id)
         logging.info(f"The file path is {file_path}")
         if not os.path.exists(file_path):
             message = "File does not exists in given path"
