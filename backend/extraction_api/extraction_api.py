@@ -42,12 +42,6 @@ def home():
         "message": message
     }
 
-# def upscale_image(image, scale_factor = 2.0):
-#     width, height, channels = image.shape
-#     logging.info(f"The width and height of image are {width} and {height}")
-#     image = cv2.resize(image, ((height * scale_factor), (width * scale_factor)))
-#     return image
-
 def image_preprocess(image_path, output_path, scale_factor=2.0):
     try:
         logging.info(f"The File Path is {image_path}")
@@ -57,13 +51,13 @@ def image_preprocess(image_path, output_path, scale_factor=2.0):
         image = cv2.resize(image, (int(width * scale_factor), int(height * scale_factor)), interpolation=cv2.INTER_CUBIC)
         logging.info(f"The Resized Image Shape is {image.shape}")
         base_name = image_path.split(".")[0]
-        # base_name = os.path.splitext(os.path.basename(image_path))[0]
         logging.info(f"The Base Name is {base_name}")
         grey_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        grey_image_path = os.path.join(output_path, f"{base_name}_grey.jpg")
-        cv2.imwrite(grey_image_path, grey_image)
-        logging.info(f"The grey image is saved in {grey_image_path}")
-        return grey_image_path
+        bi_lateral_blurred_image = cv2.bilateralFilter(grey_image, 9, 75, 75)
+        bi_lateral_blurred_image_path = os.path.join(output_path, f"{base_name}_bi_lateral_blur_image.jpg")
+        cv2.imwrite(bi_lateral_blurred_image_path, bi_lateral_blurred_image)
+        logging.info(f"The grey image is saved in {bi_lateral_blurred_image_path}")
+        return bi_lateral_blurred_image_path
     except Exception as e:
         logging.error(f"Error occured with Exception {e}")
         return None
