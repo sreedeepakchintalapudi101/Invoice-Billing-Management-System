@@ -54,7 +54,7 @@ def image_preprocess(image_path, output_path, scale_factor=2.0):
         logging.info(f"The Base Name is {base_name}")
         grey_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         bi_lateral_blurred_image = cv2.bilateralFilter(grey_image, 9, 75, 75)
-        threshold_image = cv2.threshold(bi_lateral_blurred_image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
+        threshold_image = cv2.adaptiveThreshold(bi_lateral_blurred_image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3,3))
         morphological_image = cv2.morphologyEx(threshold_image, cv2.MORPH_OPEN, kernel, iterations=1)
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3,3))
