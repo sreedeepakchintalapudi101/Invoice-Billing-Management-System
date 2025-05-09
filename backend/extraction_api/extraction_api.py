@@ -62,7 +62,7 @@ def image_preprocess(image_path, output_path, scale_factor=2.0):
         morphological_image_final_path = os.path.join(output_path, f"{base_name}_final_image.jpg")
         cv2.imwrite(morphological_image_final_path, morphological_image_final)
         logging.info(f"The grey image is saved in {morphological_image_final_path}")
-        return morphological_image_path
+        return morphological_image_final_path
     except Exception as e:
         logging.error(f"Error occured with Exception {e}")
         return None
