@@ -88,7 +88,7 @@ services:
     container_name:
       table_detection_api
     ports:
-      "8086:8086"
+      - "8086:8086"
     env_file:
       - .env
     volumes:
