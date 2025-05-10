@@ -68,7 +68,7 @@ services:
 
   table_detection_api:
     build:
-      context: 
+      context: .
       dockerfile: backend/table_detection_api/Dockerfile
     container_name: table_detection_api
     ports:
