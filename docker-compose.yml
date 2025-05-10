@@ -81,19 +81,19 @@ services:
     volumes:
       - ingested_files:/app/ingested_files
     restart: always
-  table_detection_api:
-    build:
-      context: .
-      dockerfile: /backend/table_detection_api/Dockerfile
-    container_name:
-      table_detection_api
-    ports:
-      - "8086:8086"
-    env_file:
-      - .env
-    volumes:
-      - ingested_files:/app/ingested_files
-    restart: always
+  # table_detection_api:
+  #   build:
+  #     context: .
+  #     dockerfile: /backend/table_detection_api/Dockerfile
+  #   container_name:
+  #     table_detection_api
+  #   ports:
+  #     - "8086:8086"
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - ingested_files:/app/ingested_files
+  #   restart: always
   frontend:
     build:
       context: ./frontend
