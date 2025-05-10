@@ -6,7 +6,7 @@ COPY . .
 
 ENV PYTHONPATH=/app
 
-RUN pip install -r backend/email_management/requirements.txt
+RUN pip install --upgrade pip && pip install -r backend/email_management/requirements.txt
 
 ENV PYTHONPATH=/app
 
