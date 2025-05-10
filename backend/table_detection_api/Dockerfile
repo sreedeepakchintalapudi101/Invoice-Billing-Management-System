@@ -10,4 +10,4 @@ ENV PYTHONPATH=/app
 
 EXPOSE 8086
 
-CMD["python", "backend/table_detection_api/table_detection_api.py"]
+CMD ["python", "backend/table_detection_api/table_detection_api.py"]
