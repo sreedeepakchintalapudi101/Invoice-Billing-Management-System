@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN pip install -r backend/dashboard_management/requirements.txt
+RUN pip install --upgrade pip && pip install -r backend/dashboard_management/requirements.txt
 
 ENV PYTHONPATH=/app
 

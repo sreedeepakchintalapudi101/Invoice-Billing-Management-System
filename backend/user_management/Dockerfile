@@ -33,7 +33,7 @@ WORKDIR /app
 COPY . .
 
 # Install dependencies from requirements.txt
-RUN pip install -r backend/user_management/requirements.txt
+RUN pip install --upgrade pip && pip install -r backend/user_management/requirements.txt
 
 # Set PYTHONPATH to the app directory for imports
 ENV PYTHONPATH=/app

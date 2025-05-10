@@ -6,7 +6,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN pip install -r backend/invoice_management/requirements.txt
+RUN pip install --upgrade pip && pip install -r backend/invoice_management/requirements.txt
 
 ENV PYTHONPATH=/app
 
