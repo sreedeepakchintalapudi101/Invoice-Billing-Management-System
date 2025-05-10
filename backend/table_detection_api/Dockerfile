@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN pip install --upgrade pip && pip install -r backend/table_detection_api/table_detection_api.py
+RUN pip install --upgrade pip && pip install -r backend/table_detection_api/requirements.txt
 
 ENV PYTHONPATH=/app
 
