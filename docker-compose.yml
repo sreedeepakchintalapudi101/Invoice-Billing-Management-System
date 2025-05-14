@@ -84,7 +84,7 @@ services:
   extraction_api:
     build:
       context: .
-      Dockerfile: backend/extraction_api/Dockerfile
+      Dockerfile: ./backend/extraction_api/Dockerfile
     container_name: extraction_api
     ports:
       - "8086:8086"
