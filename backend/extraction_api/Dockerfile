@@ -1,0 +1,18 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y \
+    tesseract-ocr \
+    poppler-utils \
+    libglib2.0-0 \
+    libgl1-mesa-glx \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+COPY . .
+
+RUN pip install --upgrade pip && pip install -r requirements.txt
+
+ENV PYTHONPATH=/app
+
+CMD ["python", "backend/extraction_api/extraction_api.py"]
