@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
 COPY . .
 
 # Install Python dependencies
-RUN pip install --upgrade pip && pip install --no-cache-dir -r backend/extraction_api/requirements.txt
+RUN pip install --upgrade pip && pip install --no-cache-dir -r backend/image_conversion_api/requirements.txt
 
 ENV PYTHONPATH=/app
 
