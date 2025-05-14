@@ -1,4 +1,17 @@
-version: '3.8'
+# # version: '3.8'
+
+# services:
+#   user_management:
+#     build: ./backend/user_management
+#     ports:
+#       - "8081:8081"
+#     env_file:
+#       - .env
+#     volumes:
+#       - ./backend:/app
+#     # restart: always
+
+# version: '3.8'
 
 services:
   user_management:
@@ -11,52 +24,55 @@ services:
     env_file:
       - .env
     volumes:
-      - ./backend/user_management:/app
+      - .:/app
     restart: always
-
+  
   dashboard_management:
     build:
       context: .
       dockerfile: /backend/dashboard_management/Dockerfile
     container_name: dashboard_management
-    ports:
+    ports: 
       - "8082:8082"
     env_file:
       - .env
     volumes:
-      - ./backend/dashboard_management:/app
+      - .:/app
     restart: always
 
   email_management:
     build:
       context: .
-      dockerfile: backend/email_management/Dockerfile
+      dockerfile: /backend/email_management/Dockerfile
     container_name: email_management
     ports:
       - "8083:8083"
     env_file:
       - .env
     volumes:
+      # - ./ingested_emails:/app/ingested_emails
       - ingested_files:/app/ingested_files
     restart: always
+  
 
   invoice_management:
     build:
       context: .
-      dockerfile: backend/invoice_management/Dockerfile
+      dockerfile: ./backend/invoice_management/Dockerfile
     container_name: invoice_management
     ports:
       - "8084:8084"
     env_file:
       - .env
     volumes:
+      # - ./ingested_emails:/app/ingested_emails
       - ingested_files:/app/ingested_files
     restart: always
-
+  
   extraction_api:
     build:
       context: .
-      dockerfile: backend/extraction_api/Dockerfile
+      dockerfile: ./backend/extraction_api/Dockerfile
     container_name: extraction_api
     ports:
       - "8085:8085"
@@ -65,7 +81,18 @@ services:
     volumes:
       - ingested_files:/app/ingested_files
     restart: always
-
+  # table_detection_api:
+  #   build:
+  #     context: .
+  #     dockerfile: /backend/table_detection_api/Dockerfile
+  #   container_name: table_detection_api
+  #   ports:
+  #     - "8086:8086"
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - /ingested_files:/app/ingested_files
+  #   restart: always
   frontend:
     build:
       context: ./frontend
