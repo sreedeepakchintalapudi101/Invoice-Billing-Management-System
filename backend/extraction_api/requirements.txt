@@ -5,6 +5,7 @@ python-dotenv
 # logging
 jinja2
 requests
+paramiko
 pdf2image
 pytesseract
 opencv-contrib-python
