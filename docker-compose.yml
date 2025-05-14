@@ -69,11 +69,11 @@ services:
       - ingested_files:/app/ingested_files
     restart: always
   
-  extraction_api:
+  image_conversion_api:
     build:
       context: .
-      dockerfile: ./backend/extraction_api/Dockerfile
-    container_name: extraction_api
+      dockerfile: ./backend/image_conversion_api/Dockerfile
+    container_name: image_conversion_api
     ports:
       - "8085:8085"
     env_file:

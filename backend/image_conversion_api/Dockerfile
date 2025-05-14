@@ -20,4 +20,4 @@ ENV PYTHONPATH=/app
 
 EXPOSE 8085
 
-CMD ["python", "backend/extraction_api/extraction_api.py"]
+CMD ["python", "backend/image_conversion_api/image_conversion_api.py"]
