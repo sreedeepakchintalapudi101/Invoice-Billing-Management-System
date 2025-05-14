@@ -110,12 +110,51 @@ def convert_image():
             grey_image = image_preprocess(image_path, output_path)
             if grey_image:
                 grey_image_paths.append(grey_image)
-        message = "The Files are successfully Preprocessed"
-        return {
-            "flag" : True,
-            "message" : message, 
-            "processed_images" : grey_image_paths
-        }
+        # message = "The Files are successfully Preprocessed"
+        # return {
+        #     "flag" : True,
+        #     "message" : message, 
+        #     "processed_images" : grey_image_paths
+        # }
+        if not grey_image_paths:
+            message = "Image Preprocessing Failed!"
+            return {
+                "flag" : False,
+                "message" : message
+            }
+        try:
+            extraction_api_url = "http://localhost:8086/extraction_api"
+            extraction_api_params = {
+                "invoice_id" : invoice_id,
+                "grey_image_paths" : grey_image_paths
+            }
+            
+            extraction_api_response = requests.post(extraction_api_url, json=extraction_api_params)
+            logging.info(f"The extraction_api response is {extraction_api_response}")
+            if extraction_api_response.status_code != 200:
+                message = "extraction_api failed!"
+                return {
+                    "flag" : False,
+                    "message" : message
+                }
+            final_result = extraction_api_response.json()
+            flag = final_result.get("flag", False)
+            message = final_result.get("message", "")
+            extracted_data = final_result.get("extracted_data", "")
+            
+            return {
+                "flag" : flag,
+                "message" : message,
+                "processed_files" : grey_image_paths,
+                "extracted_data" : extracted_data
+            }
+        except Exception as e:
+            logging.error(f"Error occured with Exception {e}")
+            message = "Something went Wrong!"
+            return {
+                "flag" : False,
+                "message" : message
+            }
     except Exception as e:
         logging.error(f"Error occured with Exception {e}")
         message = "Internal Error Occured"
