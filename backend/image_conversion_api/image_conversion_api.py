@@ -67,8 +67,8 @@ def image_preprocess(image_path, output_path, scale_factor=2.0):
         logging.error(f"Error occured with Exception {e}")
         return None
         
-@app.route("/extraction_api", methods=["GET", "POST"])
-def extraction_api():
+@app.route("/convert_image", methods=["GET", "POST"])
+def convert_image():
     data = request.get_json()
     logging.info(f"Request Data is {data}")
     invoice_id = data.get("invoice_id","")

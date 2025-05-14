@@ -46,7 +46,7 @@ window.onload = loadInvoice;
 document.getElementById("extract-btn").addEventListener("click", function () {
   const { invoice_id, filename } = getParams();
 
-  fetch("http://localhost:8085/extraction_api", {
+  fetch("http://localhost:8085/convert_image", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ invoice_id, filename })
