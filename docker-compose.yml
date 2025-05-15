@@ -93,6 +93,19 @@ services:
     volumes:
       - ingested_files:/app/ingested_files
     restart: always
+  
+  ocr_preprocessing_api:
+    build:
+      context: .
+      dockerfile: /backend/ocr_preprocessing_api/Dockerfile
+    container_name: ocr_preprocessing_api
+    ports:
+      - "8087:8087"
+    env_file:
+      - .env
+    volumes:
+      - /ingested_files:/app/ingested_files
+    restart: always
   frontend:
     build:
       context: ./frontend
