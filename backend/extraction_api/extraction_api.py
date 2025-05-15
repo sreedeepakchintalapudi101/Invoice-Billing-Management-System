@@ -78,7 +78,7 @@ def extraction_api():
                 SELECT `invoice_id` FROM `raw_ocr`
                 WHERE `invoice_id` = %s AND `image_path` = %s;
             """
-            params = [invoice_id]
+            params = [invoice_id, grey_image_path]
             result = execute_(database, check_query, params)
             
             if result:
