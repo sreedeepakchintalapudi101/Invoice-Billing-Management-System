@@ -1,19 +1,39 @@
+# flask
+# flask_cors
+# pymysql
+# python-dotenv
+# # logging
+# jinja2
+# requests
+# paramiko
+# pdf2image
+# pytesseract
+# opencv-contrib-python
+# pdfplumber
+# layoutparser
+# matplotlib 
+# numpy
+# spacy
+# ultralytics
+# huggingface_hub
+# torch==2.1.0
+
 flask
 flask_cors
+requests
 pymysql
 python-dotenv
-# logging
-jinja2
-requests
 paramiko
-pdf2image
 pytesseract
 opencv-contrib-python
+Pillow
+ultralytics==8.1.22
+huggingface_hub
+pdf2image
 pdfplumber
 layoutparser
-matplotlib 
+matplotlib
 numpy
 spacy
-ultralytics
-huggingface_hub
+doclayout-yolo @ git+https://github.com/juliozhao/DocLayout-YOLO.git
 torch==2.1.0
