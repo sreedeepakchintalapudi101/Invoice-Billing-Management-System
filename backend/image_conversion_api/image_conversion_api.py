@@ -123,7 +123,7 @@ def convert_image():
                 "message" : message
             }
         try:
-            extraction_api_url = "http://extraction_api:8086/extraction_api"
+            extraction_api_url = "http://bounding_box_detection_api:8088/bounding_box_detection_api"
             extraction_api_params = {
                 "invoice_id" : invoice_id,
                 "grey_image_paths" : grey_image_paths
