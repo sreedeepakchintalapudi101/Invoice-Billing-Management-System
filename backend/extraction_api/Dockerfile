@@ -15,4 +15,6 @@ RUN pip install --upgrade pip && pip install -r backend/extraction_api/requireme
 
 ENV PYTHONPATH=/app
 
+EXPOSE 8086
+
 CMD ["python", "backend/extraction_api/extraction_api.py"]
