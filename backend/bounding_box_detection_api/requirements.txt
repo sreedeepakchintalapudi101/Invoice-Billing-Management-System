@@ -33,7 +33,7 @@ pdf2image
 pdfplumber
 layoutparser
 matplotlib
-numpy
+numpy<2
 spacy
 doclayout-yolo @ git+https://github.com/opendatalab/DocLayout-YOLO.git
 torch==2.1.0

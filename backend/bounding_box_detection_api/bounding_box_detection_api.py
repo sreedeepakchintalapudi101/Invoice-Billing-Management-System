@@ -24,6 +24,7 @@ from PIL import Image
 import ultralytics
 from huggingface_hub import hf_hub_download
 from doclayout_yolo import YOLOv10
+import logging
 
 app = Flask(__name__)
 CORS(app)
