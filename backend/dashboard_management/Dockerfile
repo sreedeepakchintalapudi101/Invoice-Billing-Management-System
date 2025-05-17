@@ -12,4 +12,4 @@ RUN pip install flask_cors
 
 EXPOSE 8082
 
-CMD ["python", "backend/user_management/dashboard_management.py"]
+CMD ["python", "backend/dashboard_management/dashboard_management.py"]
