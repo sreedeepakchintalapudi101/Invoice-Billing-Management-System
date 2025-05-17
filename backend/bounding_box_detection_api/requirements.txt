@@ -35,5 +35,5 @@ layoutparser
 matplotlib
 numpy
 spacy
-doclayout-yolo @ git+https://github.com/juliozhao/DocLayout-YOLO.git
+doclayout-yolo @ git+https://github.com/opendatalab/DocLayout-YOLO.git
 torch==2.1.0
