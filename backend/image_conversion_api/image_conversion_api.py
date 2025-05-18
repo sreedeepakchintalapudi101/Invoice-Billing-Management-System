@@ -125,7 +125,7 @@ def convert_image():
         try:
             extraction_api_url = "http://bounding_box_detection_api:8088/bounding_box_detection_api"
             extraction_api_params = {
-                "update_flag" : "new"
+                "update_flag" : "new",
                 "invoice_id" : invoice_id,
                 "grey_image_paths" : grey_image_paths
             }

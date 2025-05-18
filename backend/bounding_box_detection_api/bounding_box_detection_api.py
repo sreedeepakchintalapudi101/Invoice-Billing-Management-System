@@ -7,7 +7,7 @@ from doclayout_yolo import YOLOv10
 import json
 import pytesseract
 from datetime import datetime
-from database.db_utils import get_connection, execute_, insert_query, update_query
+from backend.database.db_utils import get_connection, execute_, insert_query, update_query
 app = Flask(__name__)
 CORS(app)
 
