@@ -4,6 +4,7 @@ import logging
 import os
 import cv2
 from doclayout_yolo import YOLOv10
+from huggingface_hub import hf_hub_download
 import json
 import pytesseract
 from datetime import datetime
@@ -47,8 +48,11 @@ def bounding_box_detection_api():
         if not invoice_id or not grey_image_paths:
             logging.warning("Missing invoice_id or grey_image_paths")
             return {"flag": False, "message": "Missing required fields"}
-
-        model = YOLOv10.from_pretrained("juliozhao/DocLayout-YOLO-DocStructBench")
+        file_path = hf_hub_download(
+            repo_id = "juliozhao/DocLayout-YOLO-DocStructBench",
+            filename = "doclayout_yolo_docstructbench_imgsz1024.pt"
+        )
+        model = YOLOv10.from_pretrained(file_path)
         if not model:
             logging.error("Model not loaded!")
             return {"flag": False, "message": "Model not loaded!"}
