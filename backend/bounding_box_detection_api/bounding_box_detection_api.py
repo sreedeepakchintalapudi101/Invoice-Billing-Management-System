@@ -27,12 +27,6 @@ def home():
         "message" : message
     }
 
-from flask import request
-import os
-import logging
-import cv2
-from ultralytics import YOLOv10
-
 @app.route("/bounding_box_detection_api", methods=["GET", "POST"])
 def bounding_box_detection_api():
     database = "extraction_management"
