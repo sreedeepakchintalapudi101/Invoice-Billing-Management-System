@@ -16,8 +16,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY . .
 
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir --default-timeout=100 --retries=10 -r backend/bounding_box_detection_api/requirements.txt
+RUN pip install --upgrade pip && pip install -r backend/bounding_box_detection_api/requirements.txt
 
 ENV PYTHONPATH=/app
 
