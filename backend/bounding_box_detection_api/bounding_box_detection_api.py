@@ -126,7 +126,7 @@ def bounding_box_detection_api():
         WHERE `invoice_id` = %s;
         """
         params = [invoice_id]
-        result = execute_(database, query, params)
+        result = execute_(database, select_query, params)
         if result:
             message = "Already the Data is extracted!"
             return {
