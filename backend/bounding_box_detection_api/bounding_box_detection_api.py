@@ -52,7 +52,7 @@ def bounding_box_detection_api():
             repo_id = "juliozhao/DocLayout-YOLO-DocStructBench",
             filename = "doclayout_yolo_docstructbench_imgsz1024.pt"
         )
-        model = YOLOv10.from_pretrained(file_path)
+        model = YOLOv10(file_path)
         if not model:
             logging.error("Model not loaded!")
             return {"flag": False, "message": "Model not loaded!"}
