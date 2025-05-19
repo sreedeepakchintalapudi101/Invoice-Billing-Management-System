@@ -104,7 +104,7 @@ services:
     env_file:
       - .env
     volumes:
-      - /ingested_files:/app/ingested_files
+      - ingested_files:/app/ingested_files
     restart: always
   bounding_box_detection_api:
     build:
@@ -116,7 +116,7 @@ services:
     env_file:
       - .env
     volumes:
-      - /ingested_files:/app/ingested_files
+      - ingested_files:/app/ingested_files
     restart: always
 
   frontend:
