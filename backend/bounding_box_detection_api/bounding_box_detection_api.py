@@ -5,9 +5,10 @@ import os
 import cv2
 from doclayout_yolo import YOLOv10
 from huggingface_hub import hf_hub_download
-import json
+import 
 import pytesseract
 from datetime import datetime
+import torch
 from backend.database.db_utils import get_connection, execute_, insert_query, update_query
 app = Flask(__name__)
 CORS(app)
@@ -78,9 +79,9 @@ def bounding_box_detection_api():
                 continue
             det_res = model.predict(
                 grey_image_path, 
-                imgsz=1024, 
-                conf=0.2, 
-                device="cuda:0"
+                imgsz = 1024, 
+                conf = 0.2, 
+                device = "cuda:0" if torch.cuda.is_available() else "cpu"
                 )
             image_file_name = os.path.splitext(os.path.basename(grey_image_path))[0]
             logging.info(f"The Image File Name is {image_file_name}")
