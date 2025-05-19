@@ -141,13 +141,11 @@ def convert_image():
             final_result = extraction_api_response.json()
             flag = final_result.get("flag", False)
             message = final_result.get("message", "")
-            extracted_data = final_result.get("extracted_data", "")
-            
+            file_paths = final_result.get("file_paths", "")
             return {
                 "flag" : flag,
                 "message" : message,
-                "processed_files" : grey_image_paths,
-                "extracted_data" : extracted_data
+                "processed_files" : file_paths,
             }
         except Exception as e:
             logging.error(f"Error occured with Exception {e}")

@@ -121,6 +121,19 @@ def bounding_box_detection_api():
         if not extraction_dict["extracted"]:
             return {"flag": False, "message": "No valid images processed."}
         
+        select_query = f"""
+        SELECT * FROM `raw_ocr`
+        WHERE `invoice_id` = %s;
+        """
+        params = [invoice_id]
+        result = execute_(database, query, params)
+        if result:
+            message = "Already the Data is extracted!"
+            return {
+                "flag" : False,
+                "message" : message
+            }
+            
         if update_flag == "new":
             insertion_query = """
             INSERT INTO `raw_ocr` (invoice_id, image_path, extracted_text, created_at, updated_at)
