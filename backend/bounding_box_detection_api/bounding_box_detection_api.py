@@ -73,7 +73,7 @@ def bounding_box_detection_api():
                 continue
             logging.info(f"Processing: {grey_image_path}")
             img = cv2.imread(grey_image_path)
-            if not img:
+            if img is None:
                 logging.error(f"Failed to read image: {grey_image_path}")
                 continue
             det_res = model.predict(
