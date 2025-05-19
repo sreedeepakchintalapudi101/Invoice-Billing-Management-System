@@ -2,10 +2,11 @@ from flask import Flask, request
 from flask_cors import CORS
 import logging
 import os
+import json
 import cv2
 from doclayout_yolo import YOLOv10
 from huggingface_hub import hf_hub_download
-import 
+import torch
 import pytesseract
 from datetime import datetime
 import torch
@@ -46,6 +47,8 @@ def bounding_box_detection_api():
         
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         
+        if update_flag not in ["new", "update"]:
+            return {"flag": False, "message": "Invalid update_flag. Use 'new' or 'update'."}        
         if not invoice_id or not grey_image_paths:
             logging.warning("Missing invoice_id or grey_image_paths")
             return {"flag": False, "message": "Missing required fields"}
@@ -113,13 +116,18 @@ def bounding_box_detection_api():
         
         logging.info(f"THe Extracted Dict is {extraction_dict}")
         
+        grey_image_paths_string = ",".join(grey_image_paths)
+        
+        if not extraction_dict["extracted"]:
+            return {"flag": False, "message": "No valid images processed."}
+        
         if update_flag == "new":
             insertion_query = """
             INSERT INTO `raw_ocr` (invoice_id, image_path, extracted_text, created_at, updated_at)
             VALUES
             (%s, %s, %s, %s, %s);
             """
-            params = [invoice_id, grey_image_paths, str(extraction_dict), current_time, current_time]
+            params = [invoice_id, grey_image_paths_string, json.dumps(extraction_dict), current_time, current_time]
             result = insert_query(database, insertion_query, params)
             logging.info(f"The result is {result}")
             message = "The Extraction is Done Successfully!"
@@ -131,9 +139,9 @@ def bounding_box_detection_api():
         if update_flag == "update":
             updation_query = """
             UPDATE `raw_ocr` SET `extracted_data` = %s, updated_at = %s
-            WHERE `invoice_id` = %s and grey_image_path = %s;
+            WHERE `invoice_id` = %s and image_path = %s;
             """
-            params = [str(extraction_dict), current_time, invoice_id, grey_image_paths]
+            params = [json.dumps(extraction_dict), current_time, invoice_id, grey_image_paths_string]
             result = update_query(database, updation_query, params)
             logging.info(f"The result is {result}")
             message = "OCR Data Updated Successfully!"
