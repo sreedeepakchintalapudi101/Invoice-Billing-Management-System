@@ -179,7 +179,7 @@ def bounding_box_detection_api():
             result = update_query(database, updation_query, params)
             logging.info(f"The result is {result}")
             message = "OCR Data Updated Successfully!"
-            ocr_postprocessing_api_url = "http://ocr_postprocessing_api:8080/ocr_postprocessing_api"
+            ocr_postprocessing_api_url = "http://ocr_postprocessing_api:8087/ocr_postprocessing_api"
             ocr_postprocessing_api_params = {
                 "invoice_id" : invoice_id,
                 "file_paths" : grey_image_paths,
