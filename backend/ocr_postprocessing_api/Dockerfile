@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --upgrade pip && pip install -r backend/ocr_preprocessing_api/requirements.txt
+RUN pip install --upgrade pip && pip install -r backend/ocr_postprocessing_api/requirements.txt
 
 ENV PYTHONPATH=/app
 
