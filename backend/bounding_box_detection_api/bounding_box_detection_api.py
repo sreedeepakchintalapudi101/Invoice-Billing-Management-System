@@ -144,10 +144,30 @@ def bounding_box_detection_api():
             result = insert_query(database, insertion_query, params)
             logging.info(f"The result is {result}")
             message = "The Extraction is Done Successfully!"
+            ocr_postprocessing_api_url = "http://ocr_postprocessing_api:8080/ocr_postprocessing_api"
+            ocr_postprocessing_api_params = {
+                "invoice_id" : invoice_id,
+                "file_paths" : grey_image_paths,
+                "update_flag" : "new"
+            }
+            ocr_postprocessing_api_response = requests.post(ocr_postprocessing_api_url, json=ocr_postprocessing_api_params)
+            logging.info(f"The OCR post processing api response is {ocr_postprocessing_api_response}")
+            if ocr_postprocessing_api_response.status_code != 200:
+                message = "OCR postprocessing Failed!"
+                return {
+                    "flag" : False,
+                    "message" : message,
+                    "extraction_dict" : {}
+                }
+            final_result = ocr_postprocessing_api_response.json()
+            logging.info(f"The result is {final_result}")
+            flag = final_result.get("flag", "")
+            message = final_result.get("message", "")
+            extraction_dict = final_result.get("extraction_dict", "")
             return {
-                "flag" : True,
+                "flag" : flag,
                 "message" : message,
-                "file_paths" : all_crop_paths
+                "extraction_dict" : extraction_dict
             }
         if update_flag == "update":
             updation_query = """
@@ -158,10 +178,30 @@ def bounding_box_detection_api():
             result = update_query(database, updation_query, params)
             logging.info(f"The result is {result}")
             message = "OCR Data Updated Successfully!"
+            ocr_postprocessing_api_url = "http://ocr_postprocessing_api:8080/ocr_postprocessing_api"
+            ocr_postprocessing_api_params = {
+                "invoice_id" : invoice_id,
+                "file_paths" : grey_image_paths,
+                "update_flag" : "update"
+            }
+            ocr_postprocessing_api_response = requests.post(ocr_postprocessing_api_url, json=ocr_postprocessing_api_params)
+            logging.info(f"The OCR post processing api response is {ocr_postprocessing_api_response}")
+            if ocr_postprocessing_api_response.status_code != 200:
+                message = "OCR postprocessing Failed!"
+                return {
+                    "flag" : False,
+                    "message" : message,
+                    "extraction_dict" : {}
+                }
+            final_result = ocr_postprocessing_api_response.json()
+            logging.info(f"The result is {final_result}")
+            flag = final_result.get("flag", "")
+            message = final_result.get("message", "")
+            extraction_dict = final_result.get("extraction_dict", "")
             return {
-                "flag": True,
-                "message": message,
-                "file_paths": all_crop_paths
+                "flag" : flag,
+                "message" : message,
+                "extraction_dict" : extraction_dict
             }
 
     except Exception as e:

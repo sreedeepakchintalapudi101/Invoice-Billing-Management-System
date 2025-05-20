@@ -123,29 +123,31 @@ def convert_image():
                 "message" : message
             }
         try:
-            extraction_api_url = "http://bounding_box_detection_api:8088/bounding_box_detection_api"
-            extraction_api_params = {
+            bounding_box_detection_api_url = "http://bounding_box_detection_api:8088/bounding_box_detection_api"
+            bounding_box_detection_api_params = {
                 "update_flag" : "new",
                 "invoice_id" : invoice_id,
                 "grey_image_paths" : grey_image_paths
             }
             
-            extraction_api_response = requests.post(extraction_api_url, json=extraction_api_params)
-            logging.info(f"The extraction_api response is {extraction_api_response}")
-            if extraction_api_response.status_code != 200:
+            bounding_box_detection_api_response = requests.post(bounding_box_detection_api_url, json=bounding_box_detection_api_params)
+            logging.info(f"The extraction_api response is {bounding_box_detection_api_response}")
+            if bounding_box_detection_api_response.status_code != 200:
                 message = "extraction_api failed!"
                 return {
                     "flag" : False,
                     "message" : message
                 }
-            final_result = extraction_api_response.json()
+            final_result = bounding_box_detection_api_response.json()
             flag = final_result.get("flag", False)
             message = final_result.get("message", "")
             file_paths = final_result.get("file_paths", "")
+            extraction_dict = final_result.get("extraction_dict", "")
             return {
                 "flag" : flag,
                 "message" : message,
                 "processed_files" : file_paths,
+                "extraction_dict" : extraction_dict
             }
         except Exception as e:
             logging.error(f"Error occured with Exception {e}")
