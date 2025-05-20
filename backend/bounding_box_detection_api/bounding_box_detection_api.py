@@ -10,6 +10,7 @@ import torch
 import pytesseract
 from datetime import datetime
 import torch
+import requests
 from backend.database.db_utils import get_connection, execute_, insert_query, update_query
 app = Flask(__name__)
 CORS(app)
