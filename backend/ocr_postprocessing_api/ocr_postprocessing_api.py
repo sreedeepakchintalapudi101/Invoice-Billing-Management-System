@@ -148,7 +148,7 @@ def ocr_postprocessing_api():
             VALUES
             (%s, %s, %s, %s);
             """
-            params = [invoice_id, processed_dict, current_time, current_time]
+            params = [invoice_id, json.loads(processed_dict), current_time, current_time]
             insertion_result = insert_query(database, insertion_query, params)
             logging.info(f"The insertion result is {insertion_result}")
             if insertion_result:
@@ -164,7 +164,7 @@ def ocr_postprocessing_api():
             SET `ocr_dict` = %s, `updated_at` = %s
             WHERE `invoice_id` = %s;
             """
-            params = [processed_dict, current_time, invoice_id]
+            params = [json.loads(processed_dict), current_time, invoice_id]
             updation_result = update_query(database, uodation_query, params)
             logging.info(f"The updation result is {updation_result}")
             if updation_result:
