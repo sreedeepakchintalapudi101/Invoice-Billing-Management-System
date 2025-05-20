@@ -16,4 +16,4 @@ ENV PYTHONPATH=/app
 
 EXPOSE 8087
 
-CMD ["python", "backend/ocr_preprocessing_api/ocr_preprocessing_api.py"]
+CMD ["python", "backend/ocr_postprocessing_api/ocr_postprocessing_api.py"]
