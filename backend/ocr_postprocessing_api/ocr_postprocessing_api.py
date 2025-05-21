@@ -76,6 +76,7 @@ def ocr_postprocessing_api():
         logging.info(f"The ocr dict is {ocr_dict}")
         processed_dict = {}
         logging.info(f"The processed dict is {processed_dict}")
+        template_type = ""
         for item in ocr_dict["extracted"][0]["ocr_data"]:
             if item["label"] == "plain text":
                 if 1600 < item["bbox"][0] < 1900 and 550 < item["bbox"][1] < 570 and 3050 < item["bbox"][2] < 3100 and 1000 < item["bbox"][3] < 1100:
@@ -85,6 +86,8 @@ def ocr_postprocessing_api():
                     logging.info(f"The lines at billing address are {lines}")
                     billing_address_lines = []
                     for line in lines:
+                        if "Amazon.in" in line or "amazon" in line.lower() or "amazon" in line:
+                            template_type = "Amazon"
                         if "Billing Address" in line:
                             continue
                         if "State/UT Code" in line:
@@ -145,11 +148,11 @@ def ocr_postprocessing_api():
         if update_flag == "new":
             insertion_query = f"""
             INSERT INTO `ocr_info`
-            (`invoice_id`, `ocr_dict`, `created_at`, `updated_at`)
+            (`invoice_id`, `ocr_dict`, `created_at`, `updated_at`, `template`)
             VALUES
             (%s, %s, %s, %s);
             """
-            params = [invoice_id, json.dumps(processed_dict), current_time, current_time]
+            params = [invoice_id, json.dumps(processed_dict), current_time, current_time, template_type]
             insertion_result = insert_query(database, insertion_query, params)
             logging.info(f"The insertion result is {insertion_result}")
             if insertion_result:
@@ -163,10 +166,10 @@ def ocr_postprocessing_api():
         if update_flag == "update":
             updation_query = """
             UPDATE `ocr_info`
-            SET `ocr_dict` = %s, `updated_at` = %s
+            SET `ocr_dict` = %s, `updated_at` = %s, `Template`
             WHERE `invoice_id` = %s;
             """
-            params = [json.loads(processed_dict), current_time, invoice_id]
+            params = [json.loads(processed_dict), current_time, template_type, invoice_id]
             updation_result = update_query(database, uodation_query, params)
             logging.info(f"The updation result is {updation_result}")
             if updation_result:
