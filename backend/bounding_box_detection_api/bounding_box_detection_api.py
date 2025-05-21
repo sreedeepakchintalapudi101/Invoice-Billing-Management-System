@@ -192,17 +192,19 @@ def bounding_box_detection_api():
                 return {
                     "flag" : False,
                     "message" : message,
-                    "extraction_dict" : {}
+                    "extracted_dict" : {}
                 }
             final_result = ocr_postprocessing_api_response.json()
             logging.info(f"The result is {final_result}")
             flag = final_result.get("flag", "")
             message = final_result.get("message", "")
-            extraction_dict = final_result.get("extraction_dict", "")
+            extracted_dict = final_result.get("extracted_dict", "")
+            invoice_id = final_result.get("invoice_id", "")
             return {
                 "flag" : flag,
                 "message" : message,
-                "extraction_dict" : extraction_dict
+                "invoice_id" : invoice_id,
+                "extracted_dict" : extracted_dict
             }
 
     except Exception as e:

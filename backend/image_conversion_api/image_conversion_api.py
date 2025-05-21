@@ -125,7 +125,7 @@ def convert_image():
         try:
             bounding_box_detection_api_url = "http://bounding_box_detection_api:8088/bounding_box_detection_api"
             bounding_box_detection_api_params = {
-                "update_flag" : "new",
+                "update_flag" : update_flag,
                 "invoice_id" : invoice_id,
                 "grey_image_paths" : grey_image_paths
             }
@@ -139,15 +139,16 @@ def convert_image():
                     "message" : message
                 }
             final_result = bounding_box_detection_api_response.json()
+            logging.info(f"The final result is {final_result}")
             flag = final_result.get("flag", False)
             message = final_result.get("message", "")
-            file_paths = final_result.get("file_paths", "")
-            extraction_dict = final_result.get("extraction_dict", "")
+            invoice_id = final_result.get("invoice_id", "")
+            extracted_dict = final_result.get("extracted_dict", "")
             return {
                 "flag" : flag,
                 "message" : message,
-                "processed_files" : file_paths,
-                "extraction_dict" : extraction_dict
+                "invoice_id" : invoice_id,
+                "extracted_dict" : extracted_dict
             }
         except Exception as e:
             logging.error(f"Error occured with Exception {e}")

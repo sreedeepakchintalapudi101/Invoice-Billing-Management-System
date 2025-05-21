@@ -157,6 +157,7 @@ def ocr_postprocessing_api():
                 return {
                     "flag" : True,
                     "invoice_id" : invoice_id,
+                    "message" : message,
                     "extracted_dict" : processed_dict
                 }
         if update_flag == "update":
@@ -169,9 +170,11 @@ def ocr_postprocessing_api():
             updation_result = update_query(database, uodation_query, params)
             logging.info(f"The updation result is {updation_result}")
             if updation_result:
+                message = "Data updated successfully!"
                 return {
                     "flag" : True,
                     "invoice_id" : invoice_id,
+                    "message" : message,
                     "extracted_dict" : processed_dict
                 }
         else:
