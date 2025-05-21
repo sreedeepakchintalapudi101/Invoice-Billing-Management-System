@@ -25,7 +25,15 @@ body {
 
 .register-container input[type="text"],
 .register-container input[type="email"],
-.register-container input[type="password"],
+.register-container input[type="password"] {
+    width: 93%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #90caf9;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
 .register-container select {
     width: 100%;
     padding: 12px;

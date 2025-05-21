@@ -4,26 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard</title>
-  <link rel="stylesheet" href="../styles/dashboard.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../demo/styles.css"/>
 </head>
 <body>
   <div class="dashboard-container">
     <aside class="sidebar" id="sidebar">
       <ul>
+        <li><img src="../demo/download-removebg-preview.png" alt="loading" style="width: 25px;length: 40px;"></li>
         <li onclick="navigateTo('dashboard_home.html')">
-          <span class="icon">🏠</span>
+          <span class="icon"><i class="fas fa-table-columns"></i></span>
           <span class="text">Dashboard</span>
         </li>
         <li onclick="navigateTo('invoice_list.html')">
-          <span class="icon">📄</span>
+          <span class="icon"><i class="fas fa-file-invoice"></i></span>
           <span class="text">Invoices</span>
         </li>
         <li onclick="navigateTo('customers.html')">
-          <span class="icon">👥</span>
+          <span class="icon"><i class="fas fa-chart-line"></i></span>
           <span class="text">Customers</span>
         </li>
         <li onclick="navigateTo('settings.html')">
-          <span class="icon">⚙️</span>
+          <span class="icon"><i class="fas fa-cog"></i></span>
           <span class="text">Settings</span>
         </li>
       </ul>

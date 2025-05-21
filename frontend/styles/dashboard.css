@@ -1,7 +1,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  background-color: #F9FAFB;
 }
 
 .dashboard-container {
@@ -11,7 +11,7 @@ body {
 
 .sidebar {
   width: 60px;
-  background-color: #2c3e50;
+  background-color: #0F172A;
   transition: width 0.3s ease;
   overflow: hidden;
 }
