@@ -150,7 +150,7 @@ def ocr_postprocessing_api():
             INSERT INTO `ocr_info`
             (`invoice_id`, `ocr_dict`, `created_at`, `updated_at`, `template`)
             VALUES
-            (%s, %s, %s, %s);
+            (%s, %s, %s, %s, %s);
             """
             params = [invoice_id, json.dumps(processed_dict), current_time, current_time, template_type]
             insertion_result = insert_query(database, insertion_query, params)
@@ -166,7 +166,7 @@ def ocr_postprocessing_api():
         if update_flag == "update":
             updation_query = """
             UPDATE `ocr_info`
-            SET `ocr_dict` = %s, `updated_at` = %s, `Template`
+            SET `ocr_dict` = %s, `updated_at` = %s, `Template` = %s
             WHERE `invoice_id` = %s;
             """
             params = [json.loads(processed_dict), current_time, template_type, invoice_id]
