@@ -164,11 +164,12 @@ def bounding_box_detection_api():
             logging.info(f"The result is {final_result}")
             flag = final_result.get("flag", "")
             message = final_result.get("message", "")
-            extraction_dict = final_result.get("extraction_dict", "")
+            extracted_dict = final_result.get("extracted_dict", "")
+            invoice_id = final_result.get("invoice_id", "")
             return {
                 "flag" : flag,
                 "message" : message,
-                "extraction_dict" : extraction_dict
+                "extracted_dict" : extracted_dict
             }
         if update_flag == "update":
             updation_query = """
