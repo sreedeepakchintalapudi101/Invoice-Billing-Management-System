@@ -63,7 +63,7 @@ def ocr_postprocessing_api():
                 "flag" : False,
                 "message" : message
             }
-        current_time = datetime.now().strftime("%Y-%M-%D %H:%M:%S")
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         logging.info(f"The current time is {current_time}")
         select_query = """
         SELECT * FROM `raw_ocr`
