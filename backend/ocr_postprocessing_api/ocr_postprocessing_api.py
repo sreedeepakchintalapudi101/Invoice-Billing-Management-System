@@ -55,6 +55,7 @@ def ocr_postprocessing_api():
         invoice_id = data.get("invoice_id", "")
         logging.info(f"The invoice id is {invoice_id}")
         update_flag = data.get("update_flag", "")
+        logging.info(f"The Update Flag is {update_flag}")
         if not update_flag:
             logging.info(f"Update Flag missing!")
             message = "Updated flag missing!"
@@ -62,16 +63,16 @@ def ocr_postprocessing_api():
                 "flag" : False,
                 "message" : message
             }
+        current_time = datetime.now().strftime("%Y-%M-%D %H:%M:%S")
+        logging.info(f"The current time is {current_time}")
         select_query = """
         SELECT * FROM `raw_ocr`
         WHERE invoice_id = %s;
         """
-        current_time = datetime.now().strftime("%Y-%M-%D %H:%M:%S")
-        logging.info(f"The current time is {current_time}")
         params = [invoice_id]
         select_result = execute_(database, select_query, params)
         logging.info(f"The result is {select_result}")
-        ocr_dict = json.loads(select_result["extracted_text"])
+        ocr_dict = json.loads(select_result[0]["extracted_text"])
         logging.info(f"The ocr dict is {ocr_dict}")
         processed_dict = {}
         logging.info(f"The processed dict is {processed_dict}")
