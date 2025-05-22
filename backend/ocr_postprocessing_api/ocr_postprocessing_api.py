@@ -118,20 +118,14 @@ def ocr_postprocessing_api():
                                     processed_dict["Place of supply"] = "A" + processed_dict["Place of supply"]
                                     logging.info(f"The processed_dict at place of supply without A is {processed_dict['Place of supply']}")
                         if "Place of delivery" in line:
-                            match = re.search(r"^Place of delivery:\s*(.+)$", line)
+                            match = re.search(r"^Place of delivery[:;]\s*(.+)$", line)
+                            logging.info(f"The match is {match}")
                             if match:
-                                processed_dict["Place of delivery"] = match.group(0)[match.group(0).index(":") + 2:]
-                                logging.info(f"The processed dict at place of delivery is {processed_dict['Place of delivery']}")
-                                if not processed_dict["Place of delivery"].startswith("A"):
-                                    logging.info(f"The processed dict at place of delivery is without A is {processed_dict['Place of delivery']}")
-                                    processed_dict["Place of delivery"] = "A" + processed_dict["Place of delivery"]
-                            match = re.search(r"^Place of delivery;\s*(.+)$", line)
-                            if match:
-                                processed_dict["Place of delivery"] = match.group(0)[match.group(0).index(":") + 2:]
-                                logging.info(f"The processed dict at place of delivery is {processed_dict['Place of delivery']}")
-                                if not processed_dict["Place of delivery"].startswith("A"):
-                                    logging.info(f"The processed dict at place of delivery is without A is {processed_dict['Place of delivery']}")
-                                    processed_dict["Place of delivery"] = "A" + processed_dict["Place of delivery"]
+                                value = match.group(1).split()
+                                if not value.startswith("A"):
+                                    value = "A" + value
+                                processed_dict["Place of delivery"] = value
+                                logging.info(f"The processed dict after Place of delivery is {processed_dict['place of delivery']}")
                         if "Invoice Number" in line:
                             match = re.search(r"^Invoice Number :\s*(.+)$", line)
                             if match:
@@ -151,7 +145,7 @@ def ocr_postprocessing_api():
                             shipping_address_lines.append(line)
                     processed_dict["Billing Address"] = " ".join(shipping_address_lines)
                     logging.info(f"The processed dict at Billing Address is {processed_dict['Billing Address']}")
-            if 1800 < item["bbox"][0] < 2200 and 2100 < item["bbox"] < 2300 and 3000 < item["bbox"] < 3200 and 2300 < item["bbox"] < 2500:
+            if 1800 < item["bbox"][0] < 2200 and 2100 < item["bbox"][1] < 2300 and 3000 < item["bbox"][2] < 3200 and 2300 < item["bbox"][3] < 2500:
                 lines = [line.strip() for line in item["text"].split("\n") if line.strip()]
                 for line in lines:
                     if "Invoice Number" in line:
@@ -191,7 +185,7 @@ def ocr_postprocessing_api():
             WHERE `invoice_id` = %s;
             """
             params = [json.loads(processed_dict), current_time, template_type, invoice_id]
-            updation_result = update_query(database, uodation_query, params)
+            updation_result = update_query(database, updation_query, params)
             logging.info(f"The updation result is {updation_result}")
             if updation_result:
                 message = "Data updated successfully!"
