@@ -158,12 +158,12 @@ def ocr_postprocessing_api():
                         match = re.search(r"^Invoice Number :\s*(.+)$", line)
                         if match:
                             processed_dict["Invoice Number"] = match.group(0)[match.group(0).index(":") + 2]
-                            logging.info(f"The Processed Dict for Invoice Number is {processed_dict["Invoice Number"]}")
+                            logging.info(f"The Processed dict after Invoice Number is {processed_dict['Invoice Number']}")
                     if "Invoice Details" in line:
                         match = re.search(r"^Invoice Details :\s*(.+)$", line)
                         if match:
                             processed_dict["Invoice Details"] = match.group(0)[match.group(0).index(":") + 2]
-                            logging.info(f"The Processed Dict after Invoice Details are {processed_dict["Invoice Details"]}")
+                            logging.info(f"The Processed Dict after Invoice Details are {processed_dict['Invoice Details']}")
         logging.info(f"The processed_dict is {processed_dict}")
         if update_flag == "new":
             insertion_query = f"""
