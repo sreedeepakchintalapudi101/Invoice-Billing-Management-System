@@ -151,6 +151,19 @@ def ocr_postprocessing_api():
                             shipping_address_lines.append(line)
                     processed_dict["Billing Address"] = " ".join(shipping_address_lines)
                     logging.info(f"The processed dict at Billing Address is {processed_dict['Billing Address']}")
+            if 1800 < item["bbox"][0] < 2200 and 2100 < item["bbox"] < 2300 and 3000 < item["bbox"] < 3200 and 2300 < item["bbox"] < 2500:
+                lines = [line.strip() for line in item["text"].split("\n") if line.strip()]
+                for line in lines:
+                    if "Invoice Number" in line:
+                        match = re.search(r"^Invoice Number :\s*(.+)$", line)
+                        if match:
+                            processed_dict["Invoice Number"] = match.group(0)[match.group(0).index(":") + 2]
+                            logging.info(f"The Processed Dict for Invoice Number is {processed_dict["Invoice Number"]}")
+                    if "Invoice Details" in line:
+                        match = re.search(r"^Invoice Details :\s*(.+)$", line)
+                        if match:
+                            processed_dict["Invoice Details"] = match.group(0)[match.group(0).index(":") + 2]
+                            logging.info(f"The Processed Dict after Invoice Details are {processed_dict["Invoice Details"]}")
         logging.info(f"The processed_dict is {processed_dict}")
         if update_flag == "new":
             insertion_query = f"""
