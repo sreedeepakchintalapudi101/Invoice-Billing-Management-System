@@ -121,10 +121,12 @@ def ocr_postprocessing_api():
                             match = re.search(r"^Place of delivery[:;]\s*(.+)$", line)
                             logging.info(f"The match is {match}")
                             if match:
-                                value = match.group(1).split()
-                                if not value.startswith("A"):
-                                    value = "A" + value
-                                processed_dict["Place of delivery"] = value
+                                value_list = match.group(1).split()
+                                logging.info(f"The Value is {value_list}")
+                                place = " ".join(value_list)
+                                if not place.startswith("A"):
+                                    place = "A" + place
+                                processed_dict["Place of delivery"] = place
                                 logging.info(f"The processed dict after Place of delivery is {processed_dict['place of delivery']}")
                         if "Invoice Number" in line:
                             match = re.search(r"^Invoice Number :\s*(.+)$", line)
