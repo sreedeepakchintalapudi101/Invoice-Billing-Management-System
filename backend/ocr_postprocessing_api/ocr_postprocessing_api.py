@@ -125,6 +125,13 @@ def ocr_postprocessing_api():
                                 if not processed_dict["Place of delivery"].startswith("A"):
                                     logging.info(f"The processed dict at place of delivery is without A is {processed_dict['Place of delivery']}")
                                     processed_dict["Place of delivery"] = "A" + processed_dict["Place of delivery"]
+                            match = re.search(r"^Place of delivery;\s*(.+)$", line)
+                            if match:
+                                processed_dict["Place of delivery"] = match.group(0)[match.group(0).index(":") + 2:]
+                                logging.info(f"The processed dict at place of delivery is {processed_dict['Place of delivery']}")
+                                if not processed_dict["Place of delivery"].startswith("A"):
+                                    logging.info(f"The processed dict at place of delivery is without A is {processed_dict['Place of delivery']}")
+                                    processed_dict["Place of delivery"] = "A" + processed_dict["Place of delivery"]
                         if "Invoice Number" in line:
                             match = re.search(r"^Invoice Number :\s*(.+)$", line)
                             if match:
