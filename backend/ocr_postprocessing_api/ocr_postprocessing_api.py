@@ -129,17 +129,26 @@ def ocr_postprocessing_api():
                                 processed_dict["Place of delivery"] = place
                                 logging.info(f"The processed dict after Place of delivery is {processed_dict['Place of delivery']}")
                         if "Invoice Number" in line:
-                            match = re.search(r"^Invoice Number :\s*(.+)$", line)
+                            match = re.search(r"^Invoice Number\s*:\s*(.+)$", line)
+                            logging.info(f"The Match is {match}")
+                            logging.info(f"The Group 0 is {match.group(0)}")
+                            logging.info(f"The Group 1 is {match.group(1)}")
                             if match:
                                 processed_dict["Invoice Number"] = match.group(0)[match.group(0).index(":") + 2:]
                                 logging.info(f"The processed dict at Invoice Number is {processed_dict['Invoice Number']}")
                         if "Invoice Details" in line:
-                            match = re.search(r"^Invoice Details :\s*(.+)$", line)
+                            match = re.search(r"^Invoice Details\s*:\s*(.+)$", line)
+                            logging.info(f"The Match is {match}")
+                            logging.info(f"The Group 0 is {match.group(0)}")
+                            logging.info(f"The Group 1 is {match.group(1)}")
                             if match:
                                 processed_dict["Invoice Details"] = match.group(0)[match.group(0).index(":") + 2:]
                                 logging.info(f"The processed dict at Invoice Details is {processed_dict['Invoice Details']}")
                         if "Invoice Date" in line:
-                            match = re.search(r"^Invoice Date :\s*(\d.+)$", line)
+                            match = re.search(r"^Invoice Date\s*:\s*(\d.+)$", line)
+                            logging.info(f"The Match is {match}")
+                            logging.info(f"The Group 0 is {match.group(0)}")
+                            logging.info(f"The Group 1 is {match.group(1)}")
                             if match:
                                 processed_dict["Invoice Date"] = match.group(0)[match.group(0).index(":") + 2:]
                                 logging.info(f"The processed dict at Invoice Date is {processed_dict['Invoice Date']}")
@@ -151,13 +160,19 @@ def ocr_postprocessing_api():
                 lines = [line.strip() for line in item["text"].split("\n") if line.strip()]
                 for line in lines:
                     if "Invoice Number" in line:
-                        match = re.search(r"^Invoice Number :\s*(.+)$", line)
+                        match = re.search(r"^Invoice Number\s*:\s*(.+)$", line)
+                        logging.info(f"The Match is {match}")
+                        logging.info(f"The Group 0 is {match.group(0)}")
+                        logging.info(f"The Group 1 is {match.group(1)}")
                         logging.info(f"The match for Invoice Number is {match}")
                         if match:
                             processed_dict["Invoice Number"] = match.group(0)[match.group(0).index(":") + 2]
                             logging.info(f"The Processed dict after Invoice Number is {processed_dict['Invoice Number']}")
                     if "Invoice Details" in line:
-                        match = re.search(r"^Invoice Details :\s*(.+)$", line)
+                        match = re.search(r"^Invoice Details\s*:\s*(.+)$", line)
+                        logging.info(f"The Match is {match}")
+                        logging.info(f"The Group 0 is {match.group(0)}")
+                        logging.info(f"The Group 1 is {match.group(1)}")
                         if match:
                             processed_dict["Invoice Details"] = match.group(0)[match.group(0).index(":") + 2]
                             logging.info(f"The Processed Dict after Invoice Details are {processed_dict['Invoice Details']}")
