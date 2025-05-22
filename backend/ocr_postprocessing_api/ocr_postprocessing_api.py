@@ -156,6 +156,7 @@ def ocr_postprocessing_api():
                 for line in lines:
                     if "Invoice Number" in line:
                         match = re.search(r"^Invoice Number :\s*(.+)$", line)
+                        logging.info(f"The match for Invoice Number is {match}")
                         if match:
                             processed_dict["Invoice Number"] = match.group(0)[match.group(0).index(":") + 2]
                             logging.info(f"The Processed dict after Invoice Number is {processed_dict['Invoice Number']}")
