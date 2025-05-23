@@ -110,7 +110,7 @@ def ocr_postprocessing_api():
                             for i, line in enumerate(lines):
                                 if "Shipping Address" in line:
                                     start_index += i + 1
-                                else:
+                                if "State/UT Code" in line:
                                     end_index = i
                             if start_index != -1 and end_index != -1:
                                 shipping_address_lines.extend(lines[start_index, end_index])
