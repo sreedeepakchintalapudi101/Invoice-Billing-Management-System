@@ -54,24 +54,27 @@ document.getElementById("extract-btn").addEventListener("click", function () {
     .then(response => response.json())
     .then(data => {
       console.log("Response is:", data);
-      const container = document.getElementById("extracted-values")
-      if(!data || !data.extracted_dict || data.extracted_dict.length === 0 || Object.keys(data.extracted_dict).length === 0)
-      {
+      const container = document.getElementById("extracted-values");
+
+      if (!data || !data.extracted_dict || Object.keys(data.extracted_dict).length === 0) {
         container.innerHTML = "<h2>No Data is extracted!</h2>";
         return;
       }
-      else {
-        let html = "<div class='box-container'></div>";
-        for (const [key, value] of Object.entries(data.extracted_dict)) {
-          html += `<div class='data-box'><h2 class='box-key'>${key}</h2><h2 class='data-value'>${value}</h2></div>`;
-        }
-        html += '</div>';
-        container.innerHTML = html
+
+      let html = "<div class='box-container'>";
+      for (const [key, value] of Object.entries(data.extracted_dict)) {
+        html += `
+          <div class='data-box'>
+            <h2 class='box-key'>${key}</h2>
+            <p class='data-value'>${value}</p>
+          </div>
+        `;
+      }
+      html += "</div>";
+      container.innerHTML = html;
     })
     .catch(error => {
       console.error("Error:", error);
-      document.getElementById("extracted-values").innerHTML = "<h2>Error in loading extracted data</h2>"
+      document.getElementById("extracted-values").innerHTML = "<h2>Error in loading extracted data</h2>";
     });
 });
-
-document.getElementById("")
