@@ -104,7 +104,7 @@ def ocr_postprocessing_api():
                     shipping_address_lines = []
                     for line in lines:
                         if "Shipping Address" in line:
-                            match = re.search(r"^Shipping Address\s:\s*(.+)$", line)
+                            match = re.search(r"^Shipping Address:\s*(.+)$", line)
                             logging.info(f"The Match is {match}")
                             logging.info(f"The Group 0 is {match.group(0)}")
                             logging.info(f"The Group 1 is {match.group(1)}")
