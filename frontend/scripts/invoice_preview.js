@@ -54,8 +54,25 @@ document.getElementById("extract-btn").addEventListener("click", function () {
     .then(response => response.json())
     .then(data => {
       console.log("Response is:", data);
+      const container = document.getElementById("extracted-values")
+      if(!data || !data.extracted_dict || data.extracted_dict.length === 0 || Object.keys(data.extracted_dict).length === 0)
+      {
+        container.innerHTML = "<h2>No Data is extracted!</h2>";
+        return;
+      }
+      else {
+        let html = "<h2>Extracted Invoice Data:</h2><table border='1' cellpadding='8' cellspacing='0'>";
+        for ([key, value] of Object.entries(data.extracted_dict)) {
+          html += "<tr><td><strong>${key}</strong></td><td>${value}</td></tr>"
+        }
+        html += "</table>";
+        container.innerHTML = html;
+      }
     })
     .catch(error => {
       console.error("Error:", error);
+      document.getElementById("extracted-values").innerHTML = "<h2>Error in loading extracted data</h2>"
     });
 });
+
+document.getElementById("")
