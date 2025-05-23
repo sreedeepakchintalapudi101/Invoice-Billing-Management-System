@@ -107,7 +107,7 @@ def ocr_postprocessing_api():
                             shipping_address_lines.extend(lines[line.index(line.startswith("Shipping Address")) + 1: lines[line.startswith(". State/UT Code")]])
                             logging.info(f"The Shipping Address lines are {shipping_address_lines}")
                             processed_dict["Shipping Address"] = " ".join(shipping_address_lines)
-                            logging.info(f"The processed dict at shipping address is {processed_dict["Shipping Address"]}")
+                            logging.info(f"The processed dict at shipping address is {processed_dict['Shipping Address']}")
                         elif "State/UT Code" in line:
                             match = re.search(r"^State/UT Code:\s*(\d+)$", line)
                             if match:
