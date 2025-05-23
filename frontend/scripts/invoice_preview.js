@@ -61,13 +61,12 @@ document.getElementById("extract-btn").addEventListener("click", function () {
         return;
       }
       else {
-        let html = "<h2>Extracted Invoice Data:</h2><table border='1' cellpadding='8' cellspacing='0'>";
-        for ([key, value] of Object.entries(data.extracted_dict)) {
-          html += "<tr><td><strong>${key}</strong></td><td>${value}</td></tr>"
+        let html = "<div class='box-container'></div>";
+        for (const [key, value] of Object.entries(data.extracted_dict)) {
+          html += `<div class='data-box'><h2 class='box-key'>${key}</h2><h2 class='data-value'>${value}</h2></div>`;
         }
-        html += "</table>";
-        container.innerHTML = html;
-      }
+        html += '</div>';
+        container.innerHTML = html
     })
     .catch(error => {
       console.error("Error:", error);
