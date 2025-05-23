@@ -104,6 +104,7 @@ def ocr_postprocessing_api():
                     shipping_address_lines = []
                     for line in lines:
                         if "Shipping Address" in line:
+                            logging.info(f"The Shipping Address Line is {line}")
                             shipping_address_lines.extend(lines[line.index(line.startswith("Shipping Address")) + 1: lines[line.startswith(". State/UT Code")]])
                             logging.info(f"The Shipping Address lines are {shipping_address_lines}")
                             processed_dict["Shipping Address"] = " ".join(shipping_address_lines)
