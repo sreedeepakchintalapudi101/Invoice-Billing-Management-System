@@ -13,7 +13,7 @@ body {
 
 /* Left: Invoice Preview */
 .left-panel {
-  width: 50%;
+  width: 40%;
   padding: 20px;
   background-color: #ffffff;
   border-right: 1px solid #ccc;
