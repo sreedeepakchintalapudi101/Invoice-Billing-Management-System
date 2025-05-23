@@ -104,7 +104,13 @@ def ocr_postprocessing_api():
                     shipping_address_lines = []
                     for line in lines:
                         if "Shipping Address" in line:
-                            continue
+                            match = re.search(r"^Shipping Address\s:\s*(.+)$", line)
+                            logging.info(f"The Match is {match}")
+                            logging.info(f"The Group 0 is {match.group(0)}")
+                            logging.info(f"The Group 1 is {match.group(1)}")
+                            if match:
+                                processed_dict["Shipping Address"] = match.group(1)
+                                logging.info(f"The processed_dict at Shipping Address is {processed_dict['Shipping Address']}")
                         if "State/UT Code" in line:
                             match = re.search(r"^State/UT Code:\s*(\d+)$", line)
                             if match:
@@ -153,8 +159,6 @@ def ocr_postprocessing_api():
                             if match:
                                 processed_dict["Invoice Date"] = match.group(0)[match.group(0).index(":") + 2:]
                                 logging.info(f"The processed dict at Invoice Date is {processed_dict['Invoice Date']}")
-                        else:
-                            shipping_address_lines.append(line)
                     processed_dict["Billing Address"] = " ".join(shipping_address_lines)
                     logging.info(f"The processed dict at Billing Address is {processed_dict['Billing Address']}")
                 if 1800 < item["bbox"][0] < 2200 and 2100 < item["bbox"][1] < 2300 and 3000 < item["bbox"][2] < 3200 and 2300 < item["bbox"][3] < 2500:
