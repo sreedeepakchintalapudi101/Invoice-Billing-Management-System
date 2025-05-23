@@ -88,9 +88,9 @@ def ocr_postprocessing_api():
                     for line in lines:
                         if "Amazon.in" in line or "amazon" in line.lower() or "amazon" in line:
                             template_type = "Amazon"
-                        if "Billing Address" in line:
+                        else if "Billing Address" in line:
                             continue
-                        if "State/UT Code" in line:
+                        else if "State/UT Code" in line:
                             match = re.search(r"^State/UT Code:\s*(\d+)$", line)
                             processed_dict["State/UT Code"] = match.group(1)
                         else:
@@ -104,18 +104,15 @@ def ocr_postprocessing_api():
                     shipping_address_lines = []
                     for line in lines:
                         if "Shipping Address" in line:
-                            match = re.search(r"^Shipping Address:\s*(.+)$", line)
-                            logging.info(f"The Match is {match}")
-                            logging.info(f"The Group 0 is {match.group(0)}")
-                            logging.info(f"The Group 1 is {match.group(1)}")
-                            if match:
-                                processed_dict["Shipping Address"] = match.group(1)
-                                logging.info(f"The processed_dict at Shipping Address is {processed_dict['Shipping Address']}")
-                        if "State/UT Code" in line:
+                            shipping_address_lines.extend(lines[line.index(line.startswith("Shipping Address")) + 1: lines[line.startswith(". State/UT Code")]])
+                            logging.info(f"The Shipping Address lines are {shipping_address_lines}")
+                            processed_dict["Shipping Address"] = " ".join(shipping_address_lines)
+                            logging.info(f"The processed dict at shipping address is {processed_dict["Shipping Address"]}")
+                        else if "State/UT Code" in line:
                             match = re.search(r"^State/UT Code:\s*(\d+)$", line)
                             if match:
                                 processed_dict["State/UT Code"] = match.group(0)[-2:]
-                        if "Place of supply" in line:
+                        else if "Place of supply" in line:
                             match = re.search(r"^Place of supply:\s*(.+)$", line)
                             if match:
                                 processed_dict["Place of supply"] = match.group(0)[match.group(0).index(":") + 2:]
@@ -123,7 +120,7 @@ def ocr_postprocessing_api():
                                 if not processed_dict["Place of supply"].startswith("A"):
                                     processed_dict["Place of supply"] = "A" + processed_dict["Place of supply"]
                                     logging.info(f"The processed_dict at place of supply without A is {processed_dict['Place of supply']}")
-                        if "Place of delivery" in line:
+                        else if "Place of delivery" in line:
                             match = re.search(r"^Place of delivery[:;]\s*(.+)$", line)
                             logging.info(f"The match is {match}")
                             if match:
@@ -134,7 +131,7 @@ def ocr_postprocessing_api():
                                     place = "A" + place
                                 processed_dict["Place of delivery"] = place
                                 logging.info(f"The processed dict after Place of delivery is {processed_dict['Place of delivery']}")
-                        if "Invoice Number" in line:
+                        else if "Invoice Number" in line:
                             match = re.search(r"^Invoice Number\s*:\s*(.+)$", line)
                             logging.info(f"The Match is {match}")
                             logging.info(f"The Group 0 is {match.group(0)}")
@@ -142,7 +139,7 @@ def ocr_postprocessing_api():
                             if match:
                                 processed_dict["Invoice Number"] = match.group(1)
                                 logging.info(f"The processed dict at Invoice Number is {processed_dict['Invoice Number']}")
-                        if "Invoice Details" in line:
+                        else if "Invoice Details" in line:
                             match = re.search(r"^Invoice Details\s*:\s*(.+)$", line)
                             logging.info(f"The Match is {match}")
                             logging.info(f"The Group 0 is {match.group(0)}")
@@ -150,7 +147,7 @@ def ocr_postprocessing_api():
                             if match:
                                 processed_dict["Invoice Details"] = match.group(1)
                                 logging.info(f"The processed dict at Invoice Details is {processed_dict['Invoice Details']}")
-                        if "Invoice Date" in line:
+                        else if "Invoice Date" in line:
                             logging.info(line)
                             match = re.search(r"^Invoice Date\s*:\s*(\d.+)$", line)
                             logging.info(f"The Match is {match}")
@@ -174,7 +171,7 @@ def ocr_postprocessing_api():
                             if match:
                                 processed_dict["Invoice Number"] = match.group(1)
                                 logging.info(f"The Processed dict after Invoice Number is {processed_dict['Invoice Number']}")
-                        if "Invoice Details" in line:
+                        else if "Invoice Details" in line:
                             match = re.search(r"^Invoice Details\s*:\s*(.+)$", line)
                             logging.info(f"The Match is {match}")
                             logging.info(f"The Group 0 is {match.group(0)}")
@@ -182,7 +179,7 @@ def ocr_postprocessing_api():
                             if match:
                                 processed_dict["Invoice Details"] = match.group(1)
                                 logging.info(f"The Processed Dict after Invoice Details are {processed_dict['Invoice Details']}")
-                        if "Invoice Date" in line:
+                        else if "Invoice Date" in line:
                             match = re.search(r"^Invoice Date\s*:\s*(\d.+)$", line)
                             logging.info(f"The Match is {match}")
                             logging.info(f"The Group 0 is {match.group(0)}")
