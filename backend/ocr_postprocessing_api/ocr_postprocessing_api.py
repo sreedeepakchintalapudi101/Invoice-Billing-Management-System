@@ -105,7 +105,7 @@ def ocr_postprocessing_api():
                     for line in lines:
                         if "Shipping Address" in line:
                             logging.info(f"The Shipping Address Line is {line}")
-                            start_index = -1
+                            start_index = 0
                             end_index = -1
                             for i, line in enumerate(lines):
                                 if "Shipping Address" in line:
