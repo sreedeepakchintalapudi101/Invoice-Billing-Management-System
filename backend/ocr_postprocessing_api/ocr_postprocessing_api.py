@@ -113,7 +113,7 @@ def ocr_postprocessing_api():
                                 if "State/UT Code" in line:
                                     end_index = i
                             if start_index != -1 and end_index != -1:
-                                shipping_address_lines.extend(lines[start_index, end_index])
+                                shipping_address_lines.extend(lines[start_index:end_index])
                             logging.info(f"The Shipping Address lines are {shipping_address_lines}")
                             processed_dict["Shipping Address"] = " ".join(shipping_address_lines)
                             logging.info(f"The processed dict at shipping address is {processed_dict['Shipping Address']}")
