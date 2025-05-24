@@ -226,7 +226,7 @@ def ocr_postprocessing_api():
                             logging.info(f"The Group 1 is {match.group(1)}")
                             if match:
                                 processed_dict["PAN No"] = match.group(1)
-                                logging.info(f"The processed dict of PAN No is {processed_dict["PAN No"]}")
+                                logging.info(f"The processed dict of PAN No is {processed_dict['PAN No']}")
                         if "GST Registration No" in line:
                             logging.info(f"The current line is {line}")
                             match = re.search(r"^GST Registration No:\s*(.+)$")
@@ -235,7 +235,7 @@ def ocr_postprocessing_api():
                             logging.info(f"The Group 1 is {match.group(1)}")
                             if match:
                                 processed_dict["GST Registration No"] = match.group(1)
-                                logging.info(f"The processed dict of GST Registration No is {processed_dict["GST Registration No"]}")
+                                logging.info(f"The processed dict of GST Registration No is {processed_dict['GST Registration No']}")
                 elif 200 < item["bbox"][0] < 300 and 1900 < item["bbox"][0] < 2300 and 1200 < item["bbox"][1] < 1400 and 2050 < item["bbox"] < 2450:
                     raw_text = item["text"]
                     logging.info(f"The raw text is {raw_text}")
