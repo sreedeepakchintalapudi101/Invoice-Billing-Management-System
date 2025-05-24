@@ -220,7 +220,7 @@ def ocr_postprocessing_api():
                         logging.info(f"The line is {line}")
                         if "PAN No" in line:
                             logging.info(f"The current line is {line}")
-                            match = re.search(r"^PAN No:\s*(.+)$")
+                            match = re.search(r"^PAN No:\s*(.+)$", line)
                             logging.info(f"The Match is {match}")
                             logging.info(f"The Group 0 is {match.group(0)}")
                             logging.info(f"The Group 1 is {match.group(1)}")
@@ -229,7 +229,7 @@ def ocr_postprocessing_api():
                                 logging.info(f"The processed dict of PAN No is {processed_dict['PAN No']}")
                         if "GST Registration No" in line:
                             logging.info(f"The current line is {line}")
-                            match = re.search(r"^GST Registration No:\s*(.+)$")
+                            match = re.search(r"^GST Registration No:\s*(.+)$", line)
                             logging.info(f"The Match is {match}")
                             logging.info(f"The Group 0 is {match.group(0)}")
                             logging.info(f"The Group 1 is {match.group(1)}")
@@ -244,7 +244,7 @@ def ocr_postprocessing_api():
                     for line in lines:
                         if "Order Number" in line:
                             logging.info(f"The current line is {line}")
-                            match = re.search(r"^Order Number:\s*(.+)$")
+                            match = re.search(r"^Order Number:\s*(.+)$", line)
                             logging.info(f"The Match is {match}")
                             logging.info(f"The Group 0 is {match.group(0)}")
                             logging.info(f"The Group 1 is {match.group(1)}")
@@ -253,7 +253,7 @@ def ocr_postprocessing_api():
                                 logging.info(f"The processed dict of Order Number is {processed_dict['Order Number']}")
                         if "Order Date" in line:
                             logging.info(f"The current line is {line}")
-                            match = re.search(r"^Order Date:\s*(.+)$")
+                            match = re.search(r"^Order Date:\s*(.+)$", line)
                             logging.info(f"The Match is {match}")
                             logging.info(f"The Group 0 is {match.group(0)}")
                             logging.info(f"The Group 1 is {match.group(1)}")
