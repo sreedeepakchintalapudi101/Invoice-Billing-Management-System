@@ -97,7 +97,7 @@ def ocr_postprocessing_api():
                             billing_address_lines.append(line)
                     processed_dict["Billing Address"] = ",".join(billing_address_lines)
                     logging.info(f"The Processed dict at billing address is {processed_dict}")
-                if 1600 < item["bbox"][0] < 1800 and 1100 < item["bbox"][1] < 1300 and 3000 < item["bbox"][2] < 3100 and 1800 < item["bbox"][3] < 2300:
+                elif 1600 < item["bbox"][0] < 1800 and 1100 < item["bbox"][1] < 1300 and 3000 < item["bbox"][2] < 3100 and 1800 < item["bbox"][3] < 2300:
                     raw_text = item["text"]
                     lines = [line.strip() for line in item["text"].split("\n") if line.strip()]
                     logging.info(f"The lines at shipping address are {lines}")
@@ -167,7 +167,7 @@ def ocr_postprocessing_api():
                                 logging.info(f"The processed dict at Invoice Date is {processed_dict['Invoice Date']}")
                     processed_dict["Billing Address"] = " ".join(shipping_address_lines)
                     logging.info(f"The processed dict at Billing Address is {processed_dict['Billing Address']}")
-                if 1800 < item["bbox"][0] < 2200 and 2100 < item["bbox"][1] < 2300 and 3000 < item["bbox"][2] < 3200 and 2300 < item["bbox"][3] < 2500:
+                elif 1800 < item["bbox"][0] < 2200 and 2100 < item["bbox"][1] < 2300 and 3000 < item["bbox"][2] < 3200 and 2300 < item["bbox"][3] < 2500:
                     raw_text = item["text"]
                     lines = [line.strip() for line in item["text"].split("\n") if line.strip()]
                     for line in lines:
@@ -196,6 +196,70 @@ def ocr_postprocessing_api():
                             if match:
                                 processed_dict["Invoice Date"] = match.group(1)
                                 logging.info(f"The processed dict at Invoice Date is {processed_dict['Invoice Date']}")
+                elif 200 < item["bbox"][0] < 300 and 500 < item["bbox"][1] < 600 and 1000 < item["bbox"][2] < 1600 and 900 < item["bbox"][3] < 1100:
+                    raw_text = item["text"]
+                    lines = [line.strip() for line in item["text"].split("\n") if line.strip()]
+                    logginng.info(f"the lines are {lines}")
+                    result_string = ""
+                    logging.info(f"The result string is {result_string}")
+                    for line in lines:
+                        if "Sold By" in line:
+                            logging.info(f"The Sold By line is {line}")
+                            continue
+                        else:
+                            result_string += line + " "
+                            logging.info(f"The current line is {line}")
+                            logging.info(f"The result string is {result_string.strip()}")
+                    processed_dict["Sold By"] = result_string.strip()
+                elif 200 < item["bbox"][0] < 300 and 1000 < item["bbox"] < 1200 and 1300 < item["bbox"] < 1500 and 1200 < item["bbox"] < 1400:
+                    raw_text = item["text"]
+                    logging.info(f"The raw text is {raw_text}")
+                    lines = [line.strip() for line in item["text"].split("\n") if line.strip()]
+                    logging.info(f"The lines are {lines}")
+                    for line in lines:
+                        logging.info(f"The line is {line}")
+                        if "PAN No" in line:
+                            logging.info(f"The current line is {line}")
+                            match = re.search(r"^PAN No:\s*(.+)$")
+                            logging.info(f"The Match is {match}")
+                            logging.info(f"The Group 0 is {match.group(0)}")
+                            logging.info(f"The Group 1 is {match.group(1)}")
+                            if match:
+                                processed_dict["PAN No"] = match.group(1)
+                                logging.info(f"The processed dict of PAN No is {processed_dict["PAN No"]}")
+                        if "GST Registration No" in line:
+                            logging.info(f"The current line is {line}")
+                            match = re.search(r"^GST Registration No:\s*(.+)$")
+                            logging.info(f"The Match is {match}")
+                            logging.info(f"The Group 0 is {match.group(0)}")
+                            logging.info(f"The Group 1 is {match.group(1)}")
+                            if match:
+                                processed_dict["GST Registration No"] = match.group(1)
+                                logging.info(f"The processed dict of GST Registration No is {processed_dict["GST Registration No"]}")
+                elif 200 < item["bbox"][0] < 300 and 1900 < item["bbox"][0] < 2300 and 1200 < item["bbox"][1] < 1400 and 2050 < item["bbox"] < 2450:
+                    raw_text = item["text"]
+                    logging.info(f"The raw text is {raw_text}")
+                    lines = [item.strip() for item in raw_text.split("\n") if item.strip()]
+                    logging.info(f"The lines are {lines}")
+                    for line in lines:
+                        if "Order Number" in line:
+                            logging.info(f"The current line is {line}")
+                            match = re.search(r"^Order Number:\s*(.+)$")
+                            logging.info(f"The Match is {match}")
+                            logging.info(f"The Group 0 is {match.group(0)}")
+                            logging.info(f"The Group 1 is {match.group(1)}")
+                            if match:
+                                processed_dict["Order Number"] = match.group(1)
+                                logging.info(f"The processed dict of Order Number is {processed_dict["Order Number"]}")
+                        if "Order Date" in line:
+                            logging.info(f"The current line is {line}")
+                            match = re.search(r"^Order Date:\s*(.+)$")
+                            logging.info(f"The Match is {match}")
+                            logging.info(f"The Group 0 is {match.group(0)}")
+                            logging.info(f"The Group 1 is {match.group(1)}")
+                            if match:
+                                processed_dict["Order Date"] = match.group(1)
+                                logging.info(f"The processed dict of Order Data is {processed_dict["Order Date"]}")
         logging.info(f"The processed_dict is {processed_dict}")
         if update_flag == "new":
             insertion_query = f"""
