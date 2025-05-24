@@ -250,7 +250,7 @@ def ocr_postprocessing_api():
                             logging.info(f"The Group 1 is {match.group(1)}")
                             if match:
                                 processed_dict["Order Number"] = match.group(1)
-                                logging.info(f"The processed dict of Order Number is {processed_dict["Order Number"]}")
+                                logging.info(f"The processed dict of Order Number is {processed_dict['Order Number']}")
                         if "Order Date" in line:
                             logging.info(f"The current line is {line}")
                             match = re.search(r"^Order Date:\s*(.+)$")
@@ -259,7 +259,7 @@ def ocr_postprocessing_api():
                             logging.info(f"The Group 1 is {match.group(1)}")
                             if match:
                                 processed_dict["Order Date"] = match.group(1)
-                                logging.info(f"The processed dict of Order Data is {processed_dict["Order Date"]}")
+                                logging.info(f"The processed dict of Order Data is {processed_dict['Order Date']}")
         logging.info(f"The processed_dict is {processed_dict}")
         if update_flag == "new":
             insertion_query = f"""
