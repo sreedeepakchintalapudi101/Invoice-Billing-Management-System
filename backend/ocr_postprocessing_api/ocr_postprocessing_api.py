@@ -199,7 +199,7 @@ def ocr_postprocessing_api():
                 elif 200 < item["bbox"][0] < 300 and 500 < item["bbox"][1] < 600 and 1000 < item["bbox"][2] < 1600 and 900 < item["bbox"][3] < 1100:
                     raw_text = item["text"]
                     lines = [line.strip() for line in item["text"].split("\n") if line.strip()]
-                    logginng.info(f"the lines are {lines}")
+                    logging.info(f"the lines are {lines}")
                     result_string = ""
                     logging.info(f"The result string is {result_string}")
                     for line in lines:
