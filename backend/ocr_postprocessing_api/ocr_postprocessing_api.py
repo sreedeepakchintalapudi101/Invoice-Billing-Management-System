@@ -270,8 +270,8 @@ def ocr_postprocessing_api():
                                 processed_dict["Order Date"] = match.group(1)
                                 logging.info(f"The processed dict of Order Data is {processed_dict['Order Date']}")
             elif item["label"] == "table":
-                logging.info(f"The detection type is {item["label"]}")
-                logging.info(f"The bounding boxes are {item["bbox"]}")
+                logging.info(f"The detection type is {item['label']}")
+                logging.info(f"The bounding boxes are {item['bbox']}")
                 path_query = """
                 SELECT `image_path` FROM `raw_ocr`
                 WHERE `invoice_id` = %s;
