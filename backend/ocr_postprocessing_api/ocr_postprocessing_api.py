@@ -97,7 +97,7 @@ def ocr_postprocessing_api():
                     logging.info(f"The lines at billing address are {lines}")
                     billing_address_lines = []
                     for line in lines:
-                        elif "Billing Address" in line:
+                        if "Billing Address" in line:
                             continue
                         elif "State/UT Code" in line:
                             match = re.search(r"^State/UT Code:\s*(\d+)$", line)
