@@ -22,6 +22,15 @@ import cv2
 import pytesseract
 import json
 from PIL import Image
+import cv2
+from doclayout_yolo import YOLOv10
+from huggingface_hub import hf_hub_download
+import torch
+import numpy as np
+import pandas as pd
+import tensorflow as tf
+from paddleocr import PaddleOCR, draw_ocr
+import tensorflow as tf
 
 app = Flask(__name__)
 CORS(app)
@@ -260,6 +269,141 @@ def ocr_postprocessing_api():
                             if match:
                                 processed_dict["Order Date"] = match.group(1)
                                 logging.info(f"The processed dict of Order Data is {processed_dict['Order Date']}")
+            if item["label"] == "table":
+                logging.info(f"The detection type is {item["label"]}")
+                logging.info(f"The bounding boxes are {item["bbox"]}")
+                path_query = """
+                SELECT `image_path` FROM `raw_ocr`
+                WHERE `invoice_id` = %s;
+                """
+                params = [invoice_id]
+                result = execute_("extraction_management", path_query, params)
+                image_path = result["image_path"]
+                logging.info(f"The image path is {image_path}")
+                parts = image_path.rsplit("/", 1)
+                logging.info(f"The parts are {parts}")
+                filename = parts[1].replace("_final_image", "")
+                logging.info(f"The file name is {filename}")
+                new_image_path = f"{parts[0]}/{filename}"
+                logging.info(f"The new image path is {new_image_path}")
+                image = cv2.imread(new_image_path)
+                coords = item["bbox"]
+                logging.info(f"The coordinates are {coords}")
+                x_1, y_1, x_2, y_2 = coords[0], coords[1], coords[2], coords[3]
+                logging.info(f"The x_1 coordinate is {x_1}")
+                logging.info(f"The y_1 coordinate is {y_1}")
+                logging.info(f"The x_2 coordinate is {x_2}")
+                logging.info(f"The y_2 coordinate is {y_2}")
+                cropped_image = image[y_1:y_2, x_1:x_2]
+                parts = image_path.rsplit("/", 2)
+                logging.info(f"The parts are {parts}")
+                filename = parts[2].replace(parts[2], "table_detected_image.jpg")
+                logging.info(f"The file name is {filename}")
+                new_image_path = f"{parts[0]}/{parts[1]}/{filename}"
+                logging.info(f"The new image path is {new_image_path}")
+                cv2.imwrite(crop_path, cropped_image)
+                ocr = PaddleOCR(lang='en')
+                # image_path = "C:/Users/91798/Desktop/Invoice Billing Management System/INV3cf69342ff1a46b7/table_crop_0.jpg"
+                image_cv = cv2.imread(new_image_path)
+                image_height = image_cv.shape[0]
+                image_width = image_cv.shape[1]
+                output = ocr.ocr(image_path)[0]
+                logging.info(f"The image height is {image_height}")
+                logging.info(f"The image width is {image_width}")
+                logging.info(f"The output is {output}")
+                boxes = [line[0] for line in output]
+                texts = [line[1][0] for line in output]
+                probabilities = [line[1][1] for line in output]
+                logging.info(f"The boxes are {boxes}")
+                logging.info(f"The texts are {texts}")
+                logging.info(f"The probabilities are {probabilities}")
+                image_boxes = image_cv.copy()
+                for box, text in zip(boxes, texts):
+                    cv2.rectangle(image_boxes, (int(box[0][0]), int(box[0][1])), (int(box[2][0]), int(box[2][1])), (0,255,0), 1)
+                parts = image_path.split("/", 1)
+                logging.info(f"The parts are {parts}")
+                filename = "detection.jpg"
+                logging.info(f"The file name is {filename}")
+                new_image_path = f"{parts[0]}/{filename}"
+                logging.info(f"The new image path {new_image_path}")
+                cv2.imwrite(new_image_path, image_boxes)
+                im = image_cv.copy()
+                horiz_boxes = []
+                vert_boxes = []
+
+                for box in boxes:
+                    x_h, x_v = 0,int(box[0][0])
+                    y_h, y_v = int(box[0][1]),0
+                    width_h,width_v = image_width, int(box[2][0]-box[0][0])
+                    height_h,height_v = int(box[2][1]-box[0][1]),image_height
+                    
+                    horiz_boxes.append([x_h,y_h,x_h+width_h,y_h+height_h])
+                    vert_boxes.append([x_v,y_v,x_v+width_v,y_v+height_v])
+                    
+                    cv2.rectangle(im,(x_h,y_h), (x_h+width_h,y_h+height_h),(0,0,255),1)
+                    cv2.rectangle(im,(x_v,y_v), (x_v+width_v,y_v+height_v),(0,255,0),1)
+                parts = image_path.split("/", 1)
+                logging.info(f"The parts are {parts}")
+                filename = "horiz_vert.jpg"
+                logging.info(f"The filename is {filename}")
+                new_image_path = f"{parts[0]}/{filename}"
+                logging.info(f"The new image path is {new_image_path}")
+                cv2.imwrite(new_image_path, im)
+                horiz_out = tf.image.non_max_suppression(
+                    horiz_boxes,
+                    probabilities,
+                    max_output_size = 1000,
+                    iou_threshold=0.1,
+                    score_threshold=float('-inf'),
+                    name=None
+                )
+                logging.info(f"The horizontal lines is {horiz_out}")
+                im_nms = image_cv.copy()
+                for val in horiz_lines:
+                    cv2.rectangle(im_nms, (int(horiz_boxes[val][0]),int(horiz_boxes[val][1])), (int(horiz_boxes[val][2]),int(horiz_boxes[val][3])),(0,0,255),1)
+                parts = image_path.rsplit("/", 1)
+                logging.info(f"the parts are {parts}")
+                filename = "im_nms.jpg"
+                logging.info(f"The filename is {filename}")
+                new_image_path = f"{parts[0]}/{filename}"
+                logging.info(f"The new image path is {new_image_path}")
+                cv2.imwrite(new_image_path, im_nms)
+                vert_out = tf.image.non_max_suppression(
+                    vert_boxes,
+                    probabilities,
+                    max_output_size = 1000,
+                    iou_threshold=0.1,
+                    score_thre
+                    shold=float('-inf'),
+                    name=None
+                )
+                vert_lines = np.sort(np.array(vert_out))
+                logging.info(f"The vertical lines are {vert_lines}")
+                for val in vert_lines:
+                    cv2.rectangle(im_nms, (int(vert_boxes[val][0]),int(vert_boxes[val][1])), (int(vert_boxes[val][2]),int(vert_boxes[val][3])),(255,0,0),1)
+                cv2.imwrite(new_image_path, im_nms)
+                out_array = [["" for i in range(len(vert_lines))] for j in range(len(horiz_lines))]
+                logging.info(f"The shape of np.array is {np.array(out_array).shape}")
+                logging.info(f"The output is {out_array}")
+                unordered_boxes = []
+                for i in vert_lines:
+                    logging.info(f"The vertical boxes are {vert_boxes[i]}")
+                    unordered_boxes.append(vert_boxes[i][0])
+                ordered_boxes = np.argsort(unordered_boxes)
+                logging.info(f"The ordered boxes are {ordered_boxes}")
+                for i in range(len(horiz_lines)):
+                    for j in range(len(vert_lines)):
+                        resultant = intersection(horiz_boxes[horiz_lines[i]], vert_boxes[vert_lines[ordered_boxes[j]]] )
+                        for b in range(len(boxes)):
+                            the_box = [boxes[b][0][0],boxes[b][0][1],boxes[b][2][0],boxes[b][2][1]]
+                            if(iou(resultant,the_box)>0.1):
+                                out_array[i][j] = texts[b]
+                out_array=np.array(out_array)
+                logging.info(f"The out array is {out_array}")
+                
+                html_table = convert_to_html_table(out_array.tolist())
+                processed_dict['html_table'] = html_table
+                
         logging.info(f"The processed_dict is {processed_dict}")
         if update_flag == "new":
             insertion_query = f"""
@@ -277,7 +421,8 @@ def ocr_postprocessing_api():
                     "flag" : True,
                     "invoice_id" : invoice_id,
                     "message" : message,
-                    "extracted_dict" : processed_dict
+                    "extracted_dict" : processed_dict,
+                    "html_table" : html_table
                 }
         elif update_flag == "update":
             updation_query = """
@@ -294,7 +439,8 @@ def ocr_postprocessing_api():
                     "flag" : True,
                     "invoice_id" : invoice_id,
                     "message" : message,
-                    "extracted_dict" : processed_dict
+                    "extracted_dict" : processed_dict,
+                    "html_table" : html_table
                 }
         else:
             logging.info(f"The insert (or) update operation failed")
@@ -311,5 +457,31 @@ def ocr_postprocessing_api():
             "flag" : False,
             "message" : message
         }
+
+def intersection(box_1, box_2):
+    return [box_2[0], box_1[1],box_2[2], box_1[3]]
+
+def iou(box_1, box_2):
+    x_1 = max(box_1[0], box_2[0])
+    y_1 = max(box_1[1], box_2[1])
+    x_2 = min(box_1[2], box_2[2])
+    y_2 = min(box_1[3], box_2[3])
+    inter = abs(max((x_2 - x_1, 0)) * max((y_2 - y_1), 0))
+    if inter == 0:
+        return 0
+    box_1_area = abs((box_1[2] - box_1[0]) * (box_1[3] - box_1[1]))
+    box_2_area = abs((box_2[2] - box_2[0]) * (box_2[3] - box_2[1]))
+    return inter / float(box_1_area + box_2_area - inter)
+
+def convert_to_html_table(table_data):
+    html = "<table border='1' style='border-collapse: collapse;'>"
+    for row in table_data:
+        html += "<tr>"
+        for cell in row:
+            html += f"<td style='padding: 5px;'>{cell}</td>"
+        html += "</tr>"
+    html += "</table>"
+    return html
+
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8087)
