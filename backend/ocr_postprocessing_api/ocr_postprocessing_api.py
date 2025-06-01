@@ -373,8 +373,7 @@ def ocr_postprocessing_api():
                     probabilities,
                     max_output_size = 1000,
                     iou_threshold=0.1,
-                    score_thre
-                    shold=float('-inf'),
+                    score_threshold=float('-inf'),
                     name=None
                 )
                 vert_lines = np.sort(np.array(vert_out))
