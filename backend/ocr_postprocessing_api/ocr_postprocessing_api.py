@@ -269,7 +269,7 @@ def ocr_postprocessing_api():
                             if match:
                                 processed_dict["Order Date"] = match.group(1)
                                 logging.info(f"The processed dict of Order Data is {processed_dict['Order Date']}")
-            if item["label"] == "table":
+            elif item["label"] == "table":
                 logging.info(f"The detection type is {item["label"]}")
                 logging.info(f"The bounding boxes are {item["bbox"]}")
                 path_query = """
