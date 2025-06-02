@@ -12,3 +12,4 @@ paddleocr
 huggingface_hub
 paramiko
 pymysql
+python-dotenv
