@@ -23,7 +23,7 @@ import pytesseract
 import json
 from PIL import Image
 import cv2
-from doclayout_yolo import YOLOv10
+from doclayout-yolo import YOLOv10
 from huggingface_hub import hf_hub_download
 import torch
 import numpy as np
