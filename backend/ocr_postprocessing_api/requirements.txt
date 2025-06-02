@@ -13,3 +13,4 @@ huggingface_hub
 paramiko
 pymysql
 python-dotenv
+doclayout_yolo
