@@ -11,3 +11,4 @@ torch
 paddleocr
 huggingface_hub
 paramiko
+pymysql

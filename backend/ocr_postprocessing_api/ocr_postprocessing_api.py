@@ -31,6 +31,7 @@ import pandas as pd
 import tensorflow as tf
 from paddleocr import PaddleOCR, draw_ocr
 import tensorflow as tf
+import pymysql
 
 app = Flask(__name__)
 CORS(app)
