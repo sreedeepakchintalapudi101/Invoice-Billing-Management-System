@@ -49,7 +49,7 @@ logging.basicConfig(
 )
 load_dotenv()
 
-os.environ("CUDA_VISIBLE_DEVICES") = os.getenv("CUDA_VISIBLE_DEVICES", "-1")
+os.environ["CUDA_VISIBLE_DEVICES"] = os.getenv("CUDA_VISIBLE_DEVICES", "-1")
 
 logging.info("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
