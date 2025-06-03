@@ -118,7 +118,7 @@ def ocr_postprocessing_api():
         template_type = ""
         for item in ocr_dict["extracted"][0]["ocr_data"]:
             if item["label"] == "plain text":
-                if "Amazon.in" in line or "amazon" in line.lower() or "amazon" in item["text"]:
+                if "Amazon.in" in item["text"] or "amazon" in item["text"].lower() or "amazon" in item["text"]:
                     template_type = "Amazon"
                 elif 1600 < item["bbox"][0] < 1900 and 550 < item["bbox"][1] < 570 and 3050 < item["bbox"][2] < 3100 and 1000 < item["bbox"][3] < 1100:
                     raw_text = item["text"]
