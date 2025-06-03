@@ -308,7 +308,7 @@ def ocr_postprocessing_api():
                 """
                 params = [invoice_id]
                 result = execute_("extraction_management", path_query, params)
-                image_path = result["image_path"]
+                image_path = result[0]["image_path"]
                 logging.info(f"The image path is {image_path}")
                 parts = image_path.rsplit("/", 1)
                 logging.info(f"The parts are {parts}")
