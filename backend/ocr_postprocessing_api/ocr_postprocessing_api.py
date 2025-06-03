@@ -40,13 +40,21 @@ import logging
 import dotenv
 from dotenv import load_dotenv
 
-logging.basicConfig(
-    level=logging.DEBUG,
+logging.basciConfig(
+    level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    headers = [
+    headers=[
         logging.StreamHandler()
     ]
 )
+
+# logging.basicConfig(
+#     level=logging.DEBUG,
+#     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+#     headers = [
+#         logging.StreamHandler()
+#     ]
+# )
 
 @app.route("/", methods=["GET", "POST"])
 def home():
