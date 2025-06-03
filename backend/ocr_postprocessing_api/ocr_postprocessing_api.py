@@ -480,7 +480,7 @@ def ocr_postprocessing_api():
                 "extracted_dict" : {}
             }
     except Exception as e:
-        message = "Something went wrong!"
+        message = f"Something went wrong with exception {e}!"
         logging.info(f"Error occured with Exception {e}")
         return {
             "flag" : False,
