@@ -58,6 +58,7 @@ def home():
     
 @app.route("/ocr_postprocessing_api", methods=["GET","POST"])
 def ocr_postprocessing_api():
+    logging.info(f"Entering into the ocr_postprocessing_api route")
     database = "extraction_management"
     try:
         data = request.get_json()
@@ -82,7 +83,22 @@ def ocr_postprocessing_api():
         params = [invoice_id]
         select_result = execute_(database, select_query, params)
         logging.info(f"The result is {select_result}")
-        ocr_dict = json.loads(select_result[0]["extracted_text"])
+        if not select_result:
+            message = "No OCR data found"
+            logging.error("No result found for invoice_id: %s", invoice_id)
+            return {
+                "flag": False, 
+                "message": message
+            }
+        try:
+            ocr_dict = json.loads(select_result[0].get("extracted_text", "{}"))
+        except Exception as e:
+            logging.error("Failed to load JSON from extracted_text: %s", e)
+            message = "Invalid extracted_text format"
+            return {
+                "flag": False, 
+                "message": message
+            }
         logging.info(f"The ocr dict is {ocr_dict}")
         processed_dict = {}
         logging.info(f"The processed dict is {processed_dict}")
