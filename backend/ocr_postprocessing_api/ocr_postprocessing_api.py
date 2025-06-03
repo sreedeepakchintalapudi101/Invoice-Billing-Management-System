@@ -40,13 +40,18 @@ import logging
 import dotenv
 from dotenv import load_dotenv
 
-logging.basciConfig(
+logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    headers=[
+    handlers=[
         logging.StreamHandler()
     ]
 )
+load_dotenv()
+
+os.environ("CUDA_VISIBLE_DEVICES") = os.getenv("CUDA_VISIBLE_DEVICES", "-1")
+
+logging.info("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
 # logging.basicConfig(
 #     level=logging.DEBUG,
