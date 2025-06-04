@@ -25,4 +25,4 @@ ENV PYTHONPATH=/app
 
 EXPOSE 8087
 
-CMD ["python", "backend/ocr_postprocessing_api/ocr_postprocessing_api.py"]
+CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:8087", "backend.ocr_postprocessing_api.ocr_postprocessing_api:app"]
