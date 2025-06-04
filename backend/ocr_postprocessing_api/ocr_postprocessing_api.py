@@ -337,7 +337,7 @@ def ocr_postprocessing_api():
                 image_cv = cv2.imread(new_image_path)
                 image_height = image_cv.shape[0]
                 image_width = image_cv.shape[1]
-                output = ocr.ocr(image_path)[0]
+                output = ocr.ocr(new_image_path)[0]
                 logging.info(f"The image height is {image_height}")
                 logging.info(f"The image width is {image_width}")
                 logging.info(f"The output is {output}")
@@ -387,7 +387,9 @@ def ocr_postprocessing_api():
                     score_threshold=float('-inf'),
                     name=None
                 )
-                logging.info(f"The horizontal lines is {horiz_out}")
+                logging.info(f"The horizontal output is {horiz_out}")
+                horiz_lines = np.sort(np.array(horiz_out))
+                logging.info(f"The horizontal lines are {horiz_lines}")
                 im_nms = image_cv.copy()
                 for val in horiz_lines:
                     cv2.rectangle(im_nms, (int(horiz_boxes[val][0]),int(horiz_boxes[val][1])), (int(horiz_boxes[val][2]),int(horiz_boxes[val][3])),(0,0,255),1)
