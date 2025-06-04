@@ -331,7 +331,7 @@ def ocr_postprocessing_api():
                 logging.info(f"The file name is {filename}")
                 new_image_path = f"{parts[0]}/{parts[1]}/{filename}"
                 logging.info(f"The new image path is {new_image_path}")
-                cv2.imwrite(crop_path, cropped_image)
+                cv2.imwrite(new_image_path, cropped_image)
                 ocr = PaddleOCR(lang='en')
                 # image_path = "C:/Users/91798/Desktop/Invoice Billing Management System/INV3cf69342ff1a46b7/table_crop_0.jpg"
                 image_cv = cv2.imread(new_image_path)
