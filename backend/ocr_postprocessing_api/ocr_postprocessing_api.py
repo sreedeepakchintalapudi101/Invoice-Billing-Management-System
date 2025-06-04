@@ -312,7 +312,7 @@ def ocr_postprocessing_api():
                 logging.info(f"The image path is {image_path}")
                 parts = image_path.rsplit("/", 1)
                 logging.info(f"The parts are {parts}")
-                filename = parts[1].replace("_final_image", "")
+                filename = parts[1]
                 logging.info(f"The file name is {filename}")
                 new_image_path = f"{parts[0]}/{filename}"
                 logging.info(f"The new image path is {new_image_path}")
