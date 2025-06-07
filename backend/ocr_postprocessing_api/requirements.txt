@@ -14,7 +14,3 @@ paramiko
 pymysql
 python-dotenv
 doclayout-yolo
-paddleocr
-paddlepaddle
-# added gunicorn (Optional)
-gunicorn

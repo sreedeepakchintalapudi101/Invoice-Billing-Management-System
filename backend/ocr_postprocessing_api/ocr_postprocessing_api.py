@@ -20,6 +20,7 @@ import threading
 from backend.database.db_utils import get_connection, execute_, update_query, insert_query
 import cv2
 import pytesseract
+fromm pytesseract import Output
 import json
 from PIL import Image
 import cv2
@@ -29,7 +30,7 @@ import torch
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-from paddleocr import PaddleOCR, draw_ocr
+# from paddleocr import PaddleOCR, draw_ocr
 import tensorflow as tf
 import pymysql
 
@@ -44,7 +45,7 @@ load_dotenv()
 
 os.environ["CUDA_VISIBLE_DEVICES"] = os.getenv("CUDA_VISIBLE_DEVICES", "-1")
 
-print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+logging.info("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -56,34 +57,34 @@ def home():
     
 @app.route("/ocr_postprocessing_api", methods=["GET","POST"])
 def ocr_postprocessing_api():
-    print(f"Entering into the ocr_postprocessing_api route")
+    logging.info(f"Entering into the ocr_postprocessing_api route")
     database = "extraction_management"
     try:
         data = request.get_json()
-        print(f"The request data is {data}")
+        logging.info(f"The request data is {data}")
         invoice_id = data.get("invoice_id", "")
-        print(f"The invoice id is {invoice_id}")
+        logging.info(f"The invoice id is {invoice_id}")
         update_flag = data.get("update_flag", "")
-        print(f"The Update Flag is {update_flag}")
+        logging.info(f"The Update Flag is {update_flag}")
         if not update_flag:
-            print(f"Update Flag missing!")
+            logging.info(f"Update Flag missing!")
             message = "Updated flag missing!"
             return {
                 "flag" : False,
                 "message" : message
             }
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        print(f"The current time is {current_time}")
+        logging.info(f"The current time is {current_time}")
         select_query = """
         SELECT * FROM `raw_ocr`
         WHERE invoice_id = %s;
         """
         params = [invoice_id]
         select_result = execute_(database, select_query, params)
-        print(f"The result is {select_result}")
+        logging.info(f"The result is {select_result}")
         if not select_result:
             message = "No OCR data found"
-            print("No result found for invoice_id: %s", invoice_id)
+            logging.info("No result found for invoice_id: %s", invoice_id)
             return {
                 "flag": False, 
                 "message": message
@@ -91,15 +92,15 @@ def ocr_postprocessing_api():
         try:
             ocr_dict = json.loads(select_result[0].get("extracted_text", "{}"))
         except Exception as e:
-            print("Failed to load JSON from extracted_text: %s", e)
+            logging.info("Failed to load JSON from extracted_text: %s", e)
             message = "Invalid extracted_text format"
             return {
                 "flag": False, 
                 "message": message
             }
-        print(f"The ocr dict is {ocr_dict}")
+        logging.info(f"The ocr dict is {ocr_dict}")
         processed_dict = {}
-        print(f"The processed dict is {processed_dict}")
+        logging.info(f"The processed dict is {processed_dict}")
         template_type = ""
         for item in ocr_dict["extracted"][0]["ocr_data"]:
             if item["label"] == "plain text":
@@ -107,9 +108,9 @@ def ocr_postprocessing_api():
                     template_type = "Amazon"
                 elif 1600 < item["bbox"][0] < 1900 and 550 < item["bbox"][1] < 570 and 3050 < item["bbox"][2] < 3100 and 1000 < item["bbox"][3] < 1100:
                     raw_text = item["text"]
-                    print(f"The raw text is {raw_text}")
+                    logging.info(f"The raw text is {raw_text}")
                     lines = [line.strip() for line in raw_text.strip().split("\n") if line.strip() ]
-                    print(f"The lines at billing address are {lines}")
+                    logging.info(f"The lines at billing address are {lines}")
                     billing_address_lines = []
                     for line in lines:
                         if "Billing Address" in line:
@@ -120,15 +121,15 @@ def ocr_postprocessing_api():
                         else:
                             billing_address_lines.append(line)
                     processed_dict["Billing Address"] = ",".join(billing_address_lines)
-                    print(f"The Processed dict at billing address is {processed_dict}")
+                    logging.info(f"The Processed dict at billing address is {processed_dict}")
                 elif 1600 < item["bbox"][0] < 1800 and 1100 < item["bbox"][1] < 1300 and 3000 < item["bbox"][2] < 3100 and 1800 < item["bbox"][3] < 2300:
                     raw_text = item["text"]
                     lines = [line.strip() for line in item["text"].split("\n") if line.strip()]
-                    print(f"The lines at shipping address are {lines}")
+                    logging.info(f"The lines at shipping address are {lines}")
                     shipping_address_lines = []
                     for line in lines:
                         if "Shipping Address" in line:
-                            print(f"The Shipping Address Line is {line}")
+                            logging.info(f"The Shipping Address Line is {line}")
                             start_index = 0
                             end_index = -1
                             for i, line in enumerate(lines):
@@ -138,9 +139,9 @@ def ocr_postprocessing_api():
                                     end_index = i
                             if start_index != -1 and end_index != -1:
                                 shipping_address_lines.extend(lines[start_index:end_index])
-                            print(f"The Shipping Address lines are {shipping_address_lines}")
+                            logging.info(f"The Shipping Address lines are {shipping_address_lines}")
                             processed_dict["Shipping Address"] = " ".join(shipping_address_lines)
-                            print(f"The processed dict at shipping address is {processed_dict['Shipping Address']}")
+                            logging.info(f"The processed dict at shipping address is {processed_dict['Shipping Address']}")
                         elif "State/UT Code" in line:
                             match = re.search(r"^State/UT Code:\s*(\d+)$", line)
                             if match:
@@ -149,144 +150,144 @@ def ocr_postprocessing_api():
                             match = re.search(r"^Place of supply:\s*(.+)$", line)
                             if match:
                                 processed_dict["Place of supply"] = match.group(0)[match.group(0).index(":") + 2:]
-                                print(f"The processed_dict at place of supply is {processed_dict['Place of supply']}")    
+                                logging.info(f"The processed_dict at place of supply is {processed_dict['Place of supply']}")    
                                 if not processed_dict["Place of supply"].startswith("A"):
                                     processed_dict["Place of supply"] = "A" + processed_dict["Place of supply"]
-                                    print(f"The processed_dict at place of supply without A is {processed_dict['Place of supply']}")
+                                    logging.info(f"The processed_dict at place of supply without A is {processed_dict['Place of supply']}")
                         elif "Place of delivery" in line:
                             match = re.search(r"^Place of delivery[:;]\s*(.+)$", line)
-                            print(f"The match is {match}")
+                            logging.info(f"The match is {match}")
                             if match:
                                 value_list = match.group(1).split()
-                                print(f"The Value is {value_list}")
+                                logging.info(f"The Value is {value_list}")
                                 place = " ".join(value_list)
                                 if not place.startswith("A"):
                                     place = "A" + place
                                 processed_dict["Place of delivery"] = place
-                                print(f"The processed dict after Place of delivery is {processed_dict['Place of delivery']}")
+                                logging.info(f"The processed dict after Place of delivery is {processed_dict['Place of delivery']}")
                         elif "Invoice Number" in line:
                             match = re.search(r"^Invoice Number\s*:\s*(.+)$", line)
-                            print(f"The Match is {match}")
-                            print(f"The Group 0 is {match.group(0)}")
-                            print(f"The Group 1 is {match.group(1)}")
+                            logging.info(f"The Match is {match}")
+                            logging.info(f"The Group 0 is {match.group(0)}")
+                            logging.info(f"The Group 1 is {match.group(1)}")
                             if match:
                                 processed_dict["Invoice Number"] = match.group(1)
-                                print(f"The processed dict at Invoice Number is {processed_dict['Invoice Number']}")
+                                logging.info(f"The processed dict at Invoice Number is {processed_dict['Invoice Number']}")
                         elif "Invoice Details" in line:
                             match = re.search(r"^Invoice Details\s*:\s*(.+)$", line)
-                            print(f"The Match is {match}")
-                            print(f"The Group 0 is {match.group(0)}")
-                            print(f"The Group 1 is {match.group(1)}")
+                            logging.info(f"The Match is {match}")
+                            logging.info(f"The Group 0 is {match.group(0)}")
+                            logging.info(f"The Group 1 is {match.group(1)}")
                             if match:
                                 processed_dict["Invoice Details"] = match.group(1)
-                                print(f"The processed dict at Invoice Details is {processed_dict['Invoice Details']}")
+                                logging.info(f"The processed dict at Invoice Details is {processed_dict['Invoice Details']}")
                         elif "Invoice Date" in line:
-                            print(line)
+                            logging.info(line)
                             match = re.search(r"^Invoice Date\s*:\s*(\d.+)$", line)
-                            print(f"The Match is {match}")
-                            print(f"The Group 0 is {match.group(0)}")
-                            print(f"The Group 1 is {match.group(1)}")
+                            logging.info(f"The Match is {match}")
+                            logging.info(f"The Group 0 is {match.group(0)}")
+                            logging.info(f"The Group 1 is {match.group(1)}")
                             if match:
                                 processed_dict["Invoice Date"] = match.group(0)[match.group(0).index(":") + 2:]
-                                print(f"The processed dict at Invoice Date is {processed_dict['Invoice Date']}")
+                                logging.info(f"The processed dict at Invoice Date is {processed_dict['Invoice Date']}")
                     processed_dict["Billing Address"] = " ".join(shipping_address_lines)
-                    print(f"The processed dict at Billing Address is {processed_dict['Billing Address']}")
+                    logging.info(f"The processed dict at Billing Address is {processed_dict['Billing Address']}")
                 elif 1800 < item["bbox"][0] < 2200 and 2100 < item["bbox"][1] < 2300 and 3000 < item["bbox"][2] < 3200 and 2300 < item["bbox"][3] < 2500:
                     raw_text = item["text"]
                     lines = [line.strip() for line in item["text"].split("\n") if line.strip()]
                     for line in lines:
                         if "Invoice Number" in line:
                             match = re.search(r"^Invoice Number\s*:\s*(.+)$", line)
-                            print(f"The Match is {match}")
-                            print(f"The Group 0 is {match.group(0)}")
-                            print(f"The Group 1 is {match.group(1)}")
-                            print(f"The match for Invoice Number is {match}")
+                            logging.info(f"The Match is {match}")
+                            logging.info(f"The Group 0 is {match.group(0)}")
+                            logging.info(f"The Group 1 is {match.group(1)}")
+                            logging.info(f"The match for Invoice Number is {match}")
                             if match:
                                 processed_dict["Invoice Number"] = match.group(1)
-                                print(f"The Processed dict after Invoice Number is {processed_dict['Invoice Number']}")
+                                logging.info(f"The Processed dict after Invoice Number is {processed_dict['Invoice Number']}")
                         elif "Invoice Details" in line:
                             match = re.search(r"^Invoice Details\s*:\s*(.+)$", line)
-                            print(f"The Match is {match}")
-                            print(f"The Group 0 is {match.group(0)}")
-                            print(f"The Group 1 is {match.group(1)}")
+                            logging.info(f"The Match is {match}")
+                            logging.info(f"The Group 0 is {match.group(0)}")
+                            logging.info(f"The Group 1 is {match.group(1)}")
                             if match:
                                 processed_dict["Invoice Details"] = match.group(1)
-                                print(f"The Processed Dict after Invoice Details are {processed_dict['Invoice Details']}")
+                                logging.info(f"The Processed Dict after Invoice Details are {processed_dict['Invoice Details']}")
                         elif "Invoice Date" in line:
                             match = re.search(r"^Invoice Date\s*:\s*(\d.+)$", line)
-                            print(f"The Match is {match}")
-                            print(f"The Group 0 is {match.group(0)}")
-                            print(f"The Group 1 is {match.group(1)}")
+                            logging.info(f"The Match is {match}")
+                            logging.info(f"The Group 0 is {match.group(0)}")
+                            logging.info(f"The Group 1 is {match.group(1)}")
                             if match:
                                 processed_dict["Invoice Date"] = match.group(1)
-                                print(f"The processed dict at Invoice Date is {processed_dict['Invoice Date']}")
+                                logging.info(f"The processed dict at Invoice Date is {processed_dict['Invoice Date']}")
                 elif 200 < item["bbox"][0] < 300 and 500 < item["bbox"][1] < 600 and 1000 < item["bbox"][2] < 1600 and 900 < item["bbox"][3] < 1100:
                     raw_text = item["text"]
                     lines = [line.strip() for line in item["text"].split("\n") if line.strip()]
-                    print(f"the lines are {lines}")
+                    logging.info(f"the lines are {lines}")
                     result_string = ""
-                    print(f"The result string is {result_string}")
+                    logging.info(f"The result string is {result_string}")
                     for line in lines:
                         if "Sold By" in line:
-                            print(f"The Sold By line is {line}")
+                            logging.info(f"The Sold By line is {line}")
                             continue
                         else:
                             result_string += line + " "
-                            print(f"The current line is {line}")
-                            print(f"The result string is {result_string.strip()}")
+                            logging.info(f"The current line is {line}")
+                            logging.info(f"The result string is {result_string.strip()}")
                     processed_dict["Sold By"] = result_string.strip()
                 elif 200 < item["bbox"][0] < 300 and 1000 < item["bbox"][1] < 1200 and 1300 < item["bbox"][2] < 1500 and 1200 < item["bbox"][3] < 1400:
                     raw_text = item["text"]
-                    print(f"The raw text is {raw_text}")
+                    logging.info(f"The raw text is {raw_text}")
                     lines = [line.strip() for line in item["text"].split("\n") if line.strip()]
-                    print(f"The lines are {lines}")
+                    logging.info(f"The lines are {lines}")
                     for line in lines:
-                        print(f"The line is {line}")
+                        logging.info(f"The line is {line}")
                         if "PAN No" in line:
-                            print(f"The current line is {line}")
+                            logging.info(f"The current line is {line}")
                             match = re.search(r"^PAN No:\s*(.+)$", line)
-                            print(f"The Match is {match}")
-                            print(f"The Group 0 is {match.group(0)}")
-                            print(f"The Group 1 is {match.group(1)}")
+                            logging.info(f"The Match is {match}")
+                            logging.info(f"The Group 0 is {match.group(0)}")
+                            logging.info(f"The Group 1 is {match.group(1)}")
                             if match:
                                 processed_dict["PAN No"] = match.group(1)
-                                print(f"The processed dict of PAN No is {processed_dict['PAN No']}")
+                                logging.info(f"The processed dict of PAN No is {processed_dict['PAN No']}")
                         if "GST Registration No" in line:
-                            print(f"The current line is {line}")
+                            logging.info(f"The current line is {line}")
                             match = re.search(r"^GST Registration No:\s*(.+)$", line)
-                            print(f"The Match is {match}")
-                            print(f"The Group 0 is {match.group(0)}")
-                            print(f"The Group 1 is {match.group(1)}")
+                            logging.info(f"The Match is {match}")
+                            logging.info(f"The Group 0 is {match.group(0)}")
+                            logging.info(f"The Group 1 is {match.group(1)}")
                             if match:
                                 processed_dict["GST Registration No"] = match.group(1)
-                                print(f"The processed dict of GST Registration No is {processed_dict['GST Registration No']}")
+                                logging.info(f"The processed dict of GST Registration No is {processed_dict['GST Registration No']}")
                 elif 200 < item["bbox"][0] < 300 and 1900 < item["bbox"][1] < 2300 and 1200 < item["bbox"][2] < 1400 and 2050 < item["bbox"][3] < 2450:
                     raw_text = item["text"]
-                    print(f"The raw text is {raw_text}")
+                    logging.info(f"The raw text is {raw_text}")
                     lines = [item.strip() for item in raw_text.split("\n") if item.strip()]
-                    print(f"The lines are {lines}")
+                    logging.info(f"The lines are {lines}")
                     for line in lines:
                         if "Order Number" in line:
-                            print(f"The current line is {line}")
+                            logging.info(f"The current line is {line}")
                             match = re.search(r"^Order Number:\s*(.+)$", line)
-                            print(f"The Match is {match}")
-                            print(f"The Group 0 is {match.group(0)}")
-                            print(f"The Group 1 is {match.group(1)}")
+                            logging.info(f"The Match is {match}")
+                            logging.info(f"The Group 0 is {match.group(0)}")
+                            logging.info(f"The Group 1 is {match.group(1)}")
                             if match:
                                 processed_dict["Order Number"] = match.group(1)
-                                print(f"The processed dict of Order Number is {processed_dict['Order Number']}")
+                                logging.info(f"The processed dict of Order Number is {processed_dict['Order Number']}")
                         if "Order Date" in line:
-                            print(f"The current line is {line}")
+                            logging.info(f"The current line is {line}")
                             match = re.search(r"^Order Date:\s*(.+)$", line)
-                            print(f"The Match is {match}")
-                            print(f"The Group 0 is {match.group(0)}")
-                            print(f"The Group 1 is {match.group(1)}")
+                            logging.info(f"The Match is {match}")
+                            logging.info(f"The Group 0 is {match.group(0)}")
+                            logging.info(f"The Group 1 is {match.group(1)}")
                             if match:
                                 processed_dict["Order Date"] = match.group(1)
-                                print(f"The processed dict of Order Data is {processed_dict['Order Date']}")
+                                logging.info(f"The processed dict of Order Data is {processed_dict['Order Date']}")
             elif item["label"] == "table":
-                print(f"The detection type is {item['label']}")
-                print(f"The bounding boxes are {item['bbox']}")
+                logging.info(f"The detection type is {item['label']}")
+                logging.info(f"The bounding boxes are {item['bbox']}")
                 path_query = """
                 SELECT `image_path` FROM `raw_ocr`
                 WHERE `invoice_id` = %s;
@@ -294,53 +295,60 @@ def ocr_postprocessing_api():
                 params = [invoice_id]
                 result = execute_("extraction_management", path_query, params)
                 image_path = result[0]["image_path"]
-                print(f"The image path is {image_path}")
+                logging.info(f"The image path is {image_path}")
                 parts = image_path.rsplit("/", 1)
-                print(f"The parts are {parts}")
+                logging.info(f"The parts are {parts}")
                 filename = parts[1]
-                print(f"The file name is {filename}")
+                logging.info(f"The file name is {filename}")
                 new_image_path = f"{parts[0]}/{filename}"
-                print(f"The new image path is {new_image_path}")
+                logging.info(f"The new image path is {new_image_path}")
                 image = cv2.imread(new_image_path)
                 coords = item["bbox"]
-                print(f"The coordinates are {coords}")
+                logging.info(f"The coordinates are {coords}")
                 x_1, y_1, x_2, y_2 = coords[0], coords[1], coords[2], coords[3]
-                print(f"The x_1 coordinate is {x_1}")
-                print(f"The y_1 coordinate is {y_1}")
-                print(f"The x_2 coordinate is {x_2}")
-                print(f"The y_2 coordinate is {y_2}")
+                logging.info(f"The x_1 coordinate is {x_1}")
+                logging.info(f"The y_1 coordinate is {y_1}")
+                logging.info(f"The x_2 coordinate is {x_2}")
+                logging.info(f"The y_2 coordinate is {y_2}")
                 cropped_image = image[y_1:y_2, x_1:x_2]
                 parts = image_path.rsplit("/", 2)
-                print(f"The parts are {parts}")
+                logging.info(f"The parts are {parts}")
                 filename = parts[2].replace(parts[2], "table_detected_image.jpg")
-                print(f"The file name is {filename}")
+                logging.info(f"The file name is {filename}")
                 new_image_path = f"{parts[0]}/{parts[1]}/{filename}"
-                print(f"The new image path is {new_image_path}")
+                logging.info(f"The new image path is {new_image_path}")
                 cv2.imwrite(new_image_path, cropped_image)
-                ocr = PaddleOCR(lang='en')
+                # ocr = PaddleOCR(lang='en')
                 # image_path = "C:/Users/91798/Desktop/Invoice Billing Management System/INV3cf69342ff1a46b7/table_crop_0.jpg"
                 image_cv = cv2.imread(new_image_path)
                 image_height = image_cv.shape[0]
                 image_width = image_cv.shape[1]
-                output = ocr.ocr(new_image_path)[0]
-                print(f"The image height is {image_height}")
-                print(f"The image width is {image_width}")
-                print(f"The output is {output}")
-                boxes = [line[0] for line in output]
-                texts = [line[1][0] for line in output]
-                probabilities = [line[1][1] for line in output]
-                print(f"The boxes are {boxes}")
-                print(f"The texts are {texts}")
-                print(f"The probabilities are {probabilities}")
+                # output = ocr.ocr(new_image_path)[0]
+                output = pytesseract.image_to_data(new_image_path, output_type = Output.DICT)
+                logging.info(f"The image height is {image_height}")
+                logging.info(f"The image width is {image_width}")
+                logging.info(f"The output is {output}")
+                for i in range(output["level"]):
+                    if output["conf"][i] > 0:
+                        (x, y, w, h) = output["left"][i], output["top"][i], output["width"], output["height"][i]
+                        boxes.append([[x,y], [x,y+w], [x+h,y+w], [x+h,y]])
+                        texts.append(output["text"][i])
+                        probabilities.append(float(output["conf"][i])/100)
+                # boxes = [line[0] for line in output]
+                # texts = [line[1][0] for line in output]
+                # probabilities = [line[1][1] for line in output]
+                logging.info(f"The boxes are {boxes}")
+                logging.info(f"The texts are {texts}")
+                logging.info(f"The probabilities are {probabilities}")
                 image_boxes = image_cv.copy()
                 for box, text in zip(boxes, texts):
                     cv2.rectangle(image_boxes, (int(box[0][0]), int(box[0][1])), (int(box[2][0]), int(box[2][1])), (0,255,0), 1)
                 parts = image_path.split("/", 1)
-                print(f"The parts are {parts}")
+                logging.info(f"The parts are {parts}")
                 filename = "detection.jpg"
-                print(f"The file name is {filename}")
+                logging.info(f"The file name is {filename}")
                 new_image_path = f"{parts[0]}/{filename}"
-                print(f"The new image path {new_image_path}")
+                logging.info(f"The new image path {new_image_path}")
                 cv2.imwrite(new_image_path, image_boxes)
                 im = image_cv.copy()
                 horiz_boxes = []
@@ -358,11 +366,11 @@ def ocr_postprocessing_api():
                     cv2.rectangle(im,(x_h,y_h), (x_h+width_h,y_h+height_h),(0,0,255),1)
                     cv2.rectangle(im,(x_v,y_v), (x_v+width_v,y_v+height_v),(0,255,0),1)
                 parts = image_path.split("/", 1)
-                print(f"The parts are {parts}")
+                logging.info(f"The parts are {parts}")
                 filename = "horiz_vert.jpg"
-                print(f"The filename is {filename}")
+                logging.info(f"The filename is {filename}")
                 new_image_path = f"{parts[0]}/{filename}"
-                print(f"The new image path is {new_image_path}")
+                logging.info(f"The new image path is {new_image_path}")
                 cv2.imwrite(new_image_path, im)
                 horiz_out = tf.image.non_max_suppression(
                     horiz_boxes,
@@ -372,18 +380,18 @@ def ocr_postprocessing_api():
                     score_threshold=float('-inf'),
                     name=None
                 )
-                print(f"The horizontal output is {horiz_out}")
+                logging.info(f"The horizontal output is {horiz_out}")
                 horiz_lines = np.sort(np.array(horiz_out))
-                print(f"The horizontal lines are {horiz_lines}")
+                logging.info(f"The horizontal lines are {horiz_lines}")
                 im_nms = image_cv.copy()
                 for val in horiz_lines:
                     cv2.rectangle(im_nms, (int(horiz_boxes[val][0]),int(horiz_boxes[val][1])), (int(horiz_boxes[val][2]),int(horiz_boxes[val][3])),(0,0,255),1)
                 parts = image_path.rsplit("/", 1)
-                print(f"the parts are {parts}")
+                logging.info(f"the parts are {parts}")
                 filename = "im_nms.jpg"
-                print(f"The filename is {filename}")
+                logging.info(f"The filename is {filename}")
                 new_image_path = f"{parts[0]}/{filename}"
-                print(f"The new image path is {new_image_path}")
+                logging.info(f"The new image path is {new_image_path}")
                 cv2.imwrite(new_image_path, im_nms)
                 vert_out = tf.image.non_max_suppression(
                     vert_boxes,
@@ -394,19 +402,19 @@ def ocr_postprocessing_api():
                     name=None
                 )
                 vert_lines = np.sort(np.array(vert_out))
-                print(f"The vertical lines are {vert_lines}")
+                logging.info(f"The vertical lines are {vert_lines}")
                 for val in vert_lines:
                     cv2.rectangle(im_nms, (int(vert_boxes[val][0]),int(vert_boxes[val][1])), (int(vert_boxes[val][2]),int(vert_boxes[val][3])),(255,0,0),1)
                 cv2.imwrite(new_image_path, im_nms)
                 out_array = [["" for i in range(len(vert_lines))] for j in range(len(horiz_lines))]
-                print(f"The shape of np.array is {np.array(out_array).shape}")
-                print(f"The output is {out_array}")
+                logging.info(f"The shape of np.array is {np.array(out_array).shape}")
+                logging.info(f"The output is {out_array}")
                 unordered_boxes = []
                 for i in vert_lines:
-                    print(f"The vertical boxes are {vert_boxes[i]}")
+                    logging.info(f"The vertical boxes are {vert_boxes[i]}")
                     unordered_boxes.append(vert_boxes[i][0])
                 ordered_boxes = np.argsort(unordered_boxes)
-                print(f"The ordered boxes are {ordered_boxes}")
+                logging.info(f"The ordered boxes are {ordered_boxes}")
                 for i in range(len(horiz_lines)):
                     for j in range(len(vert_lines)):
                         resultant = intersection(horiz_boxes[horiz_lines[i]], vert_boxes[vert_lines[ordered_boxes[j]]] )
@@ -415,12 +423,12 @@ def ocr_postprocessing_api():
                             if(iou(resultant,the_box)>0.1):
                                 out_array[i][j] = texts[b]
                 out_array=np.array(out_array)
-                print(f"The out array is {out_array}")
+                logging.info(f"The out array is {out_array}")
                 
                 html_table = convert_to_html_table(out_array.tolist())
                 processed_dict['html_table'] = html_table
                 
-        print(f"The processed_dict is {processed_dict}")
+        logging.info(f"The processed_dict is {processed_dict}")
         if update_flag == "new":
             insertion_query = f"""
             INSERT INTO `ocr_info`
@@ -430,7 +438,7 @@ def ocr_postprocessing_api():
             """
             params = [invoice_id, json.dumps(processed_dict), current_time, current_time, template_type]
             insertion_result = insert_query(database, insertion_query, params)
-            print(f"The insertion result is {insertion_result}")
+            logging.info(f"The insertion result is {insertion_result}")
             if insertion_result:
                 message = "Data inserted successfully!"
                 return {
@@ -448,7 +456,7 @@ def ocr_postprocessing_api():
             """
             params = [json.loads(processed_dict), current_time, template_type, invoice_id]
             updation_result = update_query(database, updation_query, params)
-            print(f"The updation result is {updation_result}")
+            logging.info(f"The updation result is {updation_result}")
             if updation_result:
                 message = "Data updated successfully!"
                 return {
@@ -459,7 +467,7 @@ def ocr_postprocessing_api():
                     "html_table" : html_table
                 }
         else:
-            print(f"The insert (or) update operation failed")
+            logging.info(f"The insert (or) update operation failed")
             message = "Insertion/Updation failed"
             return {
                 "flag" : False,
@@ -468,7 +476,7 @@ def ocr_postprocessing_api():
             }
     except Exception as e:
         message = f"Something went wrong with exception {e}!"
-        print(f"Error occured with Exception {e}")
+        logging.info(f"Error occured with Exception {e}")
         return {
             "flag" : False,
             "message" : message
