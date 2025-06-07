@@ -328,7 +328,7 @@ def ocr_postprocessing_api():
                 logging.info(f"The image height is {image_height}")
                 logging.info(f"The image width is {image_width}")
                 logging.info(f"The output is {output}")
-                for i in range(output["level"]):
+                for i in range(len(output["level"])):
                     if output["conf"][i] > 0:
                         (x, y, w, h) = output["left"][i], output["top"][i], output["width"], output["height"][i]
                         boxes.append([[x,y], [x,y+w], [x+h,y+w], [x+h,y]])
