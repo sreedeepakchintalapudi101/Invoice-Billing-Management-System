@@ -333,7 +333,7 @@ def ocr_postprocessing_api():
                 probabilities = []
                 for i in range(len(output["level"])):
                     if output["conf"][i] > 0:
-                        (x, y, w, h) = output["left"][i], output["top"][i], output["width"], output["height"][i]
+                        (x, y, w, h) = output["left"][i], output["top"][i], output["width"][i], output["height"][i]
                         boxes.append([[x,y], [x,y+w], [x+h,y+w], [x+h,y]])
                         texts.append(output["text"][i])
                         probabilities.append(float(output["conf"][i])/100)
