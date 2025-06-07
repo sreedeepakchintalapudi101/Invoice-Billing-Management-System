@@ -20,7 +20,7 @@ import threading
 from backend.database.db_utils import get_connection, execute_, update_query, insert_query
 import cv2
 import pytesseract
-fromm pytesseract import Output
+from pytesseract import Output
 import json
 from PIL import Image
 import cv2
