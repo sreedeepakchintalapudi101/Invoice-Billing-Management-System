@@ -24,8 +24,6 @@ from pytesseract import Output
 import json
 from PIL import Image
 import cv2
-from doclayout_yolo import YOLOv10
-from huggingface_hub import hf_hub_download
 import numpy as np
 import pandas as pd
 import pymysql

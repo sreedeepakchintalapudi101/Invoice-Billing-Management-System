@@ -6,8 +6,6 @@ pytesseract
 pillow
 numpy
 pandas
-paddleocr
-huggingface_hub
 paramiko
 pymysql
 python-dotenv
