@@ -29,6 +29,7 @@ from huggingface_hub import hf_hub_download
 import numpy as np
 import pandas as pd
 import pymysql
+import pdfplumber
 
 app = Flask(__name__)
 CORS(app)
