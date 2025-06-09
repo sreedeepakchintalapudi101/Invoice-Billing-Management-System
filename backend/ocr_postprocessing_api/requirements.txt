@@ -6,11 +6,10 @@ pytesseract
 pillow
 numpy
 pandas
-tensorflow
-torch
 paddleocr
 huggingface_hub
 paramiko
 pymysql
 python-dotenv
 doclayout-yolo
+pdfplumber

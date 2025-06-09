@@ -26,12 +26,8 @@ from PIL import Image
 import cv2
 from doclayout_yolo import YOLOv10
 from huggingface_hub import hf_hub_download
-import torch
 import numpy as np
 import pandas as pd
-import tensorflow as tf
-# from paddleocr import PaddleOCR, draw_ocr
-import tensorflow as tf
 import pymysql
 
 app = Flask(__name__)
