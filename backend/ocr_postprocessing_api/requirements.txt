@@ -1,7 +1,6 @@
 Flask
 flask-cors
 requests
-opencv-python
 pytesseract
 pillow
 numpy

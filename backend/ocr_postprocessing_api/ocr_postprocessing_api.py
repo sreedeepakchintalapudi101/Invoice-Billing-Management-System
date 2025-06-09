@@ -18,12 +18,8 @@ import time
 from datetime import datetime
 import threading
 from backend.database.db_utils import get_connection, execute_, update_query, insert_query
-import cv2
-import pytesseract
-from pytesseract import Output
 import json
 from PIL import Image
-import cv2
 import numpy as np
 import pandas as pd
 import pymysql
