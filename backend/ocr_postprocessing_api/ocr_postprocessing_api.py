@@ -297,7 +297,7 @@ def ocr_postprocessing_api():
                 folder_path = parts[0]
                 logging.info(f"The file name is {folder_path}")
                 pdf_file_path = None
-                if os.path.exists(filepath):
+                if os.path.exists(pdf_file_path):
                     for root, dirs, files in os.walk(filepath):
                         logging.info(f"The root is {root}")
                         logging.info(f"The dirs are {dirs}")
