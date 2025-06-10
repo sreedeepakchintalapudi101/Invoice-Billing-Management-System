@@ -54,24 +54,33 @@ document.getElementById("extract-btn").addEventListener("click", function () {
     .then(response => response.json())
     .then(data => {
       console.log("Response is:", data);
-      const container = document.getElementById("extracted-values");
+      const extracted_values_container = document.getElementById("extracted-values");
+      const table_values_container = document.getElementById("table-tab");
 
       if (!data || !data.extracted_dict || Object.keys(data.extracted_dict).length === 0) {
         container.innerHTML = "<h2>No Data is extracted!</h2>";
         return;
       }
 
-      let html = "<div class='box-container'>";
+      let extracted_html = "<div class='box-container'>";
       for (const [key, value] of Object.entries(data.extracted_dict)) {
-        html += `
+        extracted_html += `
           <div class='data-box'>
             <h2 class='box-key'>${key}</h2>
             <p class='data-value'>${value}</p>
           </div>
         `;
       }
-      html += "</div>";
-      container.innerHTML = html;
+      extracted_html += "</div>";
+      extracted_values_container.innerHTML = extracted_html;
+      
+      if (!data || !data.html_table) {
+        container.innerHTML = "<h2>No Tables are Extracted</h2>"
+      } else {
+        let table_html = "";
+        table_html += data.html_table;
+        table_values_container.innerHTML = table_html;
+      }
     })
     .catch(error => {
       console.error("Error:", error);

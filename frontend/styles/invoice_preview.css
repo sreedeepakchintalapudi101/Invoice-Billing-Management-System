@@ -72,6 +72,14 @@ body {
   color: #666;
 }
 
+#table-tab {
+  background-color: #fff;
+  border: 1px dashed #aaa;
+  padding: 20px;
+  min-height: 85vh;
+  color: #666;
+}
+
 #extracted-values ul {
   list-style: none;
   padding: 0;

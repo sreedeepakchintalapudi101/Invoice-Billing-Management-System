@@ -4,30 +4,42 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Invoice Viewer</title>
-  <link rel="stylesheet" href="../styles/invoice_preview.css"/>
+  <link rel="stylesheet" href="styles/invoice_preview.css"/>
 </head>
 <body>
   <div class="main-container">
-    <!-- Left: Invoice Preview -->
+    <!-- Left Panel -->
     <div class="left-panel">
       <h1>Invoice Preview</h1>
       <div id="invoice-content">
-        <img src="../invoices/sample_invoice.png" alt="Invoice Preview" />
+        <img src="invoices/sample_invoice.png" alt="Invoice Preview" />
       </div>
-
-      <!-- Extract Button -->
       <button id="extract-btn" class="extract-button">Extract</button>
     </div>
 
-    <!-- Right: Extraction Placeholder -->
+    <!-- Right Panel -->
     <div class="right-panel">
-      <h2>Extracted Values</h2>
-      <div id="extracted-values">
-        <p>No data extracted yet.</p>
+      <h2>Extraction Output</h2>
+
+      <div class="tab-buttons">
+        <button class="tab-btn active" onclick="showTab('extracted-values-tab')">Extracted Values</button>
+        <button class="tab-btn" onclick="showTab('table-tab')">Table</button>
+      </div>
+
+      <div id="extracted-values-tab" class="tab-content active">
+        <div id="extracted-values">
+          <p>No data extracted yet.</p>
+        </div>
+      </div>
+
+      <div id="table-tab" class="tab-content">
+        <div id="html-table-container">
+          <p>No table data yet.</p>
+        </div>
       </div>
     </div>
   </div>
 
-  <script src="../scripts/invoice_preview.js"></script>
+  <script src="scripts/invoice_preview.js"></script>
 </body>
 </html>
