@@ -144,7 +144,7 @@ def convert_image():
             message = final_result.get("message", "")
             invoice_id = final_result.get("invoice_id", "")
             extracted_dict = final_result.get("extracted_dict", "")
-            html_table = final_result.get("html_table", html_table)
+            html_table = final_result.get("html_table", "")
             return {
                 "flag" : flag,
                 "message" : message,
