@@ -320,7 +320,7 @@ def ocr_postprocessing_api():
                     }
                 with pdfplumber.open(pdf_file_path) as pdf:
                     page = pdf.pages[0]
-                    table = pdf.extract_table()
+                    table = page.extract_table()
                 html_table = table_to_html(table)
         logging.info(f"The processed_dict is {processed_dict}")
         if update_flag == "new":
