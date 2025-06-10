@@ -144,11 +144,13 @@ def convert_image():
             message = final_result.get("message", "")
             invoice_id = final_result.get("invoice_id", "")
             extracted_dict = final_result.get("extracted_dict", "")
+            html_table = final_result.get("html_table", html_table)
             return {
                 "flag" : flag,
                 "message" : message,
                 "invoice_id" : invoice_id,
-                "extracted_dict" : extracted_dict
+                "extracted_dict" : extracted_dict,
+                "html_table" : html_table
             }
         except Exception as e:
             logging.error(f"Error occured with Exception {e}")

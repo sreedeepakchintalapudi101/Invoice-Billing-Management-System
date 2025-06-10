@@ -115,7 +115,7 @@ def bounding_box_detection_api():
                 
         extraction_dict["extracted"].append(temp_dict)
         
-        logging.info(f"THe Extracted Dict is {extraction_dict}")
+        logging.info(f"The Extracted Dict is {extraction_dict}")
         
         grey_image_paths_string = ",".join(grey_image_paths)
         
@@ -166,10 +166,12 @@ def bounding_box_detection_api():
             message = final_result.get("message", "")
             extracted_dict = final_result.get("extracted_dict", "")
             invoice_id = final_result.get("invoice_id", "")
+            html_table = final_result.get("html_table", "")
             return {
                 "flag" : flag,
                 "message" : message,
-                "extracted_dict" : extracted_dict
+                "extracted_dict" : extracted_dict,
+                "html_table" : html_table
             }
         if update_flag == "update":
             updation_query = """
@@ -205,7 +207,8 @@ def bounding_box_detection_api():
                 "flag" : flag,
                 "message" : message,
                 "invoice_id" : invoice_id,
-                "extracted_dict" : extracted_dict
+                "extracted_dict" : extracted_dict,
+                "html_table" : html_table
             }
 
     except Exception as e:
