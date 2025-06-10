@@ -324,13 +324,13 @@ def ocr_postprocessing_api():
                 html_table = table_to_html(table)
         logging.info(f"The processed_dict is {processed_dict}")
         if update_flag == "new":
-            insertion_query = f"""
+            insertion_query = """
             INSERT INTO `ocr_info`
-            (`invoice_id`, `ocr_dict`, `created_at`, `updated_at`, `template`)
+            (`invoice_id`, `ocr_dict`, `created_at`, `updated_at`, `template`, `html_table`)
             VALUES
-            (%s, %s, %s, %s, %s);
+            (%s, %s, %s, %s, %s, %s);
             """
-            params = [invoice_id, json.dumps(processed_dict), current_time, current_time, template_type]
+            params = [invoice_id, json.dumps(processed_dict), current_time, current_time, html_table, template_type]
             insertion_result = insert_query(database, insertion_query, params)
             logging.info(f"The insertion result is {insertion_result}")
             if insertion_result:
@@ -345,10 +345,10 @@ def ocr_postprocessing_api():
         elif update_flag == "update":
             updation_query = """
             UPDATE `ocr_info`
-            SET `ocr_dict` = %s, `updated_at` = %s, `Template` = %s
+            SET `ocr_dict` = %s, `updated_at` = %s, `Template` = %s, `html_table` = %s
             WHERE `invoice_id` = %s;
             """
-            params = [json.loads(processed_dict), current_time, template_type, invoice_id]
+            params = [json.loads(processed_dict), current_time, template_type, html_table, invoice_id]
             updation_result = update_query(database, updation_query, params)
             logging.info(f"The updation result is {updation_result}")
             if updation_result:
