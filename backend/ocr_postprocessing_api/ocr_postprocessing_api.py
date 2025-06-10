@@ -330,7 +330,7 @@ def ocr_postprocessing_api():
             VALUES
             (%s, %s, %s, %s, %s, %s);
             """
-            params = [invoice_id, json.dumps(processed_dict), current_time, current_time, html_table, template_type]
+            params = [invoice_id, json.dumps(processed_dict), current_time, current_time, template_type, html_table]
             insertion_result = insert_query(database, insertion_query, params)
             logging.info(f"The insertion result is {insertion_result}")
             if insertion_result:
