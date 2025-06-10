@@ -112,7 +112,6 @@ document.getElementById("extract-btn").addEventListener("click", function () {
     })
     .catch((error) => {
       console.error("Error:", error);
-      document.getElementById("extracted-values").innerHTML = "<h2>No data is extracted</h2>"
-        "<h2>Error in loading extracted
+      document.getElementById("extracted-values").innerHTML = "<h2>No data is extracted</h2>";
     })
 })
