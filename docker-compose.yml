@@ -129,6 +129,8 @@ services:
     environment:
       - TZ=Asia/Kolkata
       - JAVA_OPTS=-Xmx512m
+      - CAMUNDA_ADMIN_USER=admin
+      - CAMUNDA_ADMIN_PASSWORD=1234
     env_file:
       - .env
     volumes:
