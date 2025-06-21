@@ -142,7 +142,7 @@ services:
       context: ./frontend
     container_name: frontend
     ports:
-      - "8079:8079"
+      - "8079:80"
 
 volumes:
   ingested_files:
