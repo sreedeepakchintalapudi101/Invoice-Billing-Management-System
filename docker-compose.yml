@@ -122,7 +122,7 @@ services:
   camunda:
     build:
       context: .
-      dockerfile: ./backend/camunda/Dockerfile
+      dockerfile: ./backend/camunda_api/Dockerfile
     container_name: camunda_api
     ports:
       - "8080:8080"
