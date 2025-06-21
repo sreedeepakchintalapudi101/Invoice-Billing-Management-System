@@ -119,7 +119,7 @@ services:
       - ingested_files:/app/ingested_files
     restart: always
 
-  camunda:
+  camunda_api:
     build:
       context: .
       dockerfile: ./backend/camunda_api/Dockerfile
