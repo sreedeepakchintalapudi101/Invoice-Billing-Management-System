@@ -134,7 +134,7 @@ services:
     env_file:
       - .env
     volumes:
-  - ./target:/camunda/configuration/userlib
+      - ./target:/camunda/configuration/userlib
     restart: unless-stopped
 
   frontend:
