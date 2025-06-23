@@ -135,6 +135,7 @@ services:
       - .env
     volumes:
       - ingested_files:/app/ingested_files
+      - ./target:/camunda/configuration/userlib
     restart: unless-stopped
 
   frontend:
