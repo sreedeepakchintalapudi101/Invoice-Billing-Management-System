@@ -5,12 +5,12 @@
       <bpmn:outgoing>Flow_14sbn0q</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_14sbn0q" sourceRef="StartEvent_1" targetRef="Activity_016e2vs" />
-    <bpmn:serviceTask id="Activity_016e2vs" name="email_ingestion" camunda:class="com.deepak.workflow.ServiceTask">
+    <bpmn:serviceTask id="Activity_016e2vs" name="login_user" camunda:class="com.deepak.workflow.ServiceTask">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="container">email_ingestion</camunda:inputParameter>
-          <camunda:inputParameter name="port">8083</camunda:inputParameter>
-          <camunda:inputParameter name="route">email_ingestion</camunda:inputParameter>
+          <camunda:inputParameter name="container">user_management</camunda:inputParameter>
+          <camunda:inputParameter name="port">8081</camunda:inputParameter>
+          <camunda:inputParameter name="route">logging_user</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_14sbn0q</bpmn:incoming>
