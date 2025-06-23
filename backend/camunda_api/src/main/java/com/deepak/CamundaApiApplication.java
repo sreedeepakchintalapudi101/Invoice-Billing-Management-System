@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.util.logging.Logger;
 
 @SpringBootApplication
-public class SpringBootApplication{
+public class CamundaApiApplication {
 
     private static final Logger logger = Logger.getLogger(CamundaApiApplication.class.getName());
 
