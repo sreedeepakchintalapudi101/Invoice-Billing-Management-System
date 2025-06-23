@@ -11,6 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 import java.util.logging.Logger;
+import org.json.JSONObject;
 
 @Component("ServiceTask")
 public class ServiceTask implements JavaDelegate {
@@ -63,6 +64,13 @@ public class ServiceTask implements JavaDelegate {
                 responseBody = scanner.hasNext() ? scanner.next() : "";
                 execution.setVariable("response_body", responseBody);
                 logger.info("HTTP Response Body: " + responseBody);
+                
+                // Parse the response body as JSON
+                JSONObject json = new JSONObject(responseBody);
+                boolean flag = json.optBoolean("flag", false);
+                execution.setVariable("flag", String.valueOf(flag));
+                logger.info("Parsed Flag Value is: " + flag);
+
             }
 
         } catch (IOException e) {

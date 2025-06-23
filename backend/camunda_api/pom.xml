@@ -44,6 +44,11 @@
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.36</version>
         </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20210307</version>
+        </dependency>
 
         <!-- Optional: Camunda Spring Boot if needed -->
         <!-- <dependency>
