@@ -1,0 +1,8 @@
+{
+  "variables": {
+    "container": { "value": "email_ingestion", "type": "String" },
+    "port": { "value": "8083", "type": "String" },
+    "route": { "value": "email_ingestion", "type": "String" },
+    "payload": { "value": "{\"sample\":\"data\"}", "type": "String" }
+  }
+}
