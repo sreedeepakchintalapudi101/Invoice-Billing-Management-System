@@ -13,7 +13,6 @@ import java.util.Scanner;
 import java.util.logging.Logger;
 import org.json.JSONObject;
 
-@Component("ServiceTask")
 public class ServiceTask implements JavaDelegate {
 
     private final Logger logger = Logger.getLogger(ServiceTask.class.getName());
