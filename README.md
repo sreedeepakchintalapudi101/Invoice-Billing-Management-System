@@ -50,5 +50,3 @@ Manual invoice handling can be error-prone, inefficient, and difficult to scale.
 - 🔎 Search and filter invoice records  
 - 🐳 Fully containerized setup using Docker  
 - 🔗 `docker-compose.yml` to run multiple services (frontend, backend, database) in parallel
-
----
