@@ -49,7 +49,9 @@ public class ServiceTask implements JavaDelegate {
             // Send payload
             try (OutputStream os = conn.getOutputStream()) {
                 byte[] input = payload.getBytes("UTF-8");
+                logger.severe("Sending Payload: " + payload);
                 os.write(input, 0, input.length);
+                logger.info("Payload sent successfully.");
             }
 
             int responseCode = conn.getResponseCode();
