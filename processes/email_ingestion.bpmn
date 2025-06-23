@@ -10,7 +10,7 @@
         <camunda:inputOutput>
           <camunda:inputParameter name="container">user_management</camunda:inputParameter>
           <camunda:inputParameter name="port">8081</camunda:inputParameter>
-          <camunda:inputParameter name="route">"${login_user}"</camunda:inputParameter>
+          <camunda:inputParameter name="route">login_user</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_14sbn0q</bpmn:incoming>
