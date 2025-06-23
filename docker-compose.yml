@@ -133,8 +133,8 @@ services:
       - CAMUNDA_ADMIN_PASSWORD=1234
     env_file:
       - .env
-    volumes:
-      - ./target:/camunda/configuration/userlib
+    # volumes:
+    #   - ./target:/camunda/configuration/userlib
     restart: unless-stopped
 
   frontend:
