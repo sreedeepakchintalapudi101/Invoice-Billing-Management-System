@@ -5,7 +5,7 @@
       <bpmn:outgoing>Flow_14sbn0q</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_14sbn0q" sourceRef="StartEvent_1" targetRef="Activity_016e2vs" />
-    <bpmn:serviceTask id="Activity_016e2vs" name="email_ingestion" camunda:class="com.deepak.ServiceTask">
+    <bpmn:serviceTask id="Activity_016e2vs" name="email_ingestion" camunda:class="com.deepak.workflow.ServiceTask">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="container">email_ingestion</camunda:inputParameter>
