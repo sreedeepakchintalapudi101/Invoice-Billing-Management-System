@@ -110,6 +110,10 @@ def email_ingestion():
                                                         "value" : filename,
                                                         "type" : "String"
                                                     }
+                                                    "flag" : {
+                                                        "value" : True,
+                                                        "type" : "Boolean"
+                                                    }
                                                 }
                                             }
                                             response = requests.post(camunda_url, json=payload)
