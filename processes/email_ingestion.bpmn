@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0xw6gz1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.36.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.23.0">
   <bpmn:process id="email_ingestion_workflow" name="Email_Ingestion_Workflow" isExecutable="true" camunda:historyTimeToLive="30">
-    <bpmn:startEvent id="Event_0e8ois2">
+    <bpmn:startEvent id="Event_0e8ois2" name="Start Email Ingestion">
       <bpmn:outgoing>Flow_1imh8b3</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:task id="Activity_1fc6dli" name="Image Conversion API">
@@ -43,7 +43,9 @@
       <bpmn:outgoing>Flow_09inz32</bpmn:outgoing>
       <bpmn:outgoing>Flow_1e34o31</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_09inz32" sourceRef="Gateway_04nj9qj" targetRef="Activity_1fc6dli" />
+    <bpmn:sequenceFlow id="Flow_09inz32" name="${flag == &#34;true&#34;}" sourceRef="Gateway_04nj9qj" targetRef="Activity_1fc6dli">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${flag == "true"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:userTask id="incomplete_queue" name="Incomplete Queue">
       <bpmn:extensionElements>
         <camunda:taskListener class="" event="create" id="" />
@@ -109,6 +111,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0e8ois2_di" bpmnElement="Event_0e8ois2">
         <dc:Bounds x="152" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="143" y="145" width="54" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_04nj9qj_di" bpmnElement="Gateway_04nj9qj" isMarkerVisible="true">
         <dc:Bounds x="225" y="95" width="50" height="50" />
@@ -143,6 +148,9 @@
       <bpmndi:BPMNEdge id="Flow_09inz32_di" bpmnElement="Flow_09inz32">
         <di:waypoint x="275" y="120" />
         <di:waypoint x="330" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="264" y="102" width="78" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0xiyjtl_di" bpmnElement="Flow_0xiyjtl">
         <di:waypoint x="430" y="120" />
