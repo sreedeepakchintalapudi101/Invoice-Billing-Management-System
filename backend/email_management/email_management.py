@@ -72,7 +72,7 @@ def email_ingestion():
                     from_email = extract_email_address(from_email_raw)
                     subject, encoding = decode_header(msg["subject"])[0]
                     if isinstance(subject, bytes):
-                        subject = subject.decode(encoder or 'UTF-8')
+                        subject = subject.decode(encoding or 'UTF-8')
                     logging.info(f"Email Subject:, {subject}")
                     if msg.is_multipart():
                         for part in msg.walk():
@@ -97,12 +97,40 @@ def email_ingestion():
                                     """
                                     params=[invoice_id, filename, datetime.now(), from_email]
                                     result = insert_query(database, query, params)
-                                    # folder = "ingested_emails"
-                                    # os.makedirs(folder, exist_ok=True)
-                                    # filepath = os.path.join(folder, filename)
-                                    # with open(filepath, "wb") as f:
-                                    #     f.write(part.get_payload(decode=True))
-                                    # print(f"Saved email attachment: {filepath}")
+                                    if result:
+                                        try:
+                                            camunda_url = "http://localhost:8080/engine-rest/process-definition/key/email_ingestion_workflow/start"
+                                            payload = {
+                                                "variables" : {
+                                                    "invoice_id" : {
+                                                        "value" : invoice_id,
+                                                        "type" : "String"
+                                                    },
+                                                    "filename" : {
+                                                        "value" : filename,
+                                                        "type" : "String"
+                                                    }
+                                                }
+                                            }
+                                            response = requests.post(camunda_url, json=payload)
+                                            if response.status_code in [200, 201]:
+                                                logging.info(f"Camunda Process started successfully for invoice {invoice_id}")
+                                                return {
+                                                    "flag": True,
+                                                    "message": f"Email processed and file saved successfully with invoice ID {invoice_id}"
+                                                }
+                                            else:
+                                                logging.error(f"Failed to start Camunda process for invoice {invoice_id}. Status code: {response.status_code}")
+                                                return {
+                                                    "flag": False,
+                                                    "message": f"Failed to start Camunda process for invoice {invoice_id}. Status code: {response.status_code}"
+                                                }
+                                        except Exception as e:
+                                            logging.exception(f"Error Occured with Exception {e}")
+                                            return {
+                                                "flag": False,
+                                                "message": f"Error Occured with Exception {e}"
+                                            }
         imap.logout()
         return True
     
