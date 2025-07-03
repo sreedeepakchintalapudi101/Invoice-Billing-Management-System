@@ -40,9 +40,11 @@ public class ServiceTask implements JavaDelegate {
         logger.info("Target URL: " + targetUrl);
         logger.info("Payload to be sent: " + payload);
 
+        HttpURLConnection conn = null;
+
         try {
             URL url = new URL(targetUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setDoOutput(true);
