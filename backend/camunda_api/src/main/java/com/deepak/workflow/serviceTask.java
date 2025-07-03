@@ -72,7 +72,7 @@ public class ServiceTask implements JavaDelegate {
                 // Parse the response body as JSON
                 JSONObject json = new JSONObject(responseBody);
                 boolean flag = json.optBoolean("flag", false);
-                execution.setVariable("flag", String.valueOf(flag));
+                execution.setVariable("flag", flag);
                 logger.info("Parsed Flag Value is: " + flag);
 
             }
