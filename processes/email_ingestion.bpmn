@@ -43,7 +43,7 @@
       <bpmn:outgoing>Flow_09inz32</bpmn:outgoing>
       <bpmn:outgoing>Flow_1e34o31</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_09inz32" name="${flag == &#34;true&#34;}" sourceRef="Gateway_04nj9qj" targetRef="Activity_1fc6dli">
+    <bpmn:sequenceFlow id="Flow_09inz32" name="${flag == true}" sourceRef="Gateway_04nj9qj" targetRef="Activity_1fc6dli">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${flag == true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:userTask id="incomplete_queue" name="Incomplete Queue">
@@ -153,7 +153,7 @@
         <di:waypoint x="275" y="120" />
         <di:waypoint x="330" y="120" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="264" y="102" width="78" height="14" />
+          <dc:Bounds x="269" y="102" width="70" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1e34o31_di" bpmnElement="Flow_1e34o31">
