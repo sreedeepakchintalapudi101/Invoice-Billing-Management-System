@@ -78,6 +78,12 @@ public class ServiceTask implements JavaDelegate {
             }
 
         } catch (IOException e) {
+            InputStream errorStream = conn.getErrorStream();
+            if (errorStream != null) {
+                Scanner errorScanner = new Scanner(errorStream).useDelimiter("\\A");
+                String errorResponse = errorScanner.hasNext() ? errorScanner.next() : "";
+                logger.severe("Error response body: " + errorResponse);
+            }
             logger.severe("Error while calling the API: " + e.getMessage());
             throw new RuntimeException("API call failed", e);
         }
