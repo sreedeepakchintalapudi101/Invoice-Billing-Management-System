@@ -28,10 +28,6 @@
     <bpmn:sequenceFlow id="Flow_06ngenu" name="${flag == &#34;false&#34;}" sourceRef="Gateway_1w2s2zp" targetRef="Activity_07cw0yq">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${flag == "false"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="Activity_07cw0yq" name="Incomplete Queue">
-      <bpmn:incoming>Flow_06ngenu</bpmn:incoming>
-      <bpmn:outgoing>Flow_1tzfgah</bpmn:outgoing>
-    </bpmn:userTask>
     <bpmn:endEvent id="Event_159cfaa">
       <bpmn:incoming>Flow_1tzfgah</bpmn:incoming>
     </bpmn:endEvent>
@@ -39,6 +35,12 @@
     <bpmn:endEvent id="Event_12qyeq3">
       <bpmn:incoming>Flow_160d4q5</bpmn:incoming>
     </bpmn:endEvent>
+    <bpmn:intermediateThrowEvent id="Event_0sthcmn" />
+    <bpmn:callActivity id="Activity_07cw0yq" name="Incomplete Queue">
+      <bpmn:incoming>Flow_06ngenu</bpmn:incoming>
+      <bpmn:outgoing>Flow_1tzfgah</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics isSequential="true" />
+    </bpmn:callActivity>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_064ndml">
@@ -52,15 +54,17 @@
       <bpmndi:BPMNShape id="Gateway_1w2s2zp_di" bpmnElement="Gateway_1w2s2zp" isMarkerVisible="true">
         <dc:Bounds x="425" y="95" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0jbvh7w_di" bpmnElement="Activity_07cw0yq">
-        <dc:Bounds x="530" y="190" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_159cfaa_di" bpmnElement="Event_159cfaa">
         <dc:Bounds x="692" y="212" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_12qyeq3_di" bpmnElement="Event_12qyeq3">
         <dc:Bounds x="692" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0sthcmn_di" bpmnElement="Event_0sthcmn">
+        <dc:Bounds x="692" y="212" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1mc4wmt_di" bpmnElement="Activity_07cw0yq">
+        <dc:Bounds x="530" y="190" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_14sbn0q_di" bpmnElement="Flow_14sbn0q">
         <di:waypoint x="218" y="120" />

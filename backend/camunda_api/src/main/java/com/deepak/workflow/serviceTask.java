@@ -38,6 +38,7 @@ public class ServiceTask implements JavaDelegate {
         // Construct the URL
         String targetUrl = "http://" + container + ":" + port + "/" + route;
         logger.info("Target URL: " + targetUrl);
+        logger.info("Payload to be sent: " + payload);
 
         try {
             URL url = new URL(targetUrl);
@@ -47,13 +48,15 @@ public class ServiceTask implements JavaDelegate {
             conn.setDoOutput(true);
 
             // Send payload
-            try (OutputStream os = conn.getOutputStream()) {
-                byte[] input = payload.getBytes("UTF-8");
-                logger.severe("Sending Payload: " + payload);
-                os.write(input, 0, input.length);
-                logger.info("Payload sent successfully.");
+            if (payload != null && !payload.isEmpty()) {
+                try (OutputStream os = conn.getOutputStream()) {
+                    byte[] input = payload.getBytes("utf-8");
+                    os.write(input, 0, input.length);
+                    logger.info("Payload sent successfully.");
+                }
             }
 
+            // Read Response
             int responseCode = conn.getResponseCode();
             execution.setVariable("status_code", responseCode);
             logger.info("HTTP Response Code: " + responseCode);
