@@ -4,40 +4,7 @@
     <bpmn:startEvent id="Event_0e8ois2" name="Start Email Ingestion">
       <bpmn:outgoing>Flow_1imh8b3</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:task id="Activity_1fc6dli" name="Image Conversion API">
-      <bpmn:extensionElements>
-        <camunda:inputOutput>
-          <camunda:inputParameter name="container">image_conversion_api</camunda:inputParameter>
-          <camunda:inputParameter name="port">8085</camunda:inputParameter>
-          <camunda:inputParameter name="route">image_conversion_api</camunda:inputParameter>
-        </camunda:inputOutput>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_09inz32</bpmn:incoming>
-      <bpmn:outgoing>Flow_0xiyjtl</bpmn:outgoing>
-    </bpmn:task>
     <bpmn:sequenceFlow id="Flow_1imh8b3" sourceRef="Event_0e8ois2" targetRef="Gateway_04nj9qj" />
-    <bpmn:task id="Activity_12kfy08" name="Bounding Box Detection API">
-      <bpmn:extensionElements>
-        <camunda:inputOutput>
-          <camunda:inputParameter name="container">bounding_box_detection_api</camunda:inputParameter>
-          <camunda:inputParameter name="port">8088</camunda:inputParameter>
-          <camunda:inputParameter name="route">bounding_box_detection_api</camunda:inputParameter>
-        </camunda:inputOutput>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1w19kym</bpmn:incoming>
-      <bpmn:outgoing>Flow_1y47wam</bpmn:outgoing>
-    </bpmn:task>
-    <bpmn:task id="Activity_0wf5c1v" name="OCR Post Processing API">
-      <bpmn:extensionElements>
-        <camunda:inputOutput>
-          <camunda:inputParameter name="container">ocr_postprocessing_api</camunda:inputParameter>
-          <camunda:inputParameter name="port">8087</camunda:inputParameter>
-          <camunda:inputParameter name="route">ocr_postprocessing_api</camunda:inputParameter>
-        </camunda:inputOutput>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_14laa6q</bpmn:incoming>
-      <bpmn:outgoing>Flow_1v3eboo</bpmn:outgoing>
-    </bpmn:task>
     <bpmn:exclusiveGateway id="Gateway_04nj9qj">
       <bpmn:incoming>Flow_1imh8b3</bpmn:incoming>
       <bpmn:outgoing>Flow_09inz32</bpmn:outgoing>
@@ -47,9 +14,7 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${flag == true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:userTask id="incomplete_queue" name="Incomplete Queue">
-      <bpmn:extensionElements>
-        <camunda:taskListener class="" event="create" id="" />
-      </bpmn:extensionElements>
+      <bpmn:extensionElements />
       <bpmn:incoming>Flow_1e34o31</bpmn:incoming>
       <bpmn:incoming>Flow_0kimtpt</bpmn:incoming>
       <bpmn:incoming>Flow_05i3b1g</bpmn:incoming>
@@ -102,6 +67,39 @@
       <bpmn:incoming>Flow_1jzqwvt</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1jzqwvt" sourceRef="incomplete_queue" targetRef="Event_1wzm0zz" />
+    <bpmn:serviceTask id="Activity_1fc6dli" name="Image Conversion API" camunda:class="com.deepak.workflow.serviceTask">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="container">image_conversion_api</camunda:inputParameter>
+          <camunda:inputParameter name="port">8085</camunda:inputParameter>
+          <camunda:inputParameter name="route">image_conversion_api</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_09inz32</bpmn:incoming>
+      <bpmn:outgoing>Flow_0xiyjtl</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_12kfy08" name="Bounding Box Detection API" camunda:class="com.deepak.workflow.serviceTask">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="container">bounding_box_detection_api</camunda:inputParameter>
+          <camunda:inputParameter name="port">8088</camunda:inputParameter>
+          <camunda:inputParameter name="route">bounding_box_detection_api</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1w19kym</bpmn:incoming>
+      <bpmn:outgoing>Flow_1y47wam</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_0wf5c1v" name="OCR Post Processing API" camunda:class="com.deepak.workflow.serviceTask">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="container">ocr_postprocessing_api</camunda:inputParameter>
+          <camunda:inputParameter name="port">8087</camunda:inputParameter>
+          <camunda:inputParameter name="route">ocr_postprocessing_api</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_14laa6q</bpmn:incoming>
+      <bpmn:outgoing>Flow_1v3eboo</bpmn:outgoing>
+    </bpmn:serviceTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="email_ingestion_workflow">
@@ -110,18 +108,6 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="143" y="145" width="54" height="27" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1fc6dli_di" bpmnElement="Activity_1fc6dli">
-        <dc:Bounds x="330" y="80" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_12kfy08_di" bpmnElement="Activity_12kfy08">
-        <dc:Bounds x="690" y="80" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0wf5c1v_di" bpmnElement="Activity_0wf5c1v">
-        <dc:Bounds x="1130" y="80" width="100" height="80" />
-        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_04nj9qj_di" bpmnElement="Gateway_04nj9qj" isMarkerVisible="true">
         <dc:Bounds x="225" y="95" width="50" height="50" />
@@ -144,6 +130,15 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1wzm0zz_di" bpmnElement="Event_1wzm0zz">
         <dc:Bounds x="1592" y="322" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1fj77h4_di" bpmnElement="Activity_1fc6dli">
+        <dc:Bounds x="330" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1a3gxrj_di" bpmnElement="Activity_12kfy08">
+        <dc:Bounds x="690" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0bojml3_di" bpmnElement="Activity_0wf5c1v">
+        <dc:Bounds x="1130" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1imh8b3_di" bpmnElement="Flow_1imh8b3">
         <di:waypoint x="188" y="120" />
