@@ -75,7 +75,7 @@
         <camunda:inputOutput>
           <camunda:inputParameter name="container">image_conversion_api</camunda:inputParameter>
           <camunda:inputParameter name="port">8085</camunda:inputParameter>
-          <camunda:inputParameter name="route">image_conversion_api</camunda:inputParameter>
+          <camunda:inputParameter name="route">convert_image</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_09inz32</bpmn:incoming>
