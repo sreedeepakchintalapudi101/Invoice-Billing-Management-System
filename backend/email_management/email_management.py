@@ -169,7 +169,10 @@ def pdf_to_image(pdf_path, output_folder):
             logging.info(f"Saved image: {image_path}")
 
         return image_paths
-    
+    except Exception as e:
+        logging.error(f"Error occured with exception {e}")
+        return None
+        
 def basic_scheduler(interval_seconds):
     while True:
         email_ingestion()
