@@ -64,9 +64,13 @@ public class serviceTask implements JavaDelegate {
                 logger.info("HTTP Response Body: " + responseBody);
 
                 JSONObject json = new JSONObject(responseBody);
-                boolean flag = json.optBoolean("flag", false);
-                execution.setVariable("flag", flag);
-                logger.info("Parsed Flag Value is: " + flag);
+                // boolean flag = json.optBoolean("flag", false);
+                // execution.setVariable("flag", flag);
+                // logger.info("Parsed Flag Value is: " + flag);
+                execution.setVariable("flag", json.optBoolean("flag", false));
+                logger.info("Parsed Flag Value is: " + execution.getVariable("flag"));
+                execution.setVariable("message", json.optString("message", ""));
+                logger.info("Parsed Message Value is: " + execution.getVariable("message"));
             }
 
         } catch (IOException e) {

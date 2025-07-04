@@ -109,7 +109,7 @@ def email_ingestion():
                                                     "filename" : {
                                                         "value" : filename,
                                                         "type" : "String"
-                                                    }
+                                                    },
                                                     "flag" : {
                                                         "value" : True,
                                                         "type" : "Boolean"
