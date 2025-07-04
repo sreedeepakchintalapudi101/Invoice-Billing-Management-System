@@ -43,13 +43,6 @@ public class serviceTask implements JavaDelegate {
         HttpURLConnection conn = null;
 
         try {
-            URL url = new URL(targetUrl);
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setDoOutput(true);
-
-            // Send payload
             if (payload != null && !payload.isEmpty()) {
                 try (OutputStream os = conn.getOutputStream()) {
                     byte[] input = payload.getBytes("utf-8");
@@ -57,6 +50,12 @@ public class serviceTask implements JavaDelegate {
                     logger.info("Payload sent successfully.");
                 }
             }
+            
+            URL url = new URL(targetUrl);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
 
             // Read Response
             int responseCode = conn.getResponseCode();
