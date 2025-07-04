@@ -99,7 +99,8 @@ def email_ingestion():
                                     result = insert_query(database, query, params)
                                     if result:
                                         try:
-                                            camunda_url = "http://localhost:8080/engine-rest/process-definition/key/email_ingestion_workflow/start"
+                                            # camunda_url = "http://localhost:8080/engine-rest/process-definition/key/email_ingestion_workflow/start"
+                                            camunda_url = "http://camunda_api:8080/engine-rest/process-definition/key/email_ingestion_workflow/start"
                                             payload = {
                                                 "variables" : {
                                                     "payload" : {
