@@ -33,7 +33,7 @@ public class serviceTask implements JavaDelegate {
             throw new IllegalArgumentException("Container, port, or route is missing.");
         }
 
-        String targetUrl = "http://" + "localhost" + ":" + port + "/" + route;
+        String targetUrl = "http://" + "host.docker.internal" + ":" + port + "/" + route;
         logger.info("Target URL: " + targetUrl);
 
         HttpURLConnection conn = null;
