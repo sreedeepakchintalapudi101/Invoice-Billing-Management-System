@@ -110,55 +110,55 @@ def convert_image():
             grey_image = image_preprocess(image_path, output_path)
             if grey_image:
                 grey_image_paths.append(grey_image)
-        # message = "The Files are successfully Preprocessed"
-        # return {
-        #     "flag" : True,
-        #     "message" : message, 
-        #     "processed_images" : grey_image_paths
-        # }
         if not grey_image_paths:
             message = "Image Preprocessing Failed!"
             return {
                 "flag" : False,
                 "message" : message
             }
-        try:
-            bounding_box_detection_api_url = "http://bounding_box_detection_api:8088/bounding_box_detection_api"
-            bounding_box_detection_api_params = {
-                "update_flag" : "new",
-                "invoice_id" : invoice_id,
-                "grey_image_paths" : grey_image_paths
-            }
+        message = "The Files are successfully Preprocessed"
+        return {
+            "flag" : True,
+            "message" : message, 
+            "processed_images" : grey_image_paths
+        }
+        # try:
+        #     bounding_box_detection_api_url = "http://bounding_box_detection_api:8088/bounding_box_detection_api"
+        #     bounding_box_detection_api_params = {
+        #         "update_flag" : "new",
+        #         "invoice_id" : invoice_id,
+        #         "grey_image_paths" : grey_image_paths
+        #     }
             
-            bounding_box_detection_api_response = requests.post(bounding_box_detection_api_url, json=bounding_box_detection_api_params)
-            logging.info(f"The extraction_api response is {bounding_box_detection_api_response}")
-            if bounding_box_detection_api_response.status_code != 200:
-                message = "extraction_api failed!"
-                return {
-                    "flag" : False,
-                    "message" : message
-                }
-            final_result = bounding_box_detection_api_response.json()
-            logging.info(f"The final result is {final_result}")
-            flag = final_result.get("flag", False)
-            message = final_result.get("message", "")
-            invoice_id = final_result.get("invoice_id", "")
-            extracted_dict = final_result.get("extracted_dict", "")
-            html_table = final_result.get("html_table", "")
-            return {
-                "flag" : flag,
-                "message" : message,
-                "invoice_id" : invoice_id,
-                "extracted_dict" : extracted_dict,
-                "html_table" : html_table
-            }
-        except Exception as e:
-            logging.error(f"Error occured with Exception {e}")
-            message = "Something went Wrong!"
-            return {
-                "flag" : False,
-                "message" : message
-            }
+        #     bounding_box_detection_api_response = requests.post(bounding_box_detection_api_url, json=bounding_box_detection_api_params)
+        #     logging.info(f"The extraction_api response is {bounding_box_detection_api_response}")
+            # if bounding_box_detection_api_response.status_code != 200:
+            #     message = "extraction_api failed!"
+            #     return {
+            #         "flag" : False,
+            #         "message" : message
+            #     }
+            # final_result = bounding_box_detection_api_response.json()
+            # logging.info(f"The final result is {final_result}")
+            # flag = final_result.get("flag", False)
+            # message = final_result.get("message", "")
+            # invoice_id = final_result.get("invoice_id", "")
+            # extracted_dict = final_result.get("extracted_dict", "")
+            # html_table = final_result.get("html_table", "")
+            # return {
+            #     "flag" : flag,
+            #     "message" : message,
+            #     "invoice_id" : invoice_id,
+            #     "extracted_dict" : extracted_dict,
+            #     "html_table" : html_table
+            # }
+        # except Exception as e:
+        #     logging.error(f"Error occured with Exception {e}")
+        #     message = "Something went Wrong!"
+        #     return {
+        #         "flag" : False,
+        #         "message" : message
+        #     }
     except Exception as e:
         logging.error(f"Error occured with Exception {e}")
         message = "Internal Error Occured"

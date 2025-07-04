@@ -145,34 +145,40 @@ def bounding_box_detection_api():
             result = insert_query(database, insertion_query, params)
             logging.info(f"The result is {result}")
             message = "The Extraction is Done Successfully!"
-            ocr_postprocessing_api_url = "http://ocr_postprocessing_api:8087/ocr_postprocessing_api"
-            ocr_postprocessing_api_params = {
-                "invoice_id" : invoice_id,
-                "file_paths" : grey_image_paths,
-                "update_flag" : "new"
-            }
-            ocr_postprocessing_api_response = requests.post(ocr_postprocessing_api_url, json=ocr_postprocessing_api_params)
-            logging.info(f"The OCR post processing api response is {ocr_postprocessing_api_response}")
-            if ocr_postprocessing_api_response.status_code != 200:
-                message = "OCR postprocessing Failed!"
+            # ocr_postprocessing_api_url = "http://ocr_postprocessing_api:8087/ocr_postprocessing_api"
+            # ocr_postprocessing_api_params = {
+            #     "invoice_id" : invoice_id,
+            #     "file_paths" : grey_image_paths,
+            #     "update_flag" : "new"
+            # }
+            # ocr_postprocessing_api_response = requests.post(ocr_postprocessing_api_url, json=ocr_postprocessing_api_params)
+            # logging.info(f"The OCR post processing api response is {ocr_postprocessing_api_response}")
+            # if ocr_postprocessing_api_response.status_code != 200:
+            #     message = "OCR postprocessing Failed!"
+            #     return {
+            #         "flag" : False,
+            #         "message" : message,
+            #         "extraction_dict" : {}
+            #     }
+            # final_result = ocr_postprocessing_api_response.json()
+            # logging.info(f"The result is {final_result}")
+            # flag = final_result.get("flag", "")
+            # message = final_result.get("message", "")
+            # extracted_dict = final_result.get("extracted_dict", "")
+            # invoice_id = final_result.get("invoice_id", "")
+            # html_table = final_result.get("html_table", "")
+            # return {
+            #     "flag" : flag,
+            #     "message" : message,
+            #     "extracted_dict" : extracted_dict,
+            #     "html_table" : html_table
+            # }
+            if result:
                 return {
-                    "flag" : False,
+                    "flag" : True,
                     "message" : message,
-                    "extraction_dict" : {}
+                    "update_flag" : update_flag,
                 }
-            final_result = ocr_postprocessing_api_response.json()
-            logging.info(f"The result is {final_result}")
-            flag = final_result.get("flag", "")
-            message = final_result.get("message", "")
-            extracted_dict = final_result.get("extracted_dict", "")
-            invoice_id = final_result.get("invoice_id", "")
-            html_table = final_result.get("html_table", "")
-            return {
-                "flag" : flag,
-                "message" : message,
-                "extracted_dict" : extracted_dict,
-                "html_table" : html_table
-            }
         if update_flag == "update":
             updation_query = """
             UPDATE `raw_ocr` SET `extracted_data` = %s, updated_at = %s
@@ -182,35 +188,40 @@ def bounding_box_detection_api():
             result = update_query(database, updation_query, params)
             logging.info(f"The result is {result}")
             message = "OCR Data Updated Successfully!"
-            ocr_postprocessing_api_url = "http://ocr_postprocessing_api:8087/ocr_postprocessing_api"
-            ocr_postprocessing_api_params = {
-                "invoice_id" : invoice_id,
-                "file_paths" : grey_image_paths,
-                "update_flag" : "update"
-            }
-            ocr_postprocessing_api_response = requests.post(ocr_postprocessing_api_url, json=ocr_postprocessing_api_params)
-            logging.info(f"The OCR post processing api response is {ocr_postprocessing_api_response}")
-            if ocr_postprocessing_api_response.status_code != 200:
-                message = "OCR postprocessing Failed!"
+            # ocr_postprocessing_api_url = "http://ocr_postprocessing_api:8087/ocr_postprocessing_api"
+            # ocr_postprocessing_api_params = {
+            #     "invoice_id" : invoice_id,
+            #     "file_paths" : grey_image_paths,
+            #     "update_flag" : "update"
+            # }
+            # ocr_postprocessing_api_response = requests.post(ocr_postprocessing_api_url, json=ocr_postprocessing_api_params)
+            # logging.info(f"The OCR post processing api response is {ocr_postprocessing_api_response}")
+            # if ocr_postprocessing_api_response.status_code != 200:
+            #     message = "OCR postprocessing Failed!"
+            #     return {
+            #         "flag" : False,
+            #         "message" : message,
+            #         "extracted_dict" : {}
+            #     }
+            # final_result = ocr_postprocessing_api_response.json()
+            # logging.info(f"The result is {final_result}")
+            # flag = final_result.get("flag", "")
+            # message = final_result.get("message", "")
+            # extracted_dict = final_result.get("extracted_dict", "")
+            # invoice_id = final_result.get("invoice_id", "")
+            # return {
+            #     "flag" : flag,
+            #     "message" : message,
+            #     "invoice_id" : invoice_id,
+            #     "extracted_dict" : extracted_dict,
+            #     "html_table" : html_table
+            # }
+            if result:
                 return {
-                    "flag" : False,
+                    "flag" : True,
                     "message" : message,
-                    "extracted_dict" : {}
+                    "update_flag" : update_flag,
                 }
-            final_result = ocr_postprocessing_api_response.json()
-            logging.info(f"The result is {final_result}")
-            flag = final_result.get("flag", "")
-            message = final_result.get("message", "")
-            extracted_dict = final_result.get("extracted_dict", "")
-            invoice_id = final_result.get("invoice_id", "")
-            return {
-                "flag" : flag,
-                "message" : message,
-                "invoice_id" : invoice_id,
-                "extracted_dict" : extracted_dict,
-                "html_table" : html_table
-            }
-
     except Exception as e:
         logging.exception("Error occurred during bounding box detection")
         return {
