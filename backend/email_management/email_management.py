@@ -12,6 +12,8 @@ import smtplib
 import imaplib
 import paramiko
 import uuid
+import json
+from pdf2image import convert_from_path
 from email import message_from_bytes
 from email.header import decode_header
 import time
@@ -97,18 +99,34 @@ def email_ingestion():
                                     """
                                     params=[invoice_id, filename, datetime.now(), from_email]
                                     result = insert_query(database, query, params)
+                                    output_path = os.path.join("ingested_files", invoice_id)
+                                    image_file_paths = pdf_to_image(file_path, output_path)
+                                    first_image = image_file_paths[0] if image_file_paths else ""
                                     if result:
                                         try:
                                             # camunda_url = "http://localhost:8080/engine-rest/process-definition/key/email_ingestion_workflow/start"
                                             camunda_url = "http://camunda_api:8080/engine-rest/process-definition/key/email_ingestion_workflow/start"
+                                            payload_data = {
+                                                "invoice_id": invoice_id,
+                                                "filename": jpg_filename
+                                            }
                                             payload = {
-                                                "variables" : {
-                                                    "payload" : {
-                                                        "value" : {
-                                                            "invoice_id" : invoice_id,
-                                                            "file_name" : filename,
-                                                        },
-                                                        "type" : "String"
+                                                "variables": {
+                                                    "container": {
+                                                        "value": "image_conversion_api",
+                                                        "type": "String"
+                                                    },
+                                                    "port": {
+                                                        "value": "8085",
+                                                        "type": "String"
+                                                    },
+                                                    "route": {
+                                                        "value": "convert_image",
+                                                        "type": "String"
+                                                    },
+                                                    "payload": {
+                                                        "value": json.dumps(payload_data),  # this is important!
+                                                        "type": "String"
                                                     }
                                                 }
                                             }
@@ -133,11 +151,25 @@ def email_ingestion():
                                             }
         imap.logout()
         return True
-    
     except Exception as e:
         logging.exception(f"Error Occured with Exception {e}")
         return False
+    
+def pdf_to_image(pdf_path, output_folder):
+    image_paths = []
+    try:
+        if not os.path.exists(output_folder):
+            os.makedirs(output_folder, exist_ok=True)
 
+        images = convert_from_path(pdf_path)
+        for i, image in enumerate(images):
+            image_path = os.path.join(output_folder, f"page_{i+1}.jpg")
+            image.save(image_path, "JPEG")
+            image_paths.append(image_path)
+            logging.info(f"Saved image: {image_path}")
+
+        return image_paths
+    
 def basic_scheduler(interval_seconds):
     while True:
         email_ingestion()
