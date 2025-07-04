@@ -12,9 +12,9 @@ import java.util.Scanner;
 import java.util.logging.Logger;
 import org.json.JSONObject;
 
-public class ServiceTask implements JavaDelegate {
+public class serviceTask implements JavaDelegate {
 
-    private final Logger logger = Logger.getLogger(ServiceTask.class.getName());
+    private final Logger logger = Logger.getLogger(serviceTask.class.getName());
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
