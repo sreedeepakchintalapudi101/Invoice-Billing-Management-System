@@ -108,7 +108,7 @@ def email_ingestion():
                                             camunda_url = "http://camunda_api:8080/engine-rest/process-definition/key/email_ingestion_workflow/start"
                                             payload_data = {
                                                 "invoice_id": invoice_id,
-                                                "filename": jpg_filename
+                                                "filename": os.path.basename(first_image)
                                             }
                                             payload = {
                                                 "variables": {
