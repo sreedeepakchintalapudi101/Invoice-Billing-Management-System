@@ -11,6 +11,6 @@ public class initFlagListener implements ExecutionListener {
     @Override
     public void notify(DelegateExecution execution) throws Exception {
         execution.setVariable("flag", true);
-        logger.info("Flag variable initialized to false on start event.");
+        logger.info("Flag variable initialized to true on start event.");
     }
 }
