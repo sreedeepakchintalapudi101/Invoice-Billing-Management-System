@@ -102,17 +102,12 @@ def email_ingestion():
                                             camunda_url = "http://localhost:8080/engine-rest/process-definition/key/email_ingestion_workflow/start"
                                             payload = {
                                                 "variables" : {
-                                                    "invoice_id" : {
-                                                        "value" : invoice_id,
+                                                    "payload" : {
+                                                        "value" : {
+                                                            "invoice_id" : invoice_id,
+                                                            "file_name" : filename,
+                                                        },
                                                         "type" : "String"
-                                                    },
-                                                    "filename" : {
-                                                        "value" : filename,
-                                                        "type" : "String"
-                                                    },
-                                                    "flag" : {
-                                                        "value" : True,
-                                                        "type" : "Boolean"
                                                     }
                                                 }
                                             }
