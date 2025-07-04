@@ -2,7 +2,6 @@ package com.deepak.workflow;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.springframework.stereotype.Component;
 
 import java.io.OutputStream;
 import java.io.InputStream;
@@ -13,9 +12,9 @@ import java.util.Scanner;
 import java.util.logging.Logger;
 import org.json.JSONObject;
 
-public class serviceTask implements JavaDelegate {
+public class ServiceTask implements JavaDelegate {
 
-    private final Logger logger = Logger.getLogger(serviceTask.class.getName());
+    private final Logger logger = Logger.getLogger(ServiceTask.class.getName());
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
@@ -30,19 +29,22 @@ public class serviceTask implements JavaDelegate {
         logger.info("Route: " + route);
         logger.info("Payload: " + payload);
 
-        // Validate
         if (container == null || port == null || route == null) {
             throw new IllegalArgumentException("Container, port, or route is missing.");
         }
 
-        // Construct the URL
         String targetUrl = "http://" + container + ":" + port + "/" + route;
         logger.info("Target URL: " + targetUrl);
-        logger.info("Payload to be sent: " + payload);
 
         HttpURLConnection conn = null;
 
         try {
+            URL url = new URL(targetUrl);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+
             if (payload != null && !payload.isEmpty()) {
                 try (OutputStream os = conn.getOutputStream()) {
                     byte[] input = payload.getBytes("utf-8");
@@ -50,40 +52,31 @@ public class serviceTask implements JavaDelegate {
                     logger.info("Payload sent successfully.");
                 }
             }
-            
-            URL url = new URL(targetUrl);
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setDoOutput(true);
 
-            // Read Response
             int responseCode = conn.getResponseCode();
             execution.setVariable("status_code", responseCode);
             logger.info("HTTP Response Code: " + responseCode);
 
-            // Read response body
-            String responseBody;
             try (InputStream is = conn.getInputStream()) {
                 Scanner scanner = new Scanner(is).useDelimiter("\\A");
-                responseBody = scanner.hasNext() ? scanner.next() : "";
+                String responseBody = scanner.hasNext() ? scanner.next() : "";
                 execution.setVariable("response_body", responseBody);
                 logger.info("HTTP Response Body: " + responseBody);
-                
-                // Parse the response body as JSON
+
                 JSONObject json = new JSONObject(responseBody);
                 boolean flag = json.optBoolean("flag", false);
                 execution.setVariable("flag", flag);
                 logger.info("Parsed Flag Value is: " + flag);
-
             }
 
         } catch (IOException e) {
-            InputStream errorStream = conn.getErrorStream();
-            if (errorStream != null) {
-                Scanner errorScanner = new Scanner(errorStream).useDelimiter("\\A");
-                String errorResponse = errorScanner.hasNext() ? errorScanner.next() : "";
-                logger.severe("Error response body: " + errorResponse);
+            if (conn != null) {
+                InputStream errorStream = conn.getErrorStream();
+                if (errorStream != null) {
+                    Scanner errorScanner = new Scanner(errorStream).useDelimiter("\\A");
+                    String errorResponse = errorScanner.hasNext() ? errorScanner.next() : "";
+                    logger.severe("Error response body: " + errorResponse);
+                }
             }
             logger.severe("Error while calling the API: " + e.getMessage());
             throw new RuntimeException("API call failed", e);
